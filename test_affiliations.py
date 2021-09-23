@@ -97,8 +97,8 @@ author_names_to_test = [
         "doi": "10.1016/0022-247x(77)90164-0",
         "result": [
             {
-                "name": "László Losonczi",
-                "references": ["baep-author-id1", "bAFF1", "bAFF2", "bFN1"],
+                "author_name": "László Losonczi",
+                "affiliation_ids": ["baep-author-id1", "bAFF1", "bAFF2", "bFN1"],
             },
         ],
     },
@@ -106,12 +106,12 @@ author_names_to_test = [
         "doi": "10.1016/0022-247x(78)90205-6",
         "result": [
             {
-                "name": "Pierre Charrier",
-                "references": ["baep-author-id1"],
+                "author_name": "Pierre Charrier",
+                "affiliation_ids": ["baep-author-id1"],
             },
             {
-                "name": "Giovanni M Troianiello",
-                "references": ["baep-author-id3"],
+                "author_name": "Giovanni M Troianiello",
+                "affiliation_ids": ["baep-author-id3"],
             },
         ],
     },
@@ -119,12 +119,12 @@ author_names_to_test = [
         "doi": "10.1016/0022-247x(79)90002-7",
         "result": [
             {
-                "name": "N Levan",
-                "references": ["baep-author-id2", "bAFF1"],
+                "author_name": "N Levan",
+                "affiliation_ids": ["baep-author-id2", "bAFF1"],
             },
             {
-                "name": "L Rigby",
-                "references": ["baep-author-id3", "bAFF2"],
+                "author_name": "L Rigby",
+                "affiliation_ids": ["baep-author-id3", "bAFF2"],
             },
         ],
     },
@@ -132,16 +132,16 @@ author_names_to_test = [
         "doi": "10.1016/0024-3795(85)90062-x",
         "result": [
             {
-                "name": "A. El Mossadeq",
-                "references": ["baep-author-id1"],
+                "author_name": "A. El Mossadeq",
+                "affiliation_ids": ["baep-author-id1"],
             },
             {
-                "name": "A. Kobilinsky",
-                "references": ["baep-author-id3"],
+                "author_name": "A. Kobilinsky",
+                "affiliation_ids": ["baep-author-id3"],
             },
             {
-                "name": "D. Collombier",
-                "references": ["baep-author-id5"],
+                "author_name": "D. Collombier",
+                "affiliation_ids": ["baep-author-id5"],
             },
         ],
     },

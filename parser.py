@@ -31,13 +31,13 @@ class Parser:
         authors_affiliations = []
         for author in authors:
             affiliation_list = []
-            matching_id = self.find_matching_id(affiliations, author["references"])
+            matching_id = self.find_matching_id(affiliations, author["affiliation_ids"])
             for a in affiliations:
                 if a["id"] == matching_id:
                     found_affiliation = a["text"]
                     affiliation_list.append(found_affiliation)
             authors_affiliations.append(
-                {"author": author["name"], "affiliations": affiliation_list}
+                {"author": author["author_name"], "affiliations": affiliation_list}
             )
         return authors_affiliations
 
@@ -91,17 +91,18 @@ class Parser:
         author_soup = self.soup.find_all("a", class_="author")
 
         for a in author_soup:
-            ref_id = a["name"]
-            author_references = [ref_id]
-            name = ""
+            affiliation_id_1 = a["name"]
+            affiliations_ids = [affiliation_id_1]
+            author_name = ""
 
             for item in a.span:
                 if item.has_attr("class") and item["class"][0] == "author-ref":
-                    author_references.append(item["id"])
+                    affiliation_id_2 = item["id"]
+                    affiliations_ids.append(affiliation_id_2)
                 else:
-                    name = name + " " + item.text
-            name = name.strip()
-            authors.append({"name": name, "references": author_references})
+                    author_name = author_name + " " + item.text
+            author_name = author_name.strip()
+            authors.append({"author_name": author_name, "affiliation_ids": affiliations_ids})
         return authors
 
 
