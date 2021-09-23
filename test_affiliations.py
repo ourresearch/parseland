@@ -222,23 +222,23 @@ api_output = [
             },
         ],
     },
-    # {
-    #     "doi": "10.1016/j.ab.2021.114100",
-    #     "result": [
-    #         {
-    #             "author": "Emma Dreischmeier",
-    #             "affiliations": [
-    #                 "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
-    #             ],
-    #         },
-    #         {
-    #             "author": "William E. Fahl",
-    #             "affiliations": [
-    #                 "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
-    #             ],
-    #         },
-    #     ],
-    # },
+    {
+        "doi": "10.1016/j.ab.2021.114100",
+        "result": [
+            {
+                "author": "Emma Dreischmeier",
+                "affiliations": [
+                    "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
+                ],
+            },
+            {
+                "author": "William E. Fahl",
+                "affiliations": [
+                    "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
+                ],
+            },
+        ],
+    },
     {
         "doi": "10.1016/j.ab.2021.114241",
         "result": [

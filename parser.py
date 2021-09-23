@@ -39,6 +39,10 @@ class Parser:
                     if a["id"] == matching_id:
                         found_affiliation = a["text"]
                         affiliation_list.append(found_affiliation)
+
+                # default scenario assign to aff1
+                if not matching_ids and len(affiliations) == 1 and affiliations[0]["id"] == "aff1":
+                    affiliation_list.append(affiliations[0]["text"])
             authors_affiliations.append(
                 {"author": author["author_name"], "affiliations": affiliation_list}
             )
@@ -122,5 +126,5 @@ class Parser:
 
 
 if __name__ == "__main__":
-    p = Parser("10.1016/j.ab.2021.114241")
+    p = Parser("10.1016/j.ab.2021.114100")
     print(p.authors_affiliations())
