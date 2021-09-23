@@ -76,7 +76,7 @@ class Parser:
                 if a["id"] == author_aff_id:
                     references.append(a["text"])
             results.append({"author": author["name"], "references": references})
-        print(results)
+        return results
 
     def find_aff(self, affiliations, references):
         for ref in references:

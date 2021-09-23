@@ -147,6 +147,22 @@ author_names_to_test = [
     },
 ]
 
+api_output = [
+{
+        "doi": "10.1016/0022-247x(78)90205-6",
+        "result": [
+            {
+                "author": "Pierre Charrier",
+                "references": ["U.E.R. de Mathématiques et Informatique et Laboratoire associé au C.N.R.S. n∘ 226, Université de Bordeaux 1, 33405 Talence, France"],
+            },
+            {
+                "author": "Giovanni M Troianiello",
+                "references": ["Istituto Matematico, Universitá di Roma, 00185 Rome, Italy"],
+            },
+        ],
+    },
+]
+
 
 def test_affiliations():
     for doi in affiliation_dois:
@@ -160,3 +176,10 @@ def test_author_names():
         p = Parser(doi["doi"])
         authors = p.get_authors()
         assert authors == doi["result"]
+
+
+def test_api_output():
+    for doi in api_output:
+        p = Parser(doi["doi"])
+        response = p.match_author_affiliation()
+        assert response == doi["result"]
