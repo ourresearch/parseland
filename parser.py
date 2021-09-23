@@ -52,7 +52,8 @@ class Parser:
         authors = []
 
         for a in author_soup:
-            author_references = []
+            author_ref_id = a["name"]
+            author_references = [author_ref_id]
             name = ""
             for item in a.span:
                 if item.has_attr("class") and item["class"][0] == "author-ref":
@@ -61,10 +62,9 @@ class Parser:
                     name = name + " " + item.text
             name = name.strip()
             authors.append({"name": name, "references": author_references})
-        print(authors)
         return authors
 
 
 if __name__ == "__main__":
-    p = Parser("10.1016/0022-247x(77)90164-0")
+    p = Parser("10.1016/0022-247x(78)90205-6")
     p.get_authors()

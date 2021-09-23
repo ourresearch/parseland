@@ -98,7 +98,50 @@ author_names_to_test = [
         "result": [
             {
                 "name": "László Losonczi",
-                "references": ["bAFF1", "bAFF2", "bFN1"],
+                "references": ["baep-author-id1", "bAFF1", "bAFF2", "bFN1"],
+            },
+        ],
+    },
+    {
+        "doi": "10.1016/0022-247x(78)90205-6",
+        "result": [
+            {
+                "name": "Pierre Charrier",
+                "references": ["baep-author-id1"],
+            },
+            {
+                "name": "Giovanni M Troianiello",
+                "references": ["baep-author-id3"],
+            },
+        ],
+    },
+    {
+        "doi": "10.1016/0022-247x(79)90002-7",
+        "result": [
+            {
+                "name": "N Levan",
+                "references": ["baep-author-id2", "bAFF1"],
+            },
+            {
+                "name": "L Rigby",
+                "references": ["baep-author-id3", "bAFF2"],
+            },
+        ],
+    },
+    {
+        "doi": "10.1016/0024-3795(85)90062-x",
+        "result": [
+            {
+                "name": "A. El Mossadeq",
+                "references": ["baep-author-id1"],
+            },
+            {
+                "name": "A. Kobilinsky",
+                "references": ["baep-author-id3"],
+            },
+            {
+                "name": "D. Collombier",
+                "references": ["baep-author-id5"],
             },
         ],
     },
