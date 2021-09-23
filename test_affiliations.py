@@ -194,6 +194,51 @@ api_output = [
             },
         ],
     },
+    {
+        "doi": "10.1016/0024-3795(85)90253-8",
+        "result": [
+            {
+                "author": "Donald W. Robinson",
+                "affiliations": [
+                    "Department of Mathematics Brigham Young University Provo, Utah 84602, USA"
+                ],
+            },
+        ],
+    },
+    {
+        "doi": "10.1016/0024-3795(86)90148-5",
+        "result": [
+            {
+                "author": "Robert E. Hartwig",
+                "affiliations": [
+                    "Department of Mathematics North Carolina State University Box 8205 Raleigh, North Carolina 27695-820 USA"
+                ],
+            },
+            {
+                "author": "George P.H. Styan",
+                "affiliations": [
+                    "Department of Mathematics and Statistics McGill University 805 ouest, rue Sherbrooke Montréal, Québec, Canada H3A 2K6"
+                ],
+            },
+        ],
+    },
+    {
+        "doi": "10.1016/j.ab.2021.114100",
+        "result": [
+            {
+                "author": "Emma Dreischmeier",
+                "affiliations": [
+                    "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
+                ],
+            },
+            {
+                "author": "William E. Fahl",
+                "affiliations": [
+                    "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
+                ],
+            },
+        ],
+    },
 ]
 
 
