@@ -1,20 +1,33 @@
-from flask import request
+from flask import jsonify, request
 
 from app import app
-from parser import Parser
+from parsers.sciencedirect import ScienceDirect
 
 
 @app.route("/")
-def hello_world():  # put application's code here
-    return "Hello World!"
+def home():
+    return jsonify(
+        {
+            "version": "0.1",
+            "app_name": "parseland",
+            "msg": "Don't panic",
+        }
+    )
 
 
 @app.route("/parse")
 def parse():
     doi = request.args.get("doi")
-    p = Parser(doi)
-    p.get_authors()
-    return "parsing!"
+    p = ScienceDirect(doi)
+    response = {
+        "message": p.authors_affiliations(),
+        "metadata": {
+            "parser": p.parser_name,
+            "doi": doi,
+            "page_url": f"https://doi.org/{doi}",
+        },
+    }
+    return jsonify(response)
 
 
 if __name__ == "__main__":

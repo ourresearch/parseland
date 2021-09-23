@@ -154,13 +154,13 @@ api_output = [
         "doi": "10.1016/0022-247x(78)90205-6",
         "result": [
             {
-                "author": "Pierre Charrier",
+                "name": "Pierre Charrier",
                 "affiliations": [
                     "U.E.R. de Mathématiques et Informatique et Laboratoire associé au C.N.R.S. n∘ 226, Université de Bordeaux 1, 33405 Talence, France"
                 ],
             },
             {
-                "author": "Giovanni M Troianiello",
+                "name": "Giovanni M Troianiello",
                 "affiliations": [
                     "Istituto Matematico, Universitá di Roma, 00185 Rome, Italy"
                 ],
@@ -171,13 +171,13 @@ api_output = [
         "doi": "10.1016/0022-247x(79)90002-7",
         "result": [
             {
-                "author": "N Levan",
+                "name": "N Levan",
                 "affiliations": [
                     "Department of System Science, 4532 Boelter Hall, University of California, Los Angeles, California 90024 U.S.A."
                 ],
             },
             {
-                "author": "L Rigby",
+                "name": "L Rigby",
                 "affiliations": [
                     "Department of Computing and Control, Huxley Building, Imperial College, London SW7 2BZ, Great Britain"
                 ],
@@ -188,7 +188,7 @@ api_output = [
         "doi": "10.1016/0022-247x(77)90164-0",
         "result": [
             {
-                "author": "László Losonczi",
+                "name": "László Losonczi",
                 "affiliations": [
                     "Department of Mathematics, University of Lagos, Lagos, Nigeria",
                     "Department of Mathematics, Kossuth Lajos University, Debrecen, Hungary",
@@ -200,7 +200,7 @@ api_output = [
         "doi": "10.1016/0024-3795(85)90253-8",
         "result": [
             {
-                "author": "Donald W. Robinson",
+                "name": "Donald W. Robinson",
                 "affiliations": [
                     "Department of Mathematics Brigham Young University Provo, Utah 84602, USA"
                 ],
@@ -211,13 +211,13 @@ api_output = [
         "doi": "10.1016/0024-3795(86)90148-5",
         "result": [
             {
-                "author": "Robert E. Hartwig",
+                "name": "Robert E. Hartwig",
                 "affiliations": [
                     "Department of Mathematics North Carolina State University Box 8205 Raleigh, North Carolina 27695-820 USA"
                 ],
             },
             {
-                "author": "George P.H. Styan",
+                "name": "George P.H. Styan",
                 "affiliations": [
                     "Department of Mathematics and Statistics McGill University 805 ouest, rue Sherbrooke Montréal, Québec, Canada H3A 2K6"
                 ],
@@ -228,13 +228,13 @@ api_output = [
         "doi": "10.1016/j.ab.2021.114100",
         "result": [
             {
-                "author": "Emma Dreischmeier",
+                "name": "Emma Dreischmeier",
                 "affiliations": [
                     "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
                 ],
             },
             {
-                "author": "William E. Fahl",
+                "name": "William E. Fahl",
                 "affiliations": [
                     "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
                 ],
@@ -245,37 +245,37 @@ api_output = [
         "doi": "10.1016/j.ab.2021.114241",
         "result": [
             {
-                "author": "Jun Hu",
+                "name": "Jun Hu",
                 "affiliations": [
                     "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
                 ],
             },
             {
-                "author": "Lin-Lin Zheng",
+                "name": "Lin-Lin Zheng",
                 "affiliations": [
                     "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
                 ],
             },
             {
-                "author": "Yan-Song Bai",
+                "name": "Yan-Song Bai",
                 "affiliations": [
                     "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
                 ],
             },
             {
-                "author": "Ke-Wen Zhang",
+                "name": "Ke-Wen Zhang",
                 "affiliations": [
                     "College of Mechanical Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
                 ],
             },
             {
-                "author": "Dong-Jun Yu",
+                "name": "Dong-Jun Yu",
                 "affiliations": [
                     "School of Computer Science and Engineering, Nanjing University of Science and Technology,Xiaolingwei 200, Nanjing, 210094, China"
                 ],
             },
             {
-                "author": "Gui-Jun Zhang",
+                "name": "Gui-Jun Zhang",
                 "affiliations": [
                     "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
                 ],

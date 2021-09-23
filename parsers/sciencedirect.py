@@ -4,6 +4,10 @@ from parser import Parser
 
 
 class ScienceDirect(Parser):
+    def __init__(self, doi):
+        super().__init__(doi)
+        self.parser_name = "sciencedirect"
+
     def authors_affiliations(self):
         """Core function returning list of authors with their affiliations."""
         authors = self.get_authors()
@@ -88,7 +92,7 @@ class ScienceDirect(Parser):
                 ):
                     affiliation_list.append(affiliations[0]["text"])
             authors_affiliations.append(
-                {"author": author["author_name"], "affiliations": affiliation_list}
+                {"name": author["author_name"], "affiliations": affiliation_list}
             )
         return authors_affiliations
 
@@ -103,7 +107,7 @@ class ScienceDirect(Parser):
         # option 2 aep-author-id2
         for aff_id in affiliation_ids:
             for aff in affiliations:
-                if aff_id.startswith("baep-author-id"):
+                if not matching_ids and aff_id.startswith("baep-author-id"):
                     ref_id_num = int(aff_id[-1])
                     aff_id = aff["id"].rstrip(aff["id"][-1]) + str(ref_id_num + 1)
                     matching_ids.append(aff_id)

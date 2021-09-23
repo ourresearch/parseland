@@ -8,6 +8,7 @@ import requests
 class Parser(ABC):
     def __init__(self, doi):
         self.landing_page_endpoint = f"https://api.unpaywall.org/doi_page/{doi}"
+        self.parser_name = None
         self.soup = self.get_soup()
 
     def get_html(self):
