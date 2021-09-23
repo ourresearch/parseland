@@ -31,24 +31,36 @@ class Parser:
         authors_affiliations = []
         for author in authors:
             affiliation_list = []
-            matching_id = self.find_matching_id(affiliations, author["affiliation_ids"])
+            matching_ids = self.find_matching_ids(
+                affiliations, author["affiliation_ids"]
+            )
             for a in affiliations:
-                if a["id"] == matching_id:
-                    found_affiliation = a["text"]
-                    affiliation_list.append(found_affiliation)
+                for matching_id in matching_ids:
+                    if a["id"] == matching_id:
+                        found_affiliation = a["text"]
+                        affiliation_list.append(found_affiliation)
             authors_affiliations.append(
                 {"author": author["author_name"], "affiliations": affiliation_list}
             )
         return authors_affiliations
 
-    def find_matching_id(self, affiliations, references):
-        for ref in references:
+    def find_matching_ids(self, affiliations, affiliation_ids):
+        matching_ids = []
+        # option 1 AFF1
+        for aff_id in affiliation_ids:
             for aff in affiliations:
-                ref_id = ref
-                if ref_id.startswith("baep-author-id"):
-                    ref_id_num = int(ref_id[-1])
+                if aff_id[1:].startswith("AFF") and aff_id[1:] == aff["id"]:
+                    matching_ids.append(aff_id[1:])
+
+        # option 2 aep-author-id2
+        for aff_id in affiliation_ids:
+            for aff in affiliations:
+                if aff_id.startswith("baep-author-id"):
+                    ref_id_num = int(aff_id[-1])
                     aff_id = aff["id"].rstrip(aff["id"][-1]) + str(ref_id_num + 1)
-                    return aff_id
+                    matching_ids.append(aff_id)
+        matching_ids = list(set(matching_ids))  # remove duplicates
+        return matching_ids
 
     def get_affiliations(self):
         """
@@ -102,7 +114,9 @@ class Parser:
                 else:
                     author_name = author_name + " " + item.text
             author_name = author_name.strip()
-            authors.append({"author_name": author_name, "affiliation_ids": affiliations_ids})
+            authors.append(
+                {"author_name": author_name, "affiliation_ids": affiliations_ids}
+            )
         return authors
 
 

@@ -165,6 +165,35 @@ api_output = [
             },
         ],
     },
+    {
+        "doi": "10.1016/0022-247x(79)90002-7",
+        "result": [
+            {
+                "author": "N Levan",
+                "affiliations": [
+                    "Department of System Science, 4532 Boelter Hall, University of California, Los Angeles, California 90024 U.S.A."
+                ],
+            },
+            {
+                "author": "L Rigby",
+                "affiliations": [
+                    "Department of Computing and Control, Huxley Building, Imperial College, London SW7 2BZ, Great Britain"
+                ],
+            },
+        ],
+    },
+    {
+        "doi": "10.1016/0022-247x(77)90164-0",
+        "result": [
+            {
+                "author": "László Losonczi",
+                "affiliations": [
+                    "Department of Mathematics, University of Lagos, Lagos, Nigeria",
+                    "Department of Mathematics, Kossuth Lajos University, Debrecen, Hungary",
+                ],
+            },
+        ],
+    },
 ]
 
 
