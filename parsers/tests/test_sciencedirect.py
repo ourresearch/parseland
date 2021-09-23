@@ -1,4 +1,6 @@
-from parser import Parser
+import pytest
+
+from parsers.sciencedirect import ScienceDirect
 
 
 affiliation_dois = [
@@ -283,22 +285,22 @@ api_output = [
 ]
 
 
-def test_affiliations():
-    for doi in affiliation_dois:
-        p = Parser(doi["doi"])
-        affiliations = p.get_affiliations()
-        assert affiliations == doi["result"]
+@pytest.mark.parametrize("doi", affiliation_dois)
+def test_affiliations(doi):
+    p = ScienceDirect(doi["doi"])
+    affiliations = p.get_affiliations()
+    assert affiliations == doi["result"]
 
 
-def test_author_names():
-    for doi in author_names_to_test:
-        p = Parser(doi["doi"])
-        authors = p.get_authors()
-        assert authors == doi["result"]
+@pytest.mark.parametrize("doi", author_names_to_test)
+def test_author_names(doi):
+    p = ScienceDirect(doi["doi"])
+    authors = p.get_authors()
+    assert authors == doi["result"]
 
 
-def test_api_output():
-    for doi in api_output:
-        p = Parser(doi["doi"])
-        response = p.authors_affiliations()
-        assert response == doi["result"]
+@pytest.mark.parametrize("doi", api_output)
+def test_api_output(doi):
+    p = ScienceDirect(doi["doi"])
+    response = p.authors_affiliations()
+    assert response == doi["result"]
