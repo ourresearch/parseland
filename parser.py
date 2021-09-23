@@ -8,6 +8,7 @@ import requests
 class Parser:
     def __init__(self, doi):
         self.landing_page_endpoint = f"https://api.unpaywall.org/doi_page/{doi}"
+        self.soup = self.get_soup()
 
     def get_html(self):
         r = requests.get(self.landing_page_endpoint)
@@ -19,7 +20,7 @@ class Parser:
         return soup
 
     def get_affiliations(self):
-        soup = self.get_soup()
+        soup = self.soup
         raw_json = soup.find("script", type="application/json").text
         data = json.loads(raw_json)
 
@@ -45,3 +46,25 @@ class Parser:
                     aff_text = item_3["_"]
             affiliations.append({"id": aff_id, "text": aff_text})
         return affiliations
+
+    def get_authors(self):
+        author_soup = self.soup.find_all("a", class_="author")
+        authors = []
+
+        for a in author_soup:
+            author_references = []
+            name = ""
+            for item in a.span:
+                if item.has_attr("class") and item["class"][0] == "author-ref":
+                    author_references.append(item["id"])
+                else:
+                    name = name + " " + item.text
+            name = name.strip()
+            authors.append({"name": name, "references": author_references})
+        print(authors)
+        return authors
+
+
+if __name__ == "__main__":
+    p = Parser("10.1016/0022-247x(77)90164-0")
+    p.get_authors()

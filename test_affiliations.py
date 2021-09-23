@@ -92,9 +92,28 @@ affiliation_dois = [
     },
 ]
 
+author_names_to_test = [
+    {
+        "doi": "10.1016/0022-247x(77)90164-0",
+        "result": [
+            {
+                "name": "László Losonczi",
+                "references": ["bAFF1", "bAFF2", "bFN1"],
+            },
+        ],
+    },
+]
+
 
 def test_affiliations():
     for doi in affiliation_dois:
         p = Parser(doi["doi"])
         affiliations = p.get_affiliations()
         assert affiliations == doi["result"]
+
+
+def test_author_names():
+    for doi in author_names_to_test:
+        p = Parser(doi["doi"])
+        authors = p.get_authors()
+        assert authors == doi["result"]
