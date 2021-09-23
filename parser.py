@@ -64,7 +64,32 @@ class Parser:
             authors.append({"name": name, "references": author_references})
         return authors
 
+    def match_author_affiliation(self):
+        results = []
+        authors = self.get_authors()
+        affiliations = self.get_affiliations()
+        for author in authors:
+            references = []
+            author_aff_id = self.find_aff(affiliations, author["references"])
+            print(author, author_aff_id)
+            for a in affiliations:
+                if a["id"] == author_aff_id:
+                    references.append(a["text"])
+            results.append({"author": author["name"], "references": references})
+        print(results)
+
+    def find_aff(self, affiliations, references):
+        for ref in references:
+            for aff in affiliations:
+                ref_id = ref
+                if ref_id.startswith("baep-author-id"):
+                    ref_id_num = int(ref_id[-1])
+                    aff_id = aff["id"].rstrip(aff["id"][-1]) + str(ref_id_num + 1)
+                    return aff_id
+
+
+
 
 if __name__ == "__main__":
     p = Parser("10.1016/0022-247x(78)90205-6")
-    p.get_authors()
+    p.match_author_affiliation()
