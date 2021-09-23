@@ -19,15 +19,53 @@ class Parser:
         soup = BeautifulSoup(self.get_html(), "html.parser")
         return soup
 
+    def authors_affiliations(self):
+        """Core function returning list of authors with their affiliations."""
+        authors = self.get_authors()
+        affiliations = self.get_affiliations()
+        authors_affiliations = self.match_authors_to_affiliations(authors, affiliations)
+        return authors_affiliations
+
+    def match_authors_to_affiliations(self, authors, affiliations):
+        """Go through authors and affiliates and match them up using IDs."""
+        authors_affiliations = []
+        for author in authors:
+            affiliation_list = []
+            matching_id = self.find_matching_id(affiliations, author["references"])
+            for a in affiliations:
+                if a["id"] == matching_id:
+                    found_affiliation = a["text"]
+                    affiliation_list.append(found_affiliation)
+            authors_affiliations.append(
+                {"author": author["name"], "affiliations": affiliation_list}
+            )
+        return authors_affiliations
+
+    def find_matching_id(self, affiliations, references):
+        for ref in references:
+            for aff in affiliations:
+                ref_id = ref
+                if ref_id.startswith("baep-author-id"):
+                    ref_id_num = int(ref_id[-1])
+                    aff_id = aff["id"].rstrip(aff["id"][-1]) + str(ref_id_num + 1)
+                    return aff_id
+
     def get_affiliations(self):
-        soup = self.soup
-        raw_json = soup.find("script", type="application/json").text
-        data = json.loads(raw_json)
+        """
+        Returns affiliation data in form of {"id": "asdf", "text": "asdf"}
+        """
+        science_direct_json = self.extract_json()
+        affiliations = self.find_affiliations(science_direct_json)
+        return affiliations
 
-        results = self.parse_json(data)
-        return results
+    def extract_json(self):
+        """Finds and loads json that contains affiliation data."""
+        raw_json = self.soup.find("script", type="application/json").text
+        loaded_json = json.loads(raw_json)
+        return loaded_json
 
-    def parse_json(self, data):
+    def find_affiliations(self, data):
+        """Parse the json data to find affiliations along with their IDs."""
         level_1 = data["authors"]["content"]
 
         level_2 = []
@@ -48,13 +86,15 @@ class Parser:
         return affiliations
 
     def get_authors(self):
-        author_soup = self.soup.find_all("a", class_="author")
+        """Finds authors in sciencedirect using beautifulsoup."""
         authors = []
+        author_soup = self.soup.find_all("a", class_="author")
 
         for a in author_soup:
-            author_ref_id = a["name"]
-            author_references = [author_ref_id]
+            ref_id = a["name"]
+            author_references = [ref_id]
             name = ""
+
             for item in a.span:
                 if item.has_attr("class") and item["class"][0] == "author-ref":
                     author_references.append(item["id"])
@@ -64,32 +104,7 @@ class Parser:
             authors.append({"name": name, "references": author_references})
         return authors
 
-    def match_author_affiliation(self):
-        results = []
-        authors = self.get_authors()
-        affiliations = self.get_affiliations()
-        for author in authors:
-            references = []
-            author_aff_id = self.find_aff(affiliations, author["references"])
-            print(author, author_aff_id)
-            for a in affiliations:
-                if a["id"] == author_aff_id:
-                    references.append(a["text"])
-            results.append({"author": author["name"], "references": references})
-        return results
-
-    def find_aff(self, affiliations, references):
-        for ref in references:
-            for aff in affiliations:
-                ref_id = ref
-                if ref_id.startswith("baep-author-id"):
-                    ref_id_num = int(ref_id[-1])
-                    aff_id = aff["id"].rstrip(aff["id"][-1]) + str(ref_id_num + 1)
-                    return aff_id
-
-
-
 
 if __name__ == "__main__":
     p = Parser("10.1016/0022-247x(78)90205-6")
-    p.match_author_affiliation()
+    p.authors_affiliations()
