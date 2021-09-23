@@ -222,19 +222,60 @@ api_output = [
             },
         ],
     },
+    # {
+    #     "doi": "10.1016/j.ab.2021.114100",
+    #     "result": [
+    #         {
+    #             "author": "Emma Dreischmeier",
+    #             "affiliations": [
+    #                 "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
+    #             ],
+    #         },
+    #         {
+    #             "author": "William E. Fahl",
+    #             "affiliations": [
+    #                 "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
+    #             ],
+    #         },
+    #     ],
+    # },
     {
-        "doi": "10.1016/j.ab.2021.114100",
+        "doi": "10.1016/j.ab.2021.114241",
         "result": [
             {
-                "author": "Emma Dreischmeier",
+                "author": "Jun Hu",
                 "affiliations": [
-                    "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
+                    "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
                 ],
             },
             {
-                "author": "William E. Fahl",
+                "author": "Lin-Lin Zheng",
                 "affiliations": [
-                    "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
+                    "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
+                ],
+            },
+            {
+                "author": "Yan-Song Bai",
+                "affiliations": [
+                    "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
+                ],
+            },
+            {
+                "author": "Ke-Wen Zhang",
+                "affiliations": [
+                    "College of Mechanical Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
+                ],
+            },
+            {
+                "author": "Dong-Jun Yu",
+                "affiliations": [
+                    "School of Computer Science and Engineering, Nanjing University of Science and Technology,Xiaolingwei 200, Nanjing, 210094, China"
+                ],
+            },
+            {
+                "author": "Gui-Jun Zhang",
+                "affiliations": [
+                    "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
                 ],
             },
         ],

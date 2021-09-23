@@ -39,10 +39,6 @@ class Parser:
                     if a["id"] == matching_id:
                         found_affiliation = a["text"]
                         affiliation_list.append(found_affiliation)
-                    elif len(matching_ids) == 1 and matching_ids[0] == "aff1":
-                        # assign aff1 to entire author list
-                        found_affiliation = a["text"]
-                        affiliation_list.append(found_affiliation)
             authors_affiliations.append(
                 {"author": author["author_name"], "affiliations": affiliation_list}
             )
@@ -53,7 +49,7 @@ class Parser:
         # option 1 AFF1
         for aff_id in affiliation_ids:
             for aff in affiliations:
-                if aff_id[1:].startswith("AFF") and aff_id[1:] == aff["id"]:
+                if aff_id[1:].lower().startswith("aff") and aff_id[1:] == aff["id"]:
                     matching_ids.append(aff_id[1:])
 
         # option 2 aep-author-id2
@@ -63,11 +59,6 @@ class Parser:
                     ref_id_num = int(aff_id[-1])
                     aff_id = aff["id"].rstrip(aff["id"][-1]) + str(ref_id_num + 1)
                     matching_ids.append(aff_id)
-
-        # option 3 assign aff1 to entire author list
-        for aff in affiliations:
-            if aff["id"] == "aff1":
-                matching_ids.append(aff["id"])
 
         matching_ids = list(set(matching_ids))  # remove duplicates
         return matching_ids
@@ -131,5 +122,5 @@ class Parser:
 
 
 if __name__ == "__main__":
-    p = Parser("10.1016/j.ab.2021.114157")
+    p = Parser("10.1016/j.ab.2021.114241")
     print(p.authors_affiliations())
