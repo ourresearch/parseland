@@ -53,7 +53,7 @@ class Parser:
         # option 1 AFF1
         for aff_id in affiliation_ids:
             for aff in affiliations:
-                if aff_id[1:].lower().startswith("aff") and aff_id[1:] == aff["id"]:
+                if aff_id[1:].lower().startswith("af") and aff_id[1:] == aff["id"]:
                     matching_ids.append(aff_id[1:])
 
         # option 2 aep-author-id2
@@ -126,5 +126,5 @@ class Parser:
 
 
 if __name__ == "__main__":
-    p = Parser("10.1016/j.abd.2021.02.007")
+    p = Parser("10.1016/j.accpm.2020.05.009")
     print(p.authors_affiliations())
