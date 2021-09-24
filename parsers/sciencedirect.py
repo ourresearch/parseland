@@ -8,7 +8,7 @@ class ScienceDirect(Parser):
         super().__init__(doi)
         self.parser_name = "sciencedirect"
 
-    def authors_affiliations(self):
+    def parse(self):
         """Core function returning list of authors with their affiliations."""
         authors = self.get_authors()
         affiliations = self.get_affiliations()
@@ -49,7 +49,8 @@ class ScienceDirect(Parser):
         loaded_json = json.loads(raw_json)
         return loaded_json
 
-    def find_affiliations(self, data):
+    @staticmethod
+    def find_affiliations(data):
         """Parse the json data to find affiliations along with their IDs."""
         level_1 = data["authors"]["content"]
 
@@ -96,7 +97,8 @@ class ScienceDirect(Parser):
             )
         return authors_affiliations
 
-    def find_matching_ids(self, affiliations, affiliation_ids):
+    @staticmethod
+    def find_matching_ids(affiliations, affiliation_ids):
         matching_ids = []
         # option 1 AFF1
         for aff_id in affiliation_ids:

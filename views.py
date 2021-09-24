@@ -20,11 +20,11 @@ def parse():
     doi = request.args.get("doi")
     p = ScienceDirect(doi)
     response = {
-        "message": p.authors_affiliations(),
+        "message": p.parse(),
         "metadata": {
             "parser": p.parser_name,
             "doi": doi,
-            "page_url": f"https://doi.org/{doi}",
+            "doi_url": f"https://doi.org/{doi}",
         },
     }
     return jsonify(response)

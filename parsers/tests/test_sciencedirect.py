@@ -302,5 +302,5 @@ def test_author_names(doi):
 @pytest.mark.parametrize("doi", api_output)
 def test_api_output(doi):
     p = ScienceDirect(doi["doi"])
-    response = p.authors_affiliations()
+    response = p.parse()
     assert response == doi["result"]

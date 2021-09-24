@@ -1,11 +1,10 @@
-from abc import ABC, abstractmethod
 from gzip import decompress
 
 from bs4 import BeautifulSoup
 import requests
 
 
-class Parser(ABC):
+class Parser:
     def __init__(self, doi):
         self.landing_page_endpoint = f"https://api.unpaywall.org/doi_page/{doi}"
         self.parser_name = None
@@ -20,7 +19,6 @@ class Parser(ABC):
         soup = BeautifulSoup(self.get_html(), "html.parser")
         return soup
 
-    @abstractmethod
-    def authors_affiliations(self):
+    def parse(self):
         """Core method that returns authors and associated affiliations."""
         pass
