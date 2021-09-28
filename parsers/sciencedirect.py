@@ -1,12 +1,15 @@
 import json
 
-from parser import Parser
 
-
-class ScienceDirect(Parser):
-    def __init__(self, doi):
-        super().__init__(doi)
+class ScienceDirect:
+    def __init__(self, soup):
+        self.soup = soup
         self.parser_name = "sciencedirect"
+
+    def is_correct_parser(self):
+        header_link = self.soup.find("link", {"rel": "canonical"})
+        if header_link and "sciencedirect.com" in header_link["href"]:
+            return True
 
     def parse(self):
         """Core function returning list of authors with their affiliations."""

@@ -1,7 +1,7 @@
 from flask import jsonify, request
 
 from app import app
-from parsers.sciencedirect import ScienceDirect
+from parser import ParserController
 
 
 @app.route("/")
@@ -18,11 +18,12 @@ def home():
 @app.route("/parse")
 def parse():
     doi = request.args.get("doi")
-    p = ScienceDirect(doi)
+    p = ParserController(doi)
+    parser = p.find_parser()
     response = {
-        "message": p.parse(),
+        "message": parser.parse(),
         "metadata": {
-            "parser": p.parser_name,
+            "parser": parser.parser_name,
             "doi": doi,
             "doi_url": f"https://doi.org/{doi}",
         },

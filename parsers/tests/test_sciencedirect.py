@@ -1,6 +1,7 @@
 import pytest
 
 from parsers.sciencedirect import ScienceDirect
+from parsers.tests.utils import get_soup
 
 
 affiliation_dois = [
@@ -287,20 +288,23 @@ api_output = [
 
 @pytest.mark.parametrize("doi", affiliation_dois)
 def test_affiliations(doi):
-    p = ScienceDirect(doi["doi"])
+    soup = get_soup(doi)
+    p = ScienceDirect(soup)
     affiliations = p.get_affiliations()
     assert affiliations == doi["result"]
 
 
 @pytest.mark.parametrize("doi", author_names_to_test)
 def test_author_names(doi):
-    p = ScienceDirect(doi["doi"])
+    soup = get_soup(doi)
+    p = ScienceDirect(soup)
     authors = p.get_authors()
     assert authors == doi["result"]
 
 
 @pytest.mark.parametrize("doi", api_output)
 def test_api_output(doi):
-    p = ScienceDirect(doi["doi"])
+    soup = get_soup(doi)
+    p = ScienceDirect(soup)
     response = p.parse()
     assert response == doi["result"]

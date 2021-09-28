@@ -3,11 +3,14 @@ from gzip import decompress
 from bs4 import BeautifulSoup
 import requests
 
+from parsers.sciencedirect import ScienceDirect
+from parsers.springer import Springer
 
-class Parser:
+
+class ParserController:
     def __init__(self, doi):
         self.landing_page_endpoint = f"https://api.unpaywall.org/doi_page/{doi}"
-        self.parser_name = None
+        self.parsers = [ScienceDirect, Springer]
         self.soup = self.get_soup()
 
     def get_html(self):
@@ -19,6 +22,8 @@ class Parser:
         soup = BeautifulSoup(self.get_html(), "html.parser")
         return soup
 
-    def parse(self):
-        """Core method that returns authors and associated affiliations."""
-        pass
+    def find_parser(self):
+        for cls in self.parsers:
+            parser = cls(self.soup)
+            if parser.is_correct_parser():
+                return parser
