@@ -13,13 +13,20 @@ class Springer:
 
     def parse(self):
         authors = self.get_authors()
-        affiliations = self.get_affiliations()
-        authors_affiliations = self.combine_authors_affiliations(authors, affiliations)
+        if authors:
+            affiliations = self.get_affiliations()
+            authors_affiliations = self.combine_authors_affiliations(
+                authors, affiliations
+            )
+        else:
+            authors_affiliations = "no authors found"
         return authors_affiliations
 
     def get_authors(self):
         authors = []
         section = self.soup.find(id="authorsandaffiliations")
+        if not section:
+            return None
         author_soup = section.findAll("li", {"itemprop": "author"})
         for author in author_soup:
             ref_ids = []
