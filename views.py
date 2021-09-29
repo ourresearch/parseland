@@ -1,6 +1,7 @@
 from flask import jsonify, request
 
 from app import app
+from exceptions import APIError
 from parser import ParserController
 
 
@@ -29,6 +30,17 @@ def parse():
         },
     }
     return jsonify(response)
+
+
+@app.errorhandler(APIError)
+def handle_exception(err):
+    """Return custom JSON when APIError or its children are raised"""
+    response = {"error": err.description, "message": ""}
+    if len(err.args) > 0:
+        response["message"] = err.args[0]
+    # Add some logging so that we can monitor different types of errors
+    app.logger.error("{}: {}".format(err.description, response["message"]))
+    return jsonify(response), err.code
 
 
 if __name__ == "__main__":
