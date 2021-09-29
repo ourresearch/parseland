@@ -31,8 +31,9 @@ class Springer:
         for author in author_soup:
             ref_ids = []
             references = author.find("ul", {"data-role": "AuthorsIndexes"})
-            for reference in references:
-                ref_ids.append(int(reference.text))
+            if references:
+                for reference in references:
+                    ref_ids.append(int(reference.text))
             name = normalize("NFKD", author.span.text)
             authors.append({"name": name, "ref_ids": ref_ids})
         return authors

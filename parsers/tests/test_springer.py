@@ -73,6 +73,21 @@ api_output = [
             },
         ],
     },
+    {
+        "doi": "10.1007/0-306-48581-8_7",
+        "result": [
+            {
+                "name": "Christine Bowman Edmondson",
+                "affiliations": [],
+            },
+            {
+                "name": "Daniel Joseph Cahill",
+                "affiliations": [
+                    "Department of Psychology, California State University, Fresno, Fresno"
+                ],
+            },
+        ],
+    },
 ]
 
 
