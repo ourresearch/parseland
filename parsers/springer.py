@@ -22,7 +22,7 @@ class Springer:
                 authors, affiliations
             )
         else:
-            authors_affiliations = self.get_authors_method_2()
+            authors_affiliations = self.get_authors_method_3()
 
         if not authors_affiliations:
             raise AuthorNotFoundError(f"Author not found within parser {self.parser_name}")
@@ -95,8 +95,48 @@ class Springer:
         if result:
             results.append(result)
 
-        print(results)
         return results
+
+    def get_authors_method_3(self):
+        author_soup = self.soup.find(id="author-information-content")
+        if not author_soup:
+            return None
+        list_items = author_soup.ol.findAll("li")
+
+        # get mapping of affiliation -> authors
+        results = []
+        for item in list_items:
+            result = None
+            affiliation = item.p.text
+            authors = item.p.findNext('p').text
+            result = {"affiliation": affiliation, "authors": self.parser_author_list(authors)}
+            results.append(result)
+
+        response = defaultdict(list)
+        for row in results:
+            for author in row["authors"]:
+                response[author].append(row["affiliation"])
+
+        # get proper order of author names
+        name_soup = self.soup.findAll('span', class_="js-search-name")
+        ordered_names = []
+        for name in name_soup:
+            ordered_names.append(name.text)
+
+        # build new author list with proper order
+        ordered_response = []
+        for name in ordered_names:
+            ordered_response.append({"name": name, "affiliations": response[name]})
+        return ordered_response
+
+
+    @staticmethod
+    def parser_author_list(authors):
+        authors_split = authors.replace('&', ',').split(',')
+        authors_normalized = [normalize("NFKD", author).strip() for author in authors_split]
+        return authors_normalized
+
+
 
     @staticmethod
     def format_name(name):
@@ -193,21 +233,21 @@ test_cases = [
             {
                 "name": "Odette Scharenborg",
                 "affiliations": [
-                    "Centre for Language Studies, Radboud University Nijmegen, Nijmegen, The Netherlands",
+                    "Centre for Language Studies, Radboud University Nijmegen, Erasmusplein 1, 6525 HT, Nijmegen, The Netherlands",
                     "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands"
                 ],
             },
             {
                 "name": "Andrea Weber",
                 "affiliations": [
-                    "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands",
-                    "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands"
+                    "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
+                    "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands"
                 ],
             },
             {
                 "name": "Esther Janse",
                 "affiliations": [
-                    "Centre for Language Studies, Radboud University Nijmegen, Nijmegen, The Netherlands",
+                    "Centre for Language Studies, Radboud University Nijmegen, Erasmusplein 1, 6525 HT, Nijmegen, The Netherlands",
                     "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
                     "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands"
                 ],
