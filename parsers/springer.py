@@ -1,3 +1,4 @@
+from collections import defaultdict
 from unicodedata import normalize
 
 from exceptions import AuthorNotFoundError
@@ -21,6 +22,9 @@ class Springer:
                 authors, affiliations
             )
         else:
+            authors_affiliations = self.get_authors_method_2()
+
+        if not authors_affiliations:
             raise AuthorNotFoundError(f"Author not found within parser {self.parser_name}")
         return authors_affiliations
 
@@ -69,6 +73,34 @@ class Springer:
                 {"name": author["name"], "affiliations": matched_affiliations}
             )
         return results
+
+    def get_authors_method_2(self):
+        """Loop through meta tags to build author and affiliations."""
+        results = []
+        metas = self.soup.findAll("meta")
+
+        result = None
+        for meta in metas:
+            if meta.get("name", None) and meta["name"] == "citation_author":
+                if result:
+                    # reset for next author
+                    results.append(result)
+                    result = None
+                name = self.format_name(meta["content"])
+                result = {"name": name, "affiliations": [], }
+            if meta.get("name", None) and meta["name"] == "citation_author_institution":
+                result["affiliations"].append(meta["content"])
+
+        # append name from last loop
+        if result:
+            results.append(result)
+
+        print(results)
+        return results
+
+    @staticmethod
+    def format_name(name):
+        return ' '.join(reversed(name.split(', ')))
 
 test_cases = [
     {
@@ -155,4 +187,32 @@ test_cases = [
             },
         ],
     },
+    {
+        "doi": "10.3758/s13414-014-0792-2",
+        "result": [
+            {
+                "name": "Odette Scharenborg",
+                "affiliations": [
+                    "Centre for Language Studies, Radboud University Nijmegen, Nijmegen, The Netherlands",
+                    "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands"
+                ],
+            },
+            {
+                "name": "Andrea Weber",
+                "affiliations": [
+                    "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands",
+                    "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands"
+                ],
+            },
+            {
+                "name": "Esther Janse",
+                "affiliations": [
+                    "Centre for Language Studies, Radboud University Nijmegen, Nijmegen, The Netherlands",
+                    "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
+                    "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands"
+                ],
+            },
+
+        ]
+    }
 ]
