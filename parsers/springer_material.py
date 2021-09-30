@@ -37,20 +37,23 @@ class SpringerMaterial:
     def get_affiliations(self):
         aff_soup = self.soup.find("dd", class_="author-affiliation")
 
-        result = None
+        results = []
         if aff_soup:
-            aff_raw = aff_soup.li.text
-            aff_id = self.find_aff_id_in_aff(aff_raw)
-            aff = aff_raw.replace(str(aff_id), "").strip()
-            result = {"aff_id": aff_id, "affiliation": aff}
-        return result
+            affiliations = aff_soup.findAll("li")
+            for aff_raw in affiliations:
+                aff_raw = aff_raw.text
+                aff_id = self.find_aff_id_in_aff(aff_raw)
+                aff = aff_raw.replace(str(aff_id), "").strip()
+                results.append({"aff_id": aff_id, "affiliation": aff})
+        return results
 
     def get_authors_affiliations(self, authors, affiliations):
         results = []
         for author in authors:
             matching_affiliation = None
-            if affiliations and author["aff_id"] == affiliations["aff_id"]:
-                matching_affiliation = affiliations["affiliation"]
+            for affiliation in affiliations:
+                if author["aff_id"] == affiliation["aff_id"]:
+                    matching_affiliation = affiliation["affiliation"]
 
             results.append(
                 {
