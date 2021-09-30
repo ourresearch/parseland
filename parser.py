@@ -6,13 +6,14 @@ import requests
 from exceptions import ParserNotFoundError, S3FileNotFoundError
 from parsers.sciencedirect import ScienceDirect
 from parsers.springer import Springer
+from parsers.springer_material import SpringerMaterial
 
 
 class ParserController:
     def __init__(self, doi):
         self.doi = doi
         self.landing_page_endpoint = f"https://api.unpaywall.org/doi_page/{self.doi}"
-        self.parsers = [ScienceDirect, Springer]
+        self.parsers = [ScienceDirect, Springer, SpringerMaterial]
         self.soup = self.get_soup()
 
     def get_html(self):
