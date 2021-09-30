@@ -1,5 +1,7 @@
 import re
 
+from exceptions import AuthorNotFoundError
+
 
 class SpringerMaterial:
     def __init__(self, soup):
@@ -20,6 +22,8 @@ class SpringerMaterial:
     def get_authors(self):
         authors = []
         section = self.soup.find("dd", {"id": "authors"})
+        if not section:
+            raise AuthorNotFoundError(f"no authors found with springer materials parser,")
         name_soup = section.findAll("li")
         for name in name_soup:
             authors.append(
