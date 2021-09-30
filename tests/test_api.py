@@ -12,13 +12,13 @@ def client():
 
 
 def test_api_root(client):
-    rv = client.get('/')
+    rv = client.get("/")
     json_data = rv.get_json()
     assert json_data["app_name"] == "parseland"
 
 
 def test_no_authors_found(client):
-    rv = client.get('/parse?doi=10.1007/0-387-27160-0_33')
+    rv = client.get("/parse?doi=10.1007/0-387-27160-0_33")
     json_data = rv.get_json()
     assert json_data["error"] == "Authors not found."
 

@@ -5,6 +5,6 @@ import requests_cache
 app = Flask(__name__)
 CORS(app)
 
-requests_cache.install_cache(cache_name='api_cache', backend='sqlite', expire_after=60)
+requests_cache.install_cache(cache_name="api_cache", backend="sqlite", expire_after=60)
 
 app.config["JSON_SORT_KEYS"] = False

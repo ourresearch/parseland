@@ -62,3 +62,5 @@ venv.bak/
 
 # Mac
 .DS_Store
+
+available-dois.csv
