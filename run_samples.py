@@ -5,9 +5,10 @@ import requests
 def run_dois():
     """Runs a sample of DOIs for a given publisher in order to determine accuracy of parsers."""
     samples_to_run = 10
-    publisher = "Springer-Verlag"
+    publisher = "Wiley"
     df = pd.read_csv("available-dois.csv")
     df = df[(df["publisher"] == publisher)]
+    df = df[(df["published_date"].str.contains("2021", na=False))]
 
     for index, row in df.sample(frac=1).head(samples_to_run).iterrows():
         doi = row.doi
