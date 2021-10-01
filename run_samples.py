@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 import requests
 
@@ -15,7 +17,7 @@ def run_dois():
         r = requests.get(f"http://127.0.0.1:5000/parse?doi={doi}")
         print(f"doi: https://doi.org/{doi}")
         print(f"status code: {r.status_code}")
-        print(f"result: {r.json()}")
+        print(f"result: {json.dumps(r.json(), indent=2)}")
         print("")
 
 

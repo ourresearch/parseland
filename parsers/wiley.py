@@ -1,3 +1,5 @@
+from unicodedata import normalize
+
 from exceptions import AuthorNotFoundError
 
 
@@ -8,7 +10,7 @@ class Wiley:
 
     def is_correct_parser(self):
         url = self.soup.find("meta", property="og:url")
-        if "onlinelibrary.wiley.com" in url["content"]:
+        if url and "onlinelibrary.wiley.com" in url["content"]:
             return True
 
     def parse(self):
@@ -27,14 +29,16 @@ class Wiley:
             aff_soup = author.findAll("p", class_=None)
             for aff in aff_soup:
                 if (
-                    ("correspondence" in aff.text.lower() and len(aff.text) < 17)
+                    "correspondence" in aff.text.lower()[:25]
+                    or "address reprint" in aff.text.lower()[:40]
                     or "author deceased" in aff.text.lower()
                     or "e-mail:" in aff.text.lower()
-                    or aff.text.lower().startswith("contribution:")
+                    or aff.text.lower().startswith("contribution")
                     or aff.text.lower().startswith("joint first authors")
+                    or aff.text.lower().startswith("†joint")
                 ):
                     break
-                affiliations.append(aff.text)
+                affiliations.append(normalize("NFKD", aff.text))
             results.append({"name": name, "affiliations": affiliations})
         return results
 

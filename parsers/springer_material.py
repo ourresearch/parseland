@@ -9,9 +9,13 @@ class SpringerMaterial:
         self.parser_name = "springer material"
 
     def is_correct_parser(self):
-        title = self.soup.head.title.text
-        if "SpringerMaterials" in title:
-            return True
+        head = self.soup.head
+        if head:
+            title = head.title
+            if title:
+                title = title.text
+                if "SpringerMaterials" in title:
+                    return True
 
     def parse(self):
         authors = self.get_authors()
