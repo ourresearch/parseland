@@ -23,9 +23,13 @@ class SpringerMaterial:
         authors = []
         section = self.soup.find("dd", {"id": "authors"})
         if not section and "Unusual traffic from your account" in str(self.soup):
-            raise AuthorNotFoundError(f"Unable to parse due to page returning error: Unusual traffic from your account")
+            raise AuthorNotFoundError(
+                f"Unable to parse due to page returning error: Unusual traffic from your account"
+            )
         elif not section:
-            raise AuthorNotFoundError(f"no authors found with springer materials parser")
+            raise AuthorNotFoundError(
+                f"no authors found with springer materials parser"
+            )
         name_soup = section.findAll("li")
         for name in name_soup:
             authors.append(
@@ -124,13 +128,16 @@ test_cases = [
         "result": [
             {
                 "name": "S.I. Sukhoruchkin",
-                "affiliations": ["Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"]
+                "affiliations": [
+                    "Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"
+                ],
             },
             {
                 "name": "Z.N. Soroko",
                 "affiliations": [
-                    "Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"]
-            }
-        ]
-    }
+                    "Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"
+                ],
+            },
+        ],
+    },
 ]

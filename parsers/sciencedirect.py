@@ -1,5 +1,7 @@
 import json
 
+from exceptions import AuthorNotFoundError
+
 
 class ScienceDirect:
     def __init__(self, soup):
@@ -22,6 +24,9 @@ class ScienceDirect:
         """Finds authors in sciencedirect using beautifulsoup."""
         authors = []
         author_soup = self.soup.find_all("a", class_="author")
+
+        if not author_soup:
+            raise AuthorNotFoundError("Authors not found within sciencedirect parser.")
 
         for a in author_soup:
             affiliation_id_1 = a["name"]
@@ -70,7 +75,16 @@ class ScienceDirect:
 
             for item_3 in aff["$$"]:
                 if item_3["#name"] == "textfn":
-                    aff_text = item_3["_"]
+                    aff_text = item_3.get("_")
+                    if not aff_text:
+                        # alternate method
+                        level_4 = item_3.get("$$")
+                        if level_4:
+                            aff_text = []
+                            for item_4 in level_4:
+                                if item_4["#name"] == "__text__":
+                                    aff_text.append(item_4["_"])
+                            aff_text = "".join(aff_text)
             affiliations.append({"id": aff_id, "text": aff_text})
         return affiliations
 
