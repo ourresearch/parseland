@@ -12,8 +12,10 @@ def run_dois():
     for index, row in df.sample(frac=1).head(samples_to_run).iterrows():
         doi = row.doi
         r = requests.get(f"http://127.0.0.1:5000/parse?doi={doi}")
-        print(r.status_code)
-        print(r.json())
+        print(f"doi: https://doi.org/{doi}")
+        print(f"status code: {r.status_code}")
+        print(f"result: {r.json()}")
+        print("")
 
 
 if __name__ == "__main__":
