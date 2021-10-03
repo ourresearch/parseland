@@ -9,7 +9,7 @@ class ScienceDirect(Parser):
 
     def is_correct_parser(self):
         header_link = self.soup.find("link", {"rel": "canonical"})
-        if header_link and "sciencedirect.com" in header_link["href"]:
+        if header_link and "sciencedirect.com" in header_link.get("href"):
             return True
 
     def authors_found(self):

@@ -7,7 +7,7 @@ class MDPI(Parser):
 
     def is_correct_parser(self):
         url = self.soup.find("meta", property="og:url")
-        if url and "mdpi.com" in url["content"]:
+        if url and "mdpi.com" in url.get("content"):
             return True
 
     def authors_found(self):

@@ -9,7 +9,7 @@ class Springer(Parser):
 
     def is_correct_parser(self):
         header_link = self.soup.find("link", {"rel": "canonical"})
-        if header_link and "link.springer.com" in header_link["href"]:
+        if header_link and "link.springer.com" in header_link.get("href"):
             return True
 
     def authors_found(self):
