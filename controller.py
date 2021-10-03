@@ -27,7 +27,7 @@ class ParserController:
         return soup
 
     def find_parser(self):
-        for cls in Parser.__subclasses__():
+        for cls in self.parsers:
             parser = cls(self.soup)
             if parser.is_correct_parser():
                 return parser
