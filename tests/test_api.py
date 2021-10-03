@@ -1,4 +1,5 @@
 import pytest
+import requests_cache
 
 from views import app
 from parsers.sciencedirect import test_cases as science_direct_test_cases
@@ -11,6 +12,9 @@ from parsers.mdpi import test_cases as mdpi_test_cases
 @pytest.fixture
 def client():
     with app.test_client() as client:
+        requests_cache.install_cache(
+            cache_name="api_cache", backend="sqlite", expire_after=24 * 60 * 7  # 7 days
+        )
         yield client
 
 
