@@ -1,6 +1,5 @@
 from unicodedata import normalize
 
-from exceptions import AuthorNotFoundError
 from parser import Parser
 
 
@@ -12,6 +11,9 @@ class Wiley(Parser):
         if url and "onlinelibrary.wiley.com" in url["content"]:
             return True
 
+    def authors_found(self):
+        return self.soup.find("div", class_="loa-authors")
+
     def parse(self):
         authors = self.get_authors()
         return authors
@@ -19,8 +21,6 @@ class Wiley(Parser):
     def get_authors(self):
         results = []
         author_soup = self.soup.find("div", class_="loa-authors")
-        if not author_soup:
-            raise AuthorNotFoundError("Authors not found within wiley parser")
         authors = author_soup.findAll("span", class_="accordion__closed")
         for author in authors:
             affiliations = []

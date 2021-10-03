@@ -10,6 +10,9 @@ class MDPI(Parser):
         if url and "mdpi.com" in url["content"]:
             return True
 
+    def authors_found(self):
+        return self.soup.find("div", class_="art-authors")
+
     def parse(self):
         authors = self.get_authors()
         affiliations = self.get_affiliations()
@@ -19,10 +22,6 @@ class MDPI(Parser):
     def get_authors(self):
         authors = []
         author_soup = self.soup.find("div", class_="art-authors")
-        if not author_soup:
-            raise AuthorNotFoundError(
-                f"no authors found with springer materials parser"
-            )
         author_soup = author_soup.findAll("span", class_="inlineblock")
         for author in author_soup:
             if author.div:

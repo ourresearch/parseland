@@ -16,6 +16,9 @@ class SpringerMaterial(Parser):
                 if "SpringerMaterials" in title:
                     return True
 
+    def authors_found(self):
+        return self.soup.find("dd", {"id": "authors"})
+
     def parse(self):
         authors = self.get_authors()
         affiliations = self.get_affiliations()
@@ -28,10 +31,6 @@ class SpringerMaterial(Parser):
         if not section and "Unusual traffic from your account" in str(self.soup):
             raise AuthorNotFoundError(
                 f"Unable to parse due to page returning error: Unusual traffic from your account"
-            )
-        elif not section:
-            raise AuthorNotFoundError(
-                f"no authors found with springer materials parser"
             )
         name_soup = section.findAll("li")
         for name in name_soup:

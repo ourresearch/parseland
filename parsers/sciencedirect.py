@@ -12,6 +12,9 @@ class ScienceDirect(Parser):
         if header_link and "sciencedirect.com" in header_link["href"]:
             return True
 
+    def authors_found(self):
+        return self.soup.find_all("a", class_="author")
+
     def parse(self):
         """Core function returning list of authors with their affiliations."""
         authors = self.get_authors()
@@ -23,9 +26,6 @@ class ScienceDirect(Parser):
         """Finds authors in sciencedirect using beautifulsoup."""
         authors = []
         author_soup = self.soup.find_all("a", class_="author")
-
-        if not author_soup:
-            raise AuthorNotFoundError("Authors not found within sciencedirect parser.")
 
         for a in author_soup:
             affiliation_id_1 = a["name"]

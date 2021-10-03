@@ -27,7 +27,7 @@ def test_api_root(client):
 def test_no_authors_found(client):
     rv = client.get("/parse?doi=10.1007/0-387-27160-0_33")
     json_data = rv.get_json()
-    assert json_data["error"] == "Authors not found."
+    assert json_data["message"] == []
 
 
 test_cases = (

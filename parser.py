@@ -15,5 +15,13 @@ class Parser(ABC):
         pass
 
     @abstractmethod
+    def authors_found(self):
+        pass
+
+    @staticmethod
+    def no_authors_ouput():
+        return []
+
+    @abstractmethod
     def parse(self):
         pass

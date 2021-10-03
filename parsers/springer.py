@@ -1,7 +1,6 @@
 from collections import defaultdict
 from unicodedata import normalize
 
-from exceptions import AuthorNotFoundError
 from parser import Parser
 
 
@@ -12,6 +11,9 @@ class Springer(Parser):
         header_link = self.soup.find("link", {"rel": "canonical"})
         if header_link and "link.springer.com" in header_link["href"]:
             return True
+
+    def authors_found(self):
+        return True
 
     def parse(self):
         authors_affiliations = None
@@ -29,9 +31,7 @@ class Springer(Parser):
             authors_affiliations = self.get_authors_method_3()
 
         if not authors_affiliations:
-            raise AuthorNotFoundError(
-                f"Author not found within parser {self.parser_name}"
-            )
+            authors_affiliations = self.no_authors_ouput()
         return authors_affiliations
 
     def get_authors(self):

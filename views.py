@@ -21,8 +21,12 @@ def parse():
     doi = request.args.get("doi")
     p = ParserController(doi)
     parser = p.find_parser()
+    if parser.authors_found():
+        message = parser.parse()
+    else:
+        message = parser.no_authors_ouput()
     response = {
-        "message": parser.parse(),
+        "message": message,
         "metadata": {
             "parser": parser.parser_name,
             "doi": doi,
