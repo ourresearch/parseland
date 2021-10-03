@@ -1,12 +1,11 @@
 import re
 
 from exceptions import AuthorNotFoundError
+from parser import Parser
 
 
-class SpringerMaterial:
-    def __init__(self, soup):
-        self.soup = soup
-        self.parser_name = "springer material"
+class SpringerMaterial(Parser):
+    parser_name = "springer material"
 
     def is_correct_parser(self):
         head = self.soup.head

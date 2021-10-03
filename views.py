@@ -2,7 +2,7 @@ from flask import jsonify, request
 
 from app import app
 from exceptions import APIError
-from parser import ParserController
+from controller import ParserController
 
 
 @app.route("/")

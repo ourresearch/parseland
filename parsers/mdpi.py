@@ -1,10 +1,9 @@
 from exceptions import AuthorNotFoundError
+from parser import Parser
 
 
-class MDPI:
-    def __init__(self, soup):
-        self.soup = soup
-        self.parser_name = "mdpi"
+class MDPI(Parser):
+    parser_name = "mdpi"
 
     def is_correct_parser(self):
         url = self.soup.find("meta", property="og:url")
@@ -74,7 +73,13 @@ class MDPI:
 
     @staticmethod
     def format_ids(ids):
-        ids_cleaned = ids.strip().replace(",*", "").replace("*", "").replace(",†", "").replace("†", "")
+        ids_cleaned = (
+            ids.strip()
+            .replace(",*", "")
+            .replace("*", "")
+            .replace(",†", "")
+            .replace("†", "")
+        )
         ids_split = ids_cleaned.split(",")
         aff_ids = []
         for aff_id in ids_split:

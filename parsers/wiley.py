@@ -1,12 +1,11 @@
 from unicodedata import normalize
 
 from exceptions import AuthorNotFoundError
+from parser import Parser
 
 
-class Wiley:
-    def __init__(self, soup):
-        self.soup = soup
-        self.parser_name = "wiley"
+class Wiley(Parser):
+    parser_name = "wiley"
 
     def is_correct_parser(self):
         url = self.soup.find("meta", property="og:url")

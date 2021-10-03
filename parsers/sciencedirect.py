@@ -1,12 +1,11 @@
 import json
 
 from exceptions import AuthorNotFoundError
+from parser import Parser
 
 
-class ScienceDirect:
-    def __init__(self, soup):
-        self.soup = soup
-        self.parser_name = "sciencedirect"
+class ScienceDirect(Parser):
+    parser_name = "sciencedirect"
 
     def is_correct_parser(self):
         header_link = self.soup.find("link", {"rel": "canonical"})

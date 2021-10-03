@@ -2,12 +2,11 @@ from collections import defaultdict
 from unicodedata import normalize
 
 from exceptions import AuthorNotFoundError
+from parser import Parser
 
 
-class Springer:
-    def __init__(self, soup):
-        self.soup = soup
-        self.parser_name = "springer"
+class Springer(Parser):
+    parser_name = "springer"
 
     def is_correct_parser(self):
         header_link = self.soup.find("link", {"rel": "canonical"})
