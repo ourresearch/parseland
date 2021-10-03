@@ -5,6 +5,11 @@ class Parser(ABC):
     def __init__(self, soup):
         self.soup = soup
 
+    @property
+    @abstractmethod
+    def parser_name(self):
+        raise NotImplementedError
+
     @abstractmethod
     def is_correct_parser(self):
         pass
