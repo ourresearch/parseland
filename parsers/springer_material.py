@@ -99,47 +99,46 @@ class SpringerMaterial(Parser):
         aff_id = int(m)
         return aff_id
 
-
-test_cases = [
-    {
-        "doi": "10.1007/10783448_2306",
-        "result": [
-            {
-                "name": "H. Duddeck",
-                "affiliations": [
-                    "Institut für Organische Chemie, Universität Hannover, 30167, Hannover, Germany"
-                ],
-            },
-        ],
-    },
-    {
-        "doi": "10.1007/10201640_144",
-        "result": [
-            {
-                "name": "H. von Philipsborn",
-                "affiliations": [],
-            },
-            {
-                "name": "L. Treitinger",
-                "affiliations": [],
-            },
-        ],
-    },
-    {
-        "doi": "10.1007/10730534_69",
-        "result": [
-            {
-                "name": "S.I. Sukhoruchkin",
-                "affiliations": [
-                    "Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"
-                ],
-            },
-            {
-                "name": "Z.N. Soroko",
-                "affiliations": [
-                    "Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"
-                ],
-            },
-        ],
-    },
-]
+    test_cases = [
+        {
+            "doi": "10.1007/10783448_2306",
+            "result": [
+                {
+                    "name": "H. Duddeck",
+                    "affiliations": [
+                        "Institut für Organische Chemie, Universität Hannover, 30167, Hannover, Germany"
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1007/10201640_144",
+            "result": [
+                {
+                    "name": "H. von Philipsborn",
+                    "affiliations": [],
+                },
+                {
+                    "name": "L. Treitinger",
+                    "affiliations": [],
+                },
+            ],
+        },
+        {
+            "doi": "10.1007/10730534_69",
+            "result": [
+                {
+                    "name": "S.I. Sukhoruchkin",
+                    "affiliations": [
+                        "Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"
+                    ],
+                },
+                {
+                    "name": "Z.N. Soroko",
+                    "affiliations": [
+                        "Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"
+                    ],
+                },
+            ],
+        },
+    ]

@@ -1,4 +1,3 @@
-from exceptions import AuthorNotFoundError
 from parser import Parser
 
 
@@ -86,51 +85,50 @@ class MDPI(Parser):
                 aff_ids.append(int(aff_id))
         return aff_ids
 
-
-test_cases = [
-    {
-        "doi": "10.3390/act10080193",
-        "result": [
-            {
-                "name": "Wenfei Li",
-                "affiliations": [
-                    "Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences, Shenzhen 518055, China",
-                    "SIAT Branch, Shenzhen Institute of Artificial Intelligence and Robotics for Society, Shenzhen 518055, China",
-                    "Guangdong-Hong Kong-Macao Joint Laboratory of Human-Machine Intelligence-Synergy Systems, Shenzhen 518055, China",
-                ],
-            },
-            {
-                "name": "Huiyun Li",
-                "affiliations": [
-                    "Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences, Shenzhen 518055, China",
-                    "SIAT Branch, Shenzhen Institute of Artificial Intelligence and Robotics for Society, Shenzhen 518055, China",
-                    "Guangdong-Hong Kong-Macao Joint Laboratory of Human-Machine Intelligence-Synergy Systems, Shenzhen 518055, China",
-                ],
-            },
-            {
-                "name": "Chao Huang",
-                "affiliations": [
-                    "Department of Industrial and Systems Engineering, The Hong Kong Polytechnic University, Hong Kong 999077, China"
-                ],
-            },
-            {
-                "name": "Kun Xu",
-                "affiliations": [
-                    "Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences, Shenzhen 518055, China"
-                ],
-            },
-            {
-                "name": "Tianfu Sun",
-                "affiliations": [
-                    "Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences, Shenzhen 518055, China"
-                ],
-            },
-            {
-                "name": "Haiping Du",
-                "affiliations": [
-                    "School of Electrical, Computer and Telecommunications Engineering, University of Wollongong, Wollongong 2522, Australia"
-                ],
-            },
-        ],
-    }
-]
+    test_cases = [
+        {
+            "doi": "10.3390/act10080193",
+            "result": [
+                {
+                    "name": "Wenfei Li",
+                    "affiliations": [
+                        "Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences, Shenzhen 518055, China",
+                        "SIAT Branch, Shenzhen Institute of Artificial Intelligence and Robotics for Society, Shenzhen 518055, China",
+                        "Guangdong-Hong Kong-Macao Joint Laboratory of Human-Machine Intelligence-Synergy Systems, Shenzhen 518055, China",
+                    ],
+                },
+                {
+                    "name": "Huiyun Li",
+                    "affiliations": [
+                        "Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences, Shenzhen 518055, China",
+                        "SIAT Branch, Shenzhen Institute of Artificial Intelligence and Robotics for Society, Shenzhen 518055, China",
+                        "Guangdong-Hong Kong-Macao Joint Laboratory of Human-Machine Intelligence-Synergy Systems, Shenzhen 518055, China",
+                    ],
+                },
+                {
+                    "name": "Chao Huang",
+                    "affiliations": [
+                        "Department of Industrial and Systems Engineering, The Hong Kong Polytechnic University, Hong Kong 999077, China"
+                    ],
+                },
+                {
+                    "name": "Kun Xu",
+                    "affiliations": [
+                        "Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences, Shenzhen 518055, China"
+                    ],
+                },
+                {
+                    "name": "Tianfu Sun",
+                    "affiliations": [
+                        "Shenzhen Institutes of Advanced Technology, Chinese Academy of Sciences, Shenzhen 518055, China"
+                    ],
+                },
+                {
+                    "name": "Haiping Du",
+                    "affiliations": [
+                        "School of Electrical, Computer and Telecommunications Engineering, University of Wollongong, Wollongong 2522, Australia"
+                    ],
+                },
+            ],
+        }
+    ]

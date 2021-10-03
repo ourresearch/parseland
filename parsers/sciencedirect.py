@@ -1,6 +1,5 @@
 import json
 
-from exceptions import AuthorNotFoundError
 from parser import Parser
 
 
@@ -133,138 +132,137 @@ class ScienceDirect(Parser):
         matching_ids = list(set(matching_ids))  # remove duplicates
         return matching_ids
 
-
-test_cases = [
-    {
-        "doi": "10.1016/0022-247x(78)90205-6",
-        "result": [
-            {
-                "name": "Pierre Charrier",
-                "affiliations": [
-                    "U.E.R. de Mathématiques et Informatique et Laboratoire associé au C.N.R.S. n∘ 226, Université de Bordeaux 1, 33405 Talence, France"
-                ],
-            },
-            {
-                "name": "Giovanni M Troianiello",
-                "affiliations": [
-                    "Istituto Matematico, Universitá di Roma, 00185 Rome, Italy"
-                ],
-            },
-        ],
-    },
-    {
-        "doi": "10.1016/0022-247x(79)90002-7",
-        "result": [
-            {
-                "name": "N Levan",
-                "affiliations": [
-                    "Department of System Science, 4532 Boelter Hall, University of California, Los Angeles, California 90024 U.S.A."
-                ],
-            },
-            {
-                "name": "L Rigby",
-                "affiliations": [
-                    "Department of Computing and Control, Huxley Building, Imperial College, London SW7 2BZ, Great Britain"
-                ],
-            },
-        ],
-    },
-    {
-        "doi": "10.1016/0022-247x(77)90164-0",
-        "result": [
-            {
-                "name": "László Losonczi",
-                "affiliations": [
-                    "Department of Mathematics, University of Lagos, Lagos, Nigeria",
-                    "Department of Mathematics, Kossuth Lajos University, Debrecen, Hungary",
-                ],
-            },
-        ],
-    },
-    {
-        "doi": "10.1016/0024-3795(85)90253-8",
-        "result": [
-            {
-                "name": "Donald W. Robinson",
-                "affiliations": [
-                    "Department of Mathematics Brigham Young University Provo, Utah 84602, USA"
-                ],
-            },
-        ],
-    },
-    {
-        "doi": "10.1016/0024-3795(86)90148-5",
-        "result": [
-            {
-                "name": "Robert E. Hartwig",
-                "affiliations": [
-                    "Department of Mathematics North Carolina State University Box 8205 Raleigh, North Carolina 27695-820 USA"
-                ],
-            },
-            {
-                "name": "George P.H. Styan",
-                "affiliations": [
-                    "Department of Mathematics and Statistics McGill University 805 ouest, rue Sherbrooke Montréal, Québec, Canada H3A 2K6"
-                ],
-            },
-        ],
-    },
-    {
-        "doi": "10.1016/j.ab.2021.114100",
-        "result": [
-            {
-                "name": "Emma Dreischmeier",
-                "affiliations": [
-                    "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
-                ],
-            },
-            {
-                "name": "William E. Fahl",
-                "affiliations": [
-                    "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
-                ],
-            },
-        ],
-    },
-    {
-        "doi": "10.1016/j.ab.2021.114241",
-        "result": [
-            {
-                "name": "Jun Hu",
-                "affiliations": [
-                    "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
-                ],
-            },
-            {
-                "name": "Lin-Lin Zheng",
-                "affiliations": [
-                    "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
-                ],
-            },
-            {
-                "name": "Yan-Song Bai",
-                "affiliations": [
-                    "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
-                ],
-            },
-            {
-                "name": "Ke-Wen Zhang",
-                "affiliations": [
-                    "College of Mechanical Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
-                ],
-            },
-            {
-                "name": "Dong-Jun Yu",
-                "affiliations": [
-                    "School of Computer Science and Engineering, Nanjing University of Science and Technology,Xiaolingwei 200, Nanjing, 210094, China"
-                ],
-            },
-            {
-                "name": "Gui-Jun Zhang",
-                "affiliations": [
-                    "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
-                ],
-            },
-        ],
-    },
-]
+    test_cases = [
+        {
+            "doi": "10.1016/0022-247x(78)90205-6",
+            "result": [
+                {
+                    "name": "Pierre Charrier",
+                    "affiliations": [
+                        "U.E.R. de Mathématiques et Informatique et Laboratoire associé au C.N.R.S. n∘ 226, Université de Bordeaux 1, 33405 Talence, France"
+                    ],
+                },
+                {
+                    "name": "Giovanni M Troianiello",
+                    "affiliations": [
+                        "Istituto Matematico, Universitá di Roma, 00185 Rome, Italy"
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1016/0022-247x(79)90002-7",
+            "result": [
+                {
+                    "name": "N Levan",
+                    "affiliations": [
+                        "Department of System Science, 4532 Boelter Hall, University of California, Los Angeles, California 90024 U.S.A."
+                    ],
+                },
+                {
+                    "name": "L Rigby",
+                    "affiliations": [
+                        "Department of Computing and Control, Huxley Building, Imperial College, London SW7 2BZ, Great Britain"
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1016/0022-247x(77)90164-0",
+            "result": [
+                {
+                    "name": "László Losonczi",
+                    "affiliations": [
+                        "Department of Mathematics, University of Lagos, Lagos, Nigeria",
+                        "Department of Mathematics, Kossuth Lajos University, Debrecen, Hungary",
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1016/0024-3795(85)90253-8",
+            "result": [
+                {
+                    "name": "Donald W. Robinson",
+                    "affiliations": [
+                        "Department of Mathematics Brigham Young University Provo, Utah 84602, USA"
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1016/0024-3795(86)90148-5",
+            "result": [
+                {
+                    "name": "Robert E. Hartwig",
+                    "affiliations": [
+                        "Department of Mathematics North Carolina State University Box 8205 Raleigh, North Carolina 27695-820 USA"
+                    ],
+                },
+                {
+                    "name": "George P.H. Styan",
+                    "affiliations": [
+                        "Department of Mathematics and Statistics McGill University 805 ouest, rue Sherbrooke Montréal, Québec, Canada H3A 2K6"
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1016/j.ab.2021.114100",
+            "result": [
+                {
+                    "name": "Emma Dreischmeier",
+                    "affiliations": [
+                        "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
+                    ],
+                },
+                {
+                    "name": "William E. Fahl",
+                    "affiliations": [
+                        "Wisconsin Institutes of Medical Research, University of Wisconsin-Madison, Madison, WI, USA"
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1016/j.ab.2021.114241",
+            "result": [
+                {
+                    "name": "Jun Hu",
+                    "affiliations": [
+                        "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
+                    ],
+                },
+                {
+                    "name": "Lin-Lin Zheng",
+                    "affiliations": [
+                        "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
+                    ],
+                },
+                {
+                    "name": "Yan-Song Bai",
+                    "affiliations": [
+                        "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
+                    ],
+                },
+                {
+                    "name": "Ke-Wen Zhang",
+                    "affiliations": [
+                        "College of Mechanical Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
+                    ],
+                },
+                {
+                    "name": "Dong-Jun Yu",
+                    "affiliations": [
+                        "School of Computer Science and Engineering, Nanjing University of Science and Technology,Xiaolingwei 200, Nanjing, 210094, China"
+                    ],
+                },
+                {
+                    "name": "Gui-Jun Zhang",
+                    "affiliations": [
+                        "College of Information Engineering, Zhejiang University of Technology, Hangzhou, 310023, China"
+                    ],
+                },
+            ],
+        },
+    ]

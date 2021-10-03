@@ -153,117 +153,116 @@ class Springer(Parser):
     def format_name(name):
         return " ".join(reversed(name.split(", ")))
 
-
-test_cases = [
-    {
-        "doi": "10.1007/978-0-387-39343-8_21",
-        "result": [
-            {
-                "name": "Pascal Boileau",
-                "affiliations": [
-                    "Orthopaedic Surgery and Sports Traumatology, University of Nice-Sophia Antipolis, Nice, France"
-                ],
-            },
-            {
-                "name": "Christopher R. Chuinard",
-                "affiliations": [
-                    "Great Lakes Orthopaedic Center, Munson Medical Center, Traverse City, USA"
-                ],
-            },
-        ],
-    },
-    {
-        "doi": "10.1007/0-306-48581-8_22",
-        "result": [
-            {
-                "name": "L. Michael Ascher",
-                "affiliations": [
-                    "Department of Psychology, Philadelphia College of Osteopathic Medicine, Philadelphia"
-                ],
-            },
-            {
-                "name": "Christina Esposito",
-                "affiliations": [
-                    "Department of Psychology, Philadelphia College of Osteopathic Medicine, Philadelphia"
-                ],
-            },
-        ],
-    },
-    {
-        "doi": "10.1007/0-306-48688-1_15",
-        "result": [
-            {
-                "name": "Ping Zhang",
-                "affiliations": [
-                    "Department of Medicine, Section of Pulmonary and Critical Care Medicine, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
-                ],
-            },
-            {
-                "name": "Gregory J. Bagby",
-                "affiliations": [
-                    "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Department of Physiology, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
-                ],
-            },
-            {
-                "name": "Jay K. Kolls",
-                "affiliations": [
-                    "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Alcohol Research Center and Gene Therapy Programs, Louisiana State University Health Sciences Center, New Orleans"
-                ],
-            },
-            {
-                "name": "Lee J. Quinton",
-                "affiliations": [
-                    "Department of Physiology and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
-                ],
-            },
-            {
-                "name": "Steve Nelson",
-                "affiliations": [
-                    "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Department of Physiology, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
-                ],
-            },
-        ],
-    },
-    {
-        "doi": "10.1007/0-306-48581-8_7",
-        "result": [
-            {
-                "name": "Christine Bowman Edmondson",
-                "affiliations": [],
-            },
-            {
-                "name": "Daniel Joseph Cahill",
-                "affiliations": [
-                    "Department of Psychology, California State University, Fresno, Fresno"
-                ],
-            },
-        ],
-    },
-    {
-        "doi": "10.3758/s13414-014-0792-2",
-        "result": [
-            {
-                "name": "Odette Scharenborg",
-                "affiliations": [
-                    "Centre for Language Studies, Radboud University Nijmegen, Erasmusplein 1, 6525 HT, Nijmegen, The Netherlands",
-                    "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
-                ],
-            },
-            {
-                "name": "Andrea Weber",
-                "affiliations": [
-                    "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
-                    "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands",
-                ],
-            },
-            {
-                "name": "Esther Janse",
-                "affiliations": [
-                    "Centre for Language Studies, Radboud University Nijmegen, Erasmusplein 1, 6525 HT, Nijmegen, The Netherlands",
-                    "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
-                    "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands",
-                ],
-            },
-        ],
-    },
-]
+    test_cases = [
+        {
+            "doi": "10.1007/978-0-387-39343-8_21",
+            "result": [
+                {
+                    "name": "Pascal Boileau",
+                    "affiliations": [
+                        "Orthopaedic Surgery and Sports Traumatology, University of Nice-Sophia Antipolis, Nice, France"
+                    ],
+                },
+                {
+                    "name": "Christopher R. Chuinard",
+                    "affiliations": [
+                        "Great Lakes Orthopaedic Center, Munson Medical Center, Traverse City, USA"
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1007/0-306-48581-8_22",
+            "result": [
+                {
+                    "name": "L. Michael Ascher",
+                    "affiliations": [
+                        "Department of Psychology, Philadelphia College of Osteopathic Medicine, Philadelphia"
+                    ],
+                },
+                {
+                    "name": "Christina Esposito",
+                    "affiliations": [
+                        "Department of Psychology, Philadelphia College of Osteopathic Medicine, Philadelphia"
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1007/0-306-48688-1_15",
+            "result": [
+                {
+                    "name": "Ping Zhang",
+                    "affiliations": [
+                        "Department of Medicine, Section of Pulmonary and Critical Care Medicine, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
+                    ],
+                },
+                {
+                    "name": "Gregory J. Bagby",
+                    "affiliations": [
+                        "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Department of Physiology, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
+                    ],
+                },
+                {
+                    "name": "Jay K. Kolls",
+                    "affiliations": [
+                        "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Alcohol Research Center and Gene Therapy Programs, Louisiana State University Health Sciences Center, New Orleans"
+                    ],
+                },
+                {
+                    "name": "Lee J. Quinton",
+                    "affiliations": [
+                        "Department of Physiology and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
+                    ],
+                },
+                {
+                    "name": "Steve Nelson",
+                    "affiliations": [
+                        "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Department of Physiology, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1007/0-306-48581-8_7",
+            "result": [
+                {
+                    "name": "Christine Bowman Edmondson",
+                    "affiliations": [],
+                },
+                {
+                    "name": "Daniel Joseph Cahill",
+                    "affiliations": [
+                        "Department of Psychology, California State University, Fresno, Fresno"
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.3758/s13414-014-0792-2",
+            "result": [
+                {
+                    "name": "Odette Scharenborg",
+                    "affiliations": [
+                        "Centre for Language Studies, Radboud University Nijmegen, Erasmusplein 1, 6525 HT, Nijmegen, The Netherlands",
+                        "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
+                    ],
+                },
+                {
+                    "name": "Andrea Weber",
+                    "affiliations": [
+                        "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
+                        "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands",
+                    ],
+                },
+                {
+                    "name": "Esther Janse",
+                    "affiliations": [
+                        "Centre for Language Studies, Radboud University Nijmegen, Erasmusplein 1, 6525 HT, Nijmegen, The Netherlands",
+                        "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
+                        "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands",
+                    ],
+                },
+            ],
+        },
+    ]

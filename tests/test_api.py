@@ -1,12 +1,8 @@
 import pytest
 import requests_cache
 
+from parser import Parser
 from views import app
-from parsers.sciencedirect import test_cases as science_direct_test_cases
-from parsers.springer import test_cases as springer_test_cases
-from parsers.springer_material import test_cases as springer_material_test_cases
-from parsers.wiley import test_cases as wiley_test_cases
-from parsers.mdpi import test_cases as mdpi_test_cases
 
 
 @pytest.fixture
@@ -30,13 +26,10 @@ def test_no_authors_found(client):
     assert json_data["message"] == []
 
 
-test_cases = (
-    science_direct_test_cases
-    + springer_test_cases
-    + springer_material_test_cases
-    + wiley_test_cases
-    + mdpi_test_cases
-)
+test_cases = []
+parsers = Parser.__subclasses__()
+for parser in parsers:
+    test_cases.extend(parser.test_cases)
 
 
 @pytest.mark.parametrize("test_case", test_cases)

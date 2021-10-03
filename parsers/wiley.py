@@ -41,27 +41,26 @@ class Wiley(Parser):
             results.append({"name": name, "affiliations": affiliations})
         return results
 
-
-test_cases = [
-    {
-        "doi": "10.1096/fba.2020-00145",
-        "result": [
-            {
-                "name": "Lia Tadesse Gebremedhin",
-                "affiliations": ["Minister of Health, Addis Ababa, Ethiopia"],
-            },
-            {
-                "name": "Tedla W. Giorgis",
-                "affiliations": [
-                    "Advisor to the Minister, Ministry of Health, Addis Ababa, Ethiopia"
-                ],
-            },
-            {
-                "name": "Heran Gerba",
-                "affiliations": [
-                    "Director-General, Ethiopian Food and Drug Administration, Addis Ababa, Ethiopia"
-                ],
-            },
-        ],
-    },
-]
+    test_cases = [
+        {
+            "doi": "10.1096/fba.2020-00145",
+            "result": [
+                {
+                    "name": "Lia Tadesse Gebremedhin",
+                    "affiliations": ["Minister of Health, Addis Ababa, Ethiopia"],
+                },
+                {
+                    "name": "Tedla W. Giorgis",
+                    "affiliations": [
+                        "Advisor to the Minister, Ministry of Health, Addis Ababa, Ethiopia"
+                    ],
+                },
+                {
+                    "name": "Heran Gerba",
+                    "affiliations": [
+                        "Director-General, Ethiopian Food and Drug Administration, Addis Ababa, Ethiopia"
+                    ],
+                },
+            ],
+        },
+    ]

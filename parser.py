@@ -25,3 +25,7 @@ class Parser(ABC):
     @abstractmethod
     def parse(self):
         pass
+
+    @property
+    def test_cases(self):
+        return []
