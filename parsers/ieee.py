@@ -8,8 +8,7 @@ class IEEE(Parser):
     parser_name = "IEEE"
 
     def is_correct_parser(self):
-        header_link = self.soup.find("link", {"rel": "canonical"})
-        if header_link and "ieee.org" in header_link.get("href"):
+        if self.domain_in_canonical_link("ieee.org"):
             return True
 
     def authors_found(self):
