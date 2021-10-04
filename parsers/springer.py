@@ -9,7 +9,10 @@ class Springer(Parser):
 
     def is_correct_parser(self):
         header_link = self.soup.find("link", {"rel": "canonical"})
-        if header_link and "link.springer.com" in header_link.get("href"):
+        url = self.soup.find("meta", property="og:url")
+        if (header_link and "link.springer.com" in header_link.get("href")) or (
+            url and "nature.com" in url.get("content")
+        ):
             return True
 
     def authors_found(self):
@@ -261,6 +264,29 @@ class Springer(Parser):
                         "Centre for Language Studies, Radboud University Nijmegen, Erasmusplein 1, 6525 HT, Nijmegen, The Netherlands",
                         "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
                         "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands",
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1038/s41417-021-00297-6",
+            "result": [
+                {
+                    "name": "Yanni Hong",
+                    "affiliations": [
+                        "Department of Oncology, Quanzhou First Hospital Affiliated Fujian Medical University, Quanzhou, P.R. China"
+                    ],
+                },
+                {
+                    "name": "Xiaofeng Li",
+                    "affiliations": [
+                        "Department of Oncology, Quanzhou First Hospital Affiliated Fujian Medical University, Quanzhou, P.R. China"
+                    ],
+                },
+                {
+                    "name": "Jinfeng Zhu",
+                    "affiliations": [
+                        "Department of Oncology, Quanzhou First Hospital Affiliated Fujian Medical University, Quanzhou, P.R. China"
                     ],
                 },
             ],
