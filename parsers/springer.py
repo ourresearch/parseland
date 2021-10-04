@@ -8,10 +8,10 @@ class Springer(Parser):
     parser_name = "springer"
 
     def is_correct_parser(self):
-        header_link = self.soup.find("link", {"rel": "canonical"})
-        url = self.soup.find("meta", property="og:url")
-        if (header_link and "link.springer.com" in header_link.get("href")) or (
-            url and "nature.com" in url.get("content")
+        if (
+            self.domain_in_canonical_link("link.springer.com")
+            or self.domain_in_canonical_link("springeropen.com")
+            or self.domain_in_meta_og_url("nature.com")
         ):
             return True
 

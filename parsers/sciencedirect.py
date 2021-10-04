@@ -7,8 +7,7 @@ class ScienceDirect(Parser):
     parser_name = "sciencedirect"
 
     def is_correct_parser(self):
-        header_link = self.soup.find("link", {"rel": "canonical"})
-        if header_link and "sciencedirect.com" in header_link.get("href"):
+        if self.domain_in_canonical_link("sciencedirect.com"):
             return True
 
     def authors_found(self):

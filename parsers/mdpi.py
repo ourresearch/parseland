@@ -5,8 +5,7 @@ class MDPI(Parser):
     parser_name = "mdpi"
 
     def is_correct_parser(self):
-        url = self.soup.find("meta", property="og:url")
-        if url and "mdpi.com" in url.get("content"):
+        if self.domain_in_meta_og_url("mdpi.com"):
             return True
 
     def authors_found(self):
