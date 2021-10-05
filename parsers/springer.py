@@ -12,6 +12,7 @@ class Springer(Parser):
             self.domain_in_canonical_link("link.springer.com")
             or self.domain_in_canonical_link("springeropen.com")
             or self.domain_in_meta_og_url("nature.com")
+            or self.domain_in_meta_og_url("biomedcentral.com")
         ):
             return True
 
