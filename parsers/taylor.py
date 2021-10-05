@@ -16,9 +16,12 @@ class Taylor(Parser):
         authors = author_soup.findAll("div", class_="entryAuthor")
         for author in authors:
             name = author.a.text
+            affiliations = []
             affiliation = author.find("span", class_="overlay")
-            affiliation_trimmed = affiliation.contents[0].text[2:]
-            results.append({"name": name, "affiliations": [affiliation_trimmed]})
+            if affiliation:
+                affiliation_trimmed = affiliation.contents[0].text[2:]
+                affiliations.append(affiliation_trimmed)
+            results.append({"name": name, "affiliations": affiliations})
         return results
 
     test_cases = [
