@@ -6,8 +6,14 @@ class Oxford(Parser):
     parser_name = "oxford university press"
 
     def is_correct_parser(self):
-        if self.soup.find("div", class_="explanation-message") and "help us confirm that you are not a robot and we will take you to your content" in str(self.soup):
-            raise UnusualTrafficError(f"content blocked within {self.parser_name} parser")
+        if self.soup.find(
+            "div", class_="explanation-message"
+        ) and "help us confirm that you are not a robot and we will take you to your content" in str(
+            self.soup
+        ):
+            raise UnusualTrafficError(
+                f"content blocked within {self.parser_name} parser"
+            )
         return self.domain_in_meta_og_url("academic.oup.com")
 
     def authors_found(self):
