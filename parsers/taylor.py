@@ -1,0 +1,56 @@
+from parser import Parser
+
+
+class Taylor(Parser):
+    parser_name = "taylor"
+
+    def is_correct_parser(self):
+        return self.domain_in_meta_og_url("tandfonline.com")
+
+    def authors_found(self):
+        return self.soup.find("div", class_="publicationContentAuthors")
+
+    def parse(self):
+        results = []
+        author_soup = self.soup.find("div", class_="publicationContentAuthors")
+        authors = author_soup.findAll("div", class_="entryAuthor")
+        for author in authors:
+            name = author.a.text
+            affiliation = author.find("span", class_="overlay")
+            affiliation_trimmed = affiliation.contents[0].text[2:]
+            results.append({"name": name, "affiliations": [affiliation_trimmed]})
+        return results
+
+    test_cases = [
+        {
+            "doi": "10.1080/23311932.2021.1910156",
+            "result": [
+                {
+                    "name": "Joseph Alulu",
+                    "affiliations": [
+                        "Department of Agricultural Economics, Faculty of Agriculture, University of Nairobi, Nairobi, Kenya"
+                    ],
+                },
+                {
+                    "name": "David Jakinda Otieno",
+                    "affiliations": [
+                        "Department of Agricultural Economics, Faculty of Agriculture, University of Nairobi, Nairobi, Kenya"
+                    ],
+                },
+                {
+                    "name": "Willis Oluoch-Kosura",
+                    "affiliations": [
+                        "Department of Agricultural Economics, Faculty of Agriculture, University of Nairobi, Nairobi, Kenya"
+                    ],
+                },
+                {
+                    "name": "Justus Ochieng",
+                    "affiliations": ["World Vegetable Center, Arusha, Tanzania"],
+                },
+                {
+                    "name": "Manuel Tejada Moral",
+                    "affiliations": ["University of Seville, Seville, SPAIN"],
+                },
+            ],
+        },
+    ]
