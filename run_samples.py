@@ -21,7 +21,7 @@ def run_dois():
         print("")
 
 
-def test_coverage():
+def run_coverage():
     """Runs a sample of DOIs for a given publisher in order to determine accuracy of parsers."""
     samples_to_run = 100
     df = pd.read_csv("available-dois.csv")
@@ -54,4 +54,4 @@ def test_coverage():
 
 
 if __name__ == "__main__":
-    test_coverage()
+    run_coverage()

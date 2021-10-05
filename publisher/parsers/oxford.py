@@ -1,8 +1,8 @@
 from exceptions import UnusualTrafficError
-from parser import Parser
+from publisher.parser import PublisherParser
 
 
-class Oxford(Parser):
+class Oxford(PublisherParser):
     parser_name = "oxford university press"
 
     def is_correct_parser(self):

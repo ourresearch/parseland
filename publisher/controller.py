@@ -4,15 +4,15 @@ from bs4 import BeautifulSoup
 import requests
 
 from exceptions import ParserNotFoundError, S3FileNotFoundError
-from parser import Parser
-from parsers import *  # allows us to use __subclasses__()
+from publisher.parser import PublisherParser
+from publisher.parsers import *  # allows import via __subclasses__()
 
 
-class ParserController:
+class PublisherController:
     def __init__(self, doi):
         self.doi = doi
         self.landing_page_endpoint = f"https://api.unpaywall.org/doi_page/{self.doi}"
-        self.parsers = Parser.__subclasses__()
+        self.parsers = PublisherParser.__subclasses__()
         self.soup = self.get_soup()
 
     def get_html(self):

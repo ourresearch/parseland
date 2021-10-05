@@ -1,10 +1,10 @@
 import json
 import re
 
-from parser import Parser
+from publisher.parser import PublisherParser
 
 
-class IEEE(Parser):
+class IEEE(PublisherParser):
     parser_name = "IEEE"
 
     def is_correct_parser(self):

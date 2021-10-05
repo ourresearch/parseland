@@ -1,7 +1,7 @@
-from parser import Parser
+from publisher.parser import PublisherParser
 
 
-class ElsevierBV(Parser):
+class ElsevierBV(PublisherParser):
     parser_name = "Elsevier BV"
 
     def is_correct_parser(self):

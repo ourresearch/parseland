@@ -2,7 +2,7 @@ from flask import jsonify, request
 
 from app import app
 from exceptions import APIError
-from controller import ParserController
+from publisher.controller import PublisherController
 
 
 @app.route("/")
@@ -16,11 +16,11 @@ def home():
     )
 
 
-@app.route("/parse")
-def parse():
+@app.route("/parse-publisher")
+def parse_publisher():
     doi = request.args.get("doi")
-    p = ParserController(doi)
-    parser = p.find_parser()
+    pc = PublisherController(doi)
+    parser = pc.find_parser()
     if parser.authors_found():
         message = parser.parse()
     else:

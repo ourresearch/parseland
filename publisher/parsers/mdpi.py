@@ -1,7 +1,7 @@
-from parser import Parser
+from publisher.parser import PublisherParser
 
 
-class MDPI(Parser):
+class MDPI(PublisherParser):
     parser_name = "mdpi"
 
     def is_correct_parser(self):

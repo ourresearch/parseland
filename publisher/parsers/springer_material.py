@@ -1,10 +1,10 @@
 import re
 
 from exceptions import UnusualTrafficError
-from parser import Parser
+from publisher.parser import PublisherParser
 
 
-class SpringerMaterial(Parser):
+class SpringerMaterial(PublisherParser):
     parser_name = "springer material"
 
     def is_correct_parser(self):

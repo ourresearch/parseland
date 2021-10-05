@@ -1,7 +1,7 @@
-from parser import Parser
+from publisher.parser import PublisherParser
 
 
-class Taylor(Parser):
+class Taylor(PublisherParser):
     parser_name = "taylor"
 
     def is_correct_parser(self):

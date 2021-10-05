@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Parser(ABC):
+class PublisherParser(ABC):
     def __init__(self, soup):
         self.soup = soup
 

@@ -1,9 +1,9 @@
 import json
 
-from parser import Parser
+from publisher.parser import PublisherParser
 
 
-class ScienceDirect(Parser):
+class ScienceDirect(PublisherParser):
     parser_name = "sciencedirect"
 
     def is_correct_parser(self):

@@ -1,10 +1,10 @@
 from collections import defaultdict
 from unicodedata import normalize
 
-from parser import Parser
+from publisher.parser import PublisherParser
 
 
-class Springer(Parser):
+class Springer(PublisherParser):
     parser_name = "springer"
 
     def is_correct_parser(self):
