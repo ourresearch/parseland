@@ -1,6 +1,6 @@
 import re
 
-from exceptions import AuthorNotFoundError
+from exceptions import UnusualTrafficError
 from parser import Parser
 
 
@@ -29,7 +29,7 @@ class SpringerMaterial(Parser):
         authors = []
         section = self.soup.find("dd", {"id": "authors"})
         if not section and "Unusual traffic from your account" in str(self.soup):
-            raise AuthorNotFoundError(
+            raise UnusualTrafficError(
                 f"Unable to parse due to page returning error: Unusual traffic from your account"
             )
         name_soup = section.findAll("li")

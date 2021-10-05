@@ -58,4 +58,5 @@ class IEEE(Parser):
                 },
             ],
         },
+        {"doi": "10.1109/agro-geoinformatics50104.2021.9530299", "result": []},
     ]

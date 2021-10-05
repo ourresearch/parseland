@@ -5,17 +5,17 @@ class APIError(Exception):
 
 
 class ParserNotFoundError(APIError):
-    """Error when file does not exist in S3."""
+    """Error when a valid parser is not found."""
 
     code = 404
     description = "Parser not found."
 
 
-class AuthorNotFoundError(APIError):
-    """Error when author is not found within a valid document."""
+class UnusualTrafficError(APIError):
+    """Error when article source states "unusual traffic from your account" rather than author data."""
 
-    code = 404
-    description = "Authors not found."
+    code = 403
+    description = "Unusual traffic error."
 
 
 class S3FileNotFoundError(APIError):
