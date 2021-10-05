@@ -46,8 +46,11 @@ def test_coverage():
             print(f"status code: {r.status_code}")
             print(f"result: {json.dumps(r.json(), indent=2)}")
             print("")
+    sorted_publishers = dict(
+        sorted(publishers.items(), key=lambda item: item[1], reverse=True)
+    )
+    print(sorted_publishers)
     print(f"Coverage is {num_not_found/num_ran}")
-    print(sorted(publishers, key=publishers.get))
 
 
 if __name__ == "__main__":
