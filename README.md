@@ -4,7 +4,7 @@ This API parses and returns author and affiliation data from landing pages.
 
 ### Example
 
-`/parse?doi=10.1016/j.actaastro.2021.05.018`
+`/parse-publisher?doi=10.1016/j.actaastro.2021.05.018`
 
 Output:
 
