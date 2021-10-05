@@ -7,8 +7,7 @@ class Wiley(Parser):
     parser_name = "wiley"
 
     def is_correct_parser(self):
-        if self.domain_in_meta_og_url("onlinelibrary.wiley.com"):
-            return True
+        return self.domain_in_meta_og_url("onlinelibrary.wiley.com")
 
     def authors_found(self):
         return self.soup.find("div", class_="loa-authors")

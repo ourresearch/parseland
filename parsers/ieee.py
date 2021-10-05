@@ -8,8 +8,7 @@ class IEEE(Parser):
     parser_name = "IEEE"
 
     def is_correct_parser(self):
-        if self.domain_in_canonical_link("ieee.org"):
-            return True
+        return self.domain_in_canonical_link("ieee.org")
 
     def authors_found(self):
         json_data = self.get_json_data()

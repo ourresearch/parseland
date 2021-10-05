@@ -8,7 +8,7 @@ class Parser(ABC):
     @property
     @abstractmethod
     def parser_name(self):
-        raise NotImplementedError
+        pass
 
     @abstractmethod
     def is_correct_parser(self):

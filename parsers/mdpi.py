@@ -5,8 +5,7 @@ class MDPI(Parser):
     parser_name = "mdpi"
 
     def is_correct_parser(self):
-        if self.domain_in_meta_og_url("mdpi.com"):
-            return True
+        return self.domain_in_meta_og_url("mdpi.com")
 
     def authors_found(self):
         return self.soup.find("div", class_="art-authors")
