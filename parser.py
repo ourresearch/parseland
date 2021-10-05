@@ -28,12 +28,20 @@ class Parser(ABC):
 
     def domain_in_canonical_link(self, domain):
         canonical_link = self.soup.find("link", {"rel": "canonical"})
-        if canonical_link and domain in canonical_link.get("href"):
+        if (
+            canonical_link
+            and canonical_link.get("href")
+            and domain in canonical_link.get("href")
+        ):
             return True
 
     def domain_in_meta_og_url(self, domain):
         meta_og_url = self.soup.find("meta", property="og:url")
-        if meta_og_url and domain in meta_og_url.get("content"):
+        if (
+            meta_og_url
+            and meta_og_url.get("content")
+            and domain in meta_og_url.get("content")
+        ):
             return True
 
     @property
