@@ -1,6 +1,6 @@
 import json
 
-from publisher.parser import PublisherParser
+from publisher.parsers.parser import PublisherParser
 
 
 class ScienceDirect(PublisherParser):

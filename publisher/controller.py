@@ -4,8 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 
 from exceptions import ParserNotFoundError, S3FileNotFoundError
-from publisher.parser import PublisherParser
-from publisher.parsers import *  # allows import via __subclasses__()
+from publisher.parsers.parser import PublisherParser
 
 
 class PublisherController:

@@ -1,7 +1,7 @@
 import json
 import re
 
-from publisher.parser import PublisherParser
+from publisher.parsers.parser import PublisherParser
 
 
 class IEEE(PublisherParser):

@@ -1,7 +1,7 @@
 import re
 
 from exceptions import UnusualTrafficError
-from publisher.parser import PublisherParser
+from publisher.parsers.parser import PublisherParser
 
 
 class SpringerMaterial(PublisherParser):

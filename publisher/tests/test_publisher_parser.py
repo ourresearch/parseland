@@ -3,7 +3,7 @@ import requests_cache
 
 from views import app
 
-from publisher.parser import PublisherParser
+from publisher.parsers.parser import PublisherParser
 
 
 @pytest.fixture

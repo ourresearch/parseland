@@ -1,6 +1,6 @@
 from unicodedata import normalize
 
-from publisher.parser import PublisherParser
+from publisher.parsers.parser import PublisherParser
 
 
 class Wiley(PublisherParser):

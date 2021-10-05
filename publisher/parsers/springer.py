@@ -1,7 +1,7 @@
 from collections import defaultdict
 from unicodedata import normalize
 
-from publisher.parser import PublisherParser
+from publisher.parsers.parser import PublisherParser
 
 
 class Springer(PublisherParser):

@@ -1,4 +1,4 @@
-from publisher.parser import PublisherParser
+from publisher.parsers.parser import PublisherParser
 
 
 class MDPI(PublisherParser):
