@@ -110,7 +110,7 @@ class Springer(Parser):
         name_soup = self.soup.findAll("span", class_="js-search-name")
         ordered_names = []
         for name in name_soup:
-            ordered_names.append(name.text)
+            ordered_names.append(normalize("NFKD", name.text))
 
         # build new author list with proper order
         ordered_response = []

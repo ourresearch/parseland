@@ -12,7 +12,11 @@ class IEEE(Parser):
             return True
 
     def authors_found(self):
-        return True
+        json_data = self.get_json_data()
+        if json_data:
+            authors = json_data.get("authors")
+            if authors:
+                return True
 
     def parse(self):
         authors = self.get_authors()
