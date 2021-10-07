@@ -32,7 +32,7 @@ class Springer(PublisherParser):
             authors_affiliations = self.get_authors_method_2()
 
         if not authors_affiliations:
-            authors_affiliations = self.get_authors_method_3()
+            authors_affiliations = self.parse_meta_tags()
 
         if not authors_affiliations:
             authors_affiliations = self.no_authors_ouput()
@@ -119,32 +119,6 @@ class Springer(PublisherParser):
             ordered_response.append({"name": name, "affiliations": response[name]})
         return ordered_response
 
-    def get_authors_method_3(self):
-        """Loop through meta tags to build author and affiliations."""
-        results = []
-        metas = self.soup.findAll("meta")
-
-        result = None
-        for meta in metas:
-            if meta.get("name", None) and meta["name"] == "citation_author":
-                if result:
-                    # reset for next author
-                    results.append(result)
-                    result = None
-                name = self.format_name(meta["content"])
-                result = {
-                    "name": name,
-                    "affiliations": [],
-                }
-            if meta.get("name", None) and meta["name"] == "citation_author_institution":
-                result["affiliations"].append(meta["content"])
-
-        # append name from last loop
-        if result:
-            results.append(result)
-
-        return results
-
     @staticmethod
     def parser_author_list(authors):
         authors_split = authors.replace("&", ",").split(",")
@@ -152,10 +126,6 @@ class Springer(PublisherParser):
             normalize("NFKD", author).strip() for author in authors_split
         ]
         return authors_normalized
-
-    @staticmethod
-    def format_name(name):
-        return " ".join(reversed(name.split(", ")))
 
     test_cases = [
         {

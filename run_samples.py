@@ -6,15 +6,15 @@ import requests
 
 def run_dois():
     """Runs a sample of DOIs for a given publisher in order to determine accuracy of parsers."""
-    samples_to_run = 10
-    publisher = "Wiley"
+    samples_to_run = 100
+    publisher = "Frontiers Media SA"
     df = pd.read_csv("available-dois.csv")
     df = df[(df["publisher"] == publisher)]
     df = df[(df["published_date"].str.contains("2021", na=False))]
 
     for index, row in df.sample(frac=1).head(samples_to_run).iterrows():
         doi = row.doi
-        r = requests.get(f"http://127.0.0.1:5000/parse?doi={doi}")
+        r = requests.get(f"http://127.0.0.1:5000/parse-publisher?doi={doi}")
         print(f"doi: https://doi.org/{doi}")
         print(f"status code: {r.status_code}")
         print(f"result: {json.dumps(r.json(), indent=2)}")
@@ -33,7 +33,7 @@ def run_coverage():
     for index, row in df.sample(frac=1).head(samples_to_run).iterrows():
         num_ran += 1
         doi = row.doi
-        r = requests.get(f"http://127.0.0.1:5000/parse?doi={doi}")
+        r = requests.get(f"http://127.0.0.1:5000/parse-publisher?doi={doi}")
         if r.status_code == 404:
             num_not_found += 1
 
@@ -46,6 +46,9 @@ def run_coverage():
             print(f"status code: {r.status_code}")
             print(f"result: {json.dumps(r.json(), indent=2)}")
             print("")
+        elif r.status_code == 500:
+            print(f"error for doi {doi}")
+            break
     sorted_publishers = dict(
         sorted(publishers.items(), key=lambda item: item[1], reverse=True)
     )

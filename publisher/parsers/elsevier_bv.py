@@ -21,8 +21,9 @@ class ElsevierBV(PublisherParser):
             affiliation_soup = author.find(
                 "div", class_="article-header__info__group__body"
             )
-            for aff in affiliation_soup.stripped_strings:
-                affiliations.append(aff.strip())
+            if affiliation_soup:
+                for aff in affiliation_soup.stripped_strings:
+                    affiliations.append(aff.strip())
             results.append({"name": name.strip(), "affiliations": affiliations})
         return results
 

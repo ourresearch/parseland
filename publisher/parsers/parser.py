@@ -44,6 +44,35 @@ class PublisherParser(ABC):
         ):
             return True
 
+    def parse_meta_tags(self):
+        results = []
+        metas = self.soup.findAll("meta")
+
+        result = None
+        for meta in metas:
+            if meta.get("name", None) and meta["name"] == "citation_author":
+                if result:
+                    # reset for next author
+                    results.append(result)
+                    result = None
+                name = self.format_name(meta["content"])
+                result = {
+                    "name": name,
+                    "affiliations": [],
+                }
+            if meta.get("name", None) and meta["name"] == "citation_author_institution":
+                result["affiliations"].append(meta["content"])
+
+        # append name from last loop
+        if result:
+            results.append(result)
+
+        return results
+
+    @staticmethod
+    def format_name(name):
+        return " ".join(reversed(name.split(", ")))
+
     @property
     def test_cases(self):
         return []

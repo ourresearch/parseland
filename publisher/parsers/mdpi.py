@@ -1,3 +1,5 @@
+import re
+
 from publisher.parsers.parser import PublisherParser
 
 
@@ -41,7 +43,7 @@ class MDPI(PublisherParser):
                 else:
                     aff_id = None
                 aff = aff_raw.find("div", class_="affiliation-name").text
-                if aff_id != "*" and aff_id != "†":
+                if aff_id != "*" and aff_id != "†" and aff_id != "‡":
                     aff_id = int(aff_id) if aff_id else None
                     results.append({"aff_id": aff_id, "affiliation": aff})
         return results
@@ -75,6 +77,8 @@ class MDPI(PublisherParser):
             .replace("*", "")
             .replace(",†", "")
             .replace("†", "")
+            .replace(",‡", "")
+            .replace("‡", "")
         )
         ids_split = ids_cleaned.split(",")
         aff_ids = []
