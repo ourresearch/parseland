@@ -17,4 +17,4 @@ class Affiliation:
 @dataclass
 class AuthorAffiliations:
     name: str
-    affiliations: list[str]
+    affiliations: list
