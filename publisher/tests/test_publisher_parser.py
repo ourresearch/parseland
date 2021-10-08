@@ -33,7 +33,11 @@ for parser in parsers:
     test_cases.extend(parser.test_cases)
 
 
-@pytest.mark.parametrize("test_case", test_cases)
+def idfn(val):
+    return val["doi"]
+
+
+@pytest.mark.parametrize("test_case", test_cases, ids=idfn)
 def test_parsers_api_output(test_case, client):
     rv = client.get(f'/parse-publisher?doi={test_case["doi"]}')
     json_data = rv.get_json()

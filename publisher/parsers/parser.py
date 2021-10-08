@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from publisher.elements import AuthorAffiliations
+
 
 class PublisherParser(ABC):
     def __init__(self, soup):
@@ -73,6 +75,26 @@ class PublisherParser(ABC):
     def format_name(name):
         return " ".join(reversed(name.split(", ")))
 
-    @property
-    def test_cases(self):
-        return []
+    @staticmethod
+    def merge_authors_affiliations(authors, affiliations):
+        results = []
+        for author in authors:
+            author_affiliations = []
+
+            # scenario 1 affiliations with ids
+            for aff_id in author.aff_ids:
+                for aff in affiliations:
+                    if aff_id == aff.aff_id:
+                        author_affiliations.append(str(aff.organization))
+
+            # scenario 2 affiliations with no ids (applied to all authors)
+            for aff in affiliations:
+                if len(author.aff_ids) == 0 and aff.aff_id is None:
+                    author_affiliations.append(str(aff.organization))
+
+            results.append(
+                AuthorAffiliations(name=author.name, affiliations=author_affiliations)
+            )
+        return results
+
+    test_cases = []

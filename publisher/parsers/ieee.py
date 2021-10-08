@@ -18,10 +18,6 @@ class IEEE(PublisherParser):
                 return True
 
     def parse(self):
-        authors = self.get_authors()
-        return authors
-
-    def get_authors(self):
         results = []
         json_data = self.get_json_data()
         authors = json_data["authors"]
@@ -33,11 +29,15 @@ class IEEE(PublisherParser):
 
     def get_json_data(self):
         raw_script = re.search("xplGlobal.document.metadata=.*", str(self.soup))
-        raw_json = raw_script.group()
-        trimmed_json = raw_json.replace("xplGlobal.document.metadata=", "").replace(
-            "};", "}"
-        )
-        json_data = json.loads(trimmed_json)
+
+        if raw_script:
+            raw_json = raw_script.group()
+            trimmed_json = raw_json.replace("xplGlobal.document.metadata=", "").replace(
+                "};", "}"
+            )
+            json_data = json.loads(trimmed_json)
+        else:
+            json_data = None
         return json_data
 
     test_cases = [
@@ -59,4 +59,5 @@ class IEEE(PublisherParser):
             ],
         },
         {"doi": "10.1109/agro-geoinformatics50104.2021.9530299", "result": []},
+        {"doi": "10.1109/acirs52449.2021", "result": []},
     ]

@@ -1,0 +1,139 @@
+from publisher.parsers.parser import PublisherParser
+from publisher.elements import Author, Affiliation
+
+
+class Lippincott(PublisherParser):
+    parser_name = "lippincott"
+
+    def is_correct_parser(self):
+        return self.domain_in_meta_og_url("journals.lww.com")
+
+    def authors_found(self):
+        return self.soup.find(id="ejp-article-authors")
+
+    def parse(self):
+        authors = self.get_authors()
+        affiliations = self.get_affiliations()
+        authors_affiliations = self.merge_authors_affiliations(authors, affiliations)
+        return authors_affiliations
+
+    def get_authors(self):
+        authors = []
+        author_section = self.soup.find(id="ejp-article-authors")
+        author_soup = author_section.findAll("sup")
+
+        # authors with ids
+        for author in author_soup:
+            # set name
+            name = self.clean_name(author.previous_element)
+            if ";" in name:
+                break
+
+            # set aff_ids
+            aff_ids = self.format_ids(author.text)
+
+            if not aff_ids and name.lower().startswith("editor"):
+                continue
+
+            authors.append(Author(name=name, aff_ids=aff_ids if aff_ids else []))
+
+        # authors without ids
+        if not authors and author_section.p:
+            author_names = author_section.find("p")
+
+            if ";" in author_names.text:
+                parsed_author_names = author_names.text.split(";")
+                for name in parsed_author_names:
+                    name = name.replace("∗", "").strip()
+                    authors.append(Author(name=name, aff_ids=[]))
+
+        return authors
+
+    def get_affiliations(self):
+        aff_soup = self.soup.find("div", class_="ejp-article-authors-info-holder")
+        if not aff_soup:
+            return []
+
+        results = []
+        # affiliations with ids
+        affiliations = aff_soup.findAll("sup")
+        for aff in affiliations:
+            aff_id = aff.text
+            organization = aff.next_element.next_element
+            results.append(Affiliation(aff_id=aff_id, organization=organization))
+
+        # affiliation with no ids
+        affiliations = aff_soup.findAll("p")
+        for aff in affiliations:
+            aff_html_id = aff.get("id")
+            if aff_html_id.startswith("AF"):
+                organization = aff.text.strip()
+                results.append(Affiliation(aff_id=None, organization=organization))
+        return results
+
+    @staticmethod
+    def clean_name(name):
+        if name.startswith(";"):
+            name = name[1:]
+        name = name.strip()
+        return name
+
+    @staticmethod
+    def format_ids(ids):
+        ids_split = ids.split(",")
+        aff_ids = []
+        for aff_id in ids_split:
+            if aff_id:
+                aff_ids.append(aff_id)
+        return aff_ids
+
+    test_cases = [
+        {
+            "doi": "10.1097/LBR.0000000000000778",
+            "result": [
+                {
+                    "name": "Avasarala, Sameer K. MBBS",
+                    "affiliations": [
+                        "Division of Allergy, Pulmonary, and Critical Care Medicine"
+                    ],
+                },
+                {
+                    "name": "Lentz, Robert J. MD",
+                    "affiliations": [
+                        "Division of Allergy, Pulmonary, and Critical Care Medicine",
+                        "Department of Thoracic Surgery, Vanderbilt University Medical Center",
+                        "Department of Veterans Affairs Medical Center, Nashville, TN",
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.1097/MJT.0000000000001293",
+            "result": [
+                {
+                    "name": "Zhang, Wei-Yun MS",
+                    "affiliations": [
+                        "Department of Pulmonary and Critical Care Medicine, First Affiliated Hospital of Soochow University Suzhou, China"
+                    ],
+                },
+                {
+                    "name": "Wang, Jia-Jia MM",
+                    "affiliations": [
+                        "Department of Pulmonary and Critical Care Medicine, First Affiliated Hospital of Soochow University Suzhou, China"
+                    ],
+                },
+                {
+                    "name": "Liu, Ying-Ying MS",
+                    "affiliations": [
+                        "Department of Pulmonary and Critical Care Medicine, First Affiliated Hospital of Soochow University Suzhou, China"
+                    ],
+                },
+                {
+                    "name": "Zeng, Da-Xiong MD",
+                    "affiliations": [
+                        "Department of Pulmonary and Critical Care Medicine, First Affiliated Hospital of Soochow University Suzhou, China"
+                    ],
+                },
+            ],
+        },
+    ]
