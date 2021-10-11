@@ -1,6 +1,7 @@
 import json
 import re
 
+from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
 
 
@@ -22,9 +23,11 @@ class IEEE(PublisherParser):
         json_data = self.get_json_data()
         authors = json_data["authors"]
         for author in authors:
-            results.append(
-                {"name": author["name"], "affiliations": author["affiliation"]}
+            name = author["name"]
+            affiliations = (
+                author.get("affiliation") if author.get("affiliation") else []
             )
+            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
         return results
 
     def get_json_data(self):
