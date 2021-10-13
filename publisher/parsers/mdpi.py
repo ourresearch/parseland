@@ -1,10 +1,10 @@
-import re
-
+from publisher.elements import Author, Affiliation
 from publisher.parsers.parser import PublisherParser
 
 
 class MDPI(PublisherParser):
     parser_name = "mdpi"
+    chars_to_ignore = ["*", "†", "‡", "§"]
 
     def is_correct_parser(self):
         return self.domain_in_meta_og_url("mdpi.com")
@@ -15,7 +15,7 @@ class MDPI(PublisherParser):
     def parse(self):
         authors = self.get_authors()
         affiliations = self.get_affiliations()
-        authors_affiliations = self.get_authors_affiliations(authors, affiliations)
+        authors_affiliations = self.merge_authors_affiliations(authors, affiliations)
         return authors_affiliations
 
     def get_authors(self):
@@ -27,7 +27,8 @@ class MDPI(PublisherParser):
                 name = author.div.text
             else:
                 name = author.a.text
-            authors.append({"name": name, "aff_ids": self.format_ids(author.sup.text)})
+            aff_ids = self.format_ids(author.sup.text)
+            authors.append(Author(name=name, aff_ids=aff_ids))
         return authors
 
     def get_affiliations(self):
@@ -43,43 +44,15 @@ class MDPI(PublisherParser):
                 else:
                     aff_id = None
                 aff = aff_raw.find("div", class_="affiliation-name").text
-                if aff_id != "*" and aff_id != "†" and aff_id != "‡":
+                if aff_id not in self.chars_to_ignore:
                     aff_id = int(aff_id) if aff_id else None
-                    results.append({"aff_id": aff_id, "affiliation": aff})
+                    results.append(Affiliation(organization=aff, aff_id=aff_id))
         return results
 
-    def get_authors_affiliations(self, authors, affiliations):
-        results = []
-        for author in authors:
-            author_affiliations = []
-
-            # scenario 1 affiliations with ids
-            for aff_id in author["aff_ids"]:
-                for affiliation in affiliations:
-                    if aff_id == affiliation["aff_id"]:
-                        author_affiliations.append(affiliation["affiliation"])
-
-            # scenario 2 affiliations with no ids (applied to all authors)
-            for affiliation in affiliations:
-                if len(author["aff_ids"]) == 0 and affiliation["aff_id"] is None:
-                    author_affiliations.append(affiliation["affiliation"])
-
-            results.append(
-                {"name": author["name"], "affiliations": author_affiliations}
-            )
-        return results
-
-    @staticmethod
-    def format_ids(ids):
-        ids_cleaned = (
-            ids.strip()
-            .replace(",*", "")
-            .replace("*", "")
-            .replace(",†", "")
-            .replace("†", "")
-            .replace(",‡", "")
-            .replace("‡", "")
-        )
+    def format_ids(self, ids):
+        ids_cleaned = ids.strip()
+        for char in self.chars_to_ignore:
+            ids_cleaned = ids_cleaned.replace(f",{char}", "").replace(f"{char}", "")
         ids_split = ids_cleaned.split(",")
         aff_ids = []
         for aff_id in ids_split:

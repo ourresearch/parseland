@@ -1,3 +1,4 @@
+from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
 
 
@@ -16,15 +17,38 @@ class ElsevierBV(PublisherParser):
         results = []
         author_soup = self.soup.findAll("li", class_="author")
         for author in author_soup:
-            name = author.find("a", class_="loa__item__name").text
+            name_soup = author.find("a", class_="loa__item__name")
+            if name_soup:
+                name = name_soup.text
+            else:
+                continue
             affiliations = []
+            # method 1
+            info_groups = author.findAll("div", class_="article-header__info__group")
+            for group in info_groups:
+                header = group.find("span", class_="article-header__info__group__label")
+                for sup in group.find_all("sup"):
+                    sup.unwrap()  # remove sup tags
+                    group.smooth()  # join navigable strings
+                if header.text == "Affiliations":
+                    affiliation_soup = group.find(
+                        "div", class_="article-header__info__group__body"
+                    )
+
+                    if affiliation_soup:
+                        for aff in affiliation_soup.stripped_strings:
+                            affiliations.append(aff.strip())
+
+            # method 2
             affiliation_soup = author.find(
                 "div", class_="article-header__info__group__body"
             )
-            if affiliation_soup:
+            if affiliation_soup and not info_groups:
                 for aff in affiliation_soup.stripped_strings:
                     affiliations.append(aff.strip())
-            results.append({"name": name.strip(), "affiliations": affiliations})
+            results.append(
+                AuthorAffiliations(name=name.strip(), affiliations=affiliations)
+            )
         return results
 
     test_cases = [

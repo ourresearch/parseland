@@ -7,7 +7,7 @@ import requests
 def run_dois():
     """Runs a sample of DOIs for a given publisher in order to determine accuracy of parsers."""
     samples_to_run = 100
-    publisher = "Frontiers Media SA"
+    publisher = "Cold Spring Harbor Laboratory"
     df = pd.read_csv("available-dois.csv")
     df = df[(df["publisher"] == publisher)]
     df = df[(df["published_date"].str.contains("2021", na=False))]
@@ -23,7 +23,7 @@ def run_dois():
 
 def run_coverage():
     """Runs a sample of DOIs for a given publisher in order to determine accuracy of parsers."""
-    samples_to_run = 100
+    samples_to_run = 1000
     df = pd.read_csv("available-dois.csv")
     df = df[(df["published_date"].str.contains("2021", na=False))]
 
@@ -53,8 +53,9 @@ def run_coverage():
         sorted(publishers.items(), key=lambda item: item[1], reverse=True)
     )
     print(sorted_publishers)
-    print(f"Coverage is {num_not_found/num_ran}")
+    coverage = ((num_ran - num_not_found) / num_ran) * 100
+    print(f"Coverage is {coverage}%")
 
 
 if __name__ == "__main__":
-    run_coverage()
+    run_dois()
