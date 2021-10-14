@@ -22,7 +22,9 @@ class SSRN(PublisherParser):
             affiliations = []
             affiliation = affiliation.text.strip()
             if affiliation != "affiliation not provided to SSRN":
-                affiliations.append(affiliation)
+                aff_split = affiliation.split(";")
+                for aff in aff_split:
+                    affiliations.append(aff.strip())
             results.append(AuthorAffiliations(name=name, affiliations=affiliations))
 
         return results
@@ -40,7 +42,20 @@ class SSRN(PublisherParser):
                 {
                     "name": "Robert J. Willis",
                     "affiliations": [
-                        "University of Michigan at Ann Arbor - Department of Economics; National Bureau of Economic Research (NBER)"
+                        "University of Michigan at Ann Arbor - Department of Economics",
+                        "National Bureau of Economic Research (NBER)",
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.2139/ssrn.3782675",
+            "result": [
+                {
+                    "name": "Madison Condon",
+                    "affiliations": [
+                        "Boston University - School of Law",
+                        "New York University School of Law",
                     ],
                 },
             ],
