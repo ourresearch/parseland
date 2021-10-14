@@ -3,6 +3,7 @@ from flask import jsonify, request
 from app import app
 from exceptions import APIError
 from publisher.controller import PublisherController
+from repository.controller import RepositoryController
 
 
 @app.route("/")
@@ -31,6 +32,25 @@ def parse_publisher():
             "parser": parser.parser_name,
             "doi": doi,
             "doi_url": f"https://doi.org/{doi}",
+        },
+    }
+    return jsonify(response)
+
+
+@app.route("/parse-repository")
+def parse_repository():
+    page_id = request.args.get("page-id")
+    rc = RepositoryController(page_id)
+    parser = rc.find_parser()
+    if parser.authors_found():
+        message = parser.parse()
+    else:
+        message = parser.no_authors_output()
+    response = {
+        "message": message,
+        "metadata": {
+            "parser": parser.parser_name,
+            "page_id": page_id,
         },
     }
     return jsonify(response)
