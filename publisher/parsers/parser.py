@@ -97,4 +97,16 @@ class PublisherParser(ABC):
             )
         return results
 
+    def format_ids(self, ids, chars_to_ignore=None):
+        ids_cleaned = ids.strip()
+        if chars_to_ignore:
+            for char in chars_to_ignore:
+                ids_cleaned = ids_cleaned.replace(f",{char}", "").replace(f"{char}", "")
+        ids_split = ids_cleaned.split(",")
+        aff_ids = []
+        for aff_id in ids_split:
+            if aff_id and aff_id.isdigit():
+                aff_ids.append(int(aff_id))
+        return aff_ids
+
     test_cases = []

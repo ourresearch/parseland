@@ -1,5 +1,6 @@
 import re
 
+from publisher.elements import Author, Affiliation
 from publisher.parsers.parser import PublisherParser
 
 
@@ -15,7 +16,7 @@ class Frontiers(PublisherParser):
     def parse(self):
         authors = self.get_authors()
         affiliations = self.get_affiliations()
-        authors_affiliations = self.get_authors_affiliations(authors, affiliations)
+        authors_affiliations = self.merge_authors_affiliations(authors, affiliations)
         return authors_affiliations
 
     def get_authors(self):
@@ -34,9 +35,9 @@ class Frontiers(PublisherParser):
             else:
                 aff_ids = None
 
-            authors.append(
-                {"name": name, "aff_ids": self.format_ids(aff_ids) if aff_ids else []}
-            )
+            aff_ids = self.format_ids(aff_ids) if aff_ids else []
+
+            authors.append(Author(name=name, aff_ids=aff_ids))
         return authors
 
     def get_affiliations(self):
@@ -56,28 +57,7 @@ class Frontiers(PublisherParser):
                     aff = aff.replace(aff_id, "").strip()
                 if aff_id != "*" and aff_id != "†":
                     aff_id = int(aff_id) if aff_id else None
-                    results.append({"aff_id": aff_id, "affiliation": aff})
-        return results
-
-    def get_authors_affiliations(self, authors, affiliations):
-        results = []
-        for author in authors:
-            author_affiliations = []
-
-            # scenario 1 affiliations with ids
-            for aff_id in author["aff_ids"]:
-                for affiliation in affiliations:
-                    if aff_id == affiliation["aff_id"]:
-                        author_affiliations.append(affiliation["affiliation"])
-
-            # scenario 2 affiliations with no ids (applied to all authors)
-            for affiliation in affiliations:
-                if len(author["aff_ids"]) == 0 and affiliation["aff_id"] is None:
-                    author_affiliations.append(affiliation["affiliation"])
-
-            results.append(
-                {"name": author["name"], "affiliations": author_affiliations}
-            )
+                    results.append(Affiliation(aff_id=aff_id, organization=aff))
         return results
 
     @staticmethod

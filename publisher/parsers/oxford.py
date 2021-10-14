@@ -1,4 +1,5 @@
 from exceptions import UnusualTrafficError
+from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
 
 
@@ -33,7 +34,7 @@ class Oxford(PublisherParser):
                 for aff in affiliations_soup:
                     affiliations.append(aff.text)
 
-            results.append({"name": name, "affiliations": affiliations})
+            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
         return results
 
     test_cases = [

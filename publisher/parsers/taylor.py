@@ -1,3 +1,4 @@
+from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
 
 
@@ -21,7 +22,7 @@ class Taylor(PublisherParser):
             if affiliation:
                 affiliation_trimmed = affiliation.contents[0].text[2:]
                 affiliations.append(affiliation_trimmed)
-            results.append({"name": name, "affiliations": affiliations})
+            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
         return results
 
     test_cases = [

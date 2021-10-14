@@ -8,7 +8,7 @@ class ElsevierBV(PublisherParser):
     def is_correct_parser(self):
         return self.soup.find(
             "script", {"src": "https://cdn.cookielaw.org/scripttemplates/otSDKStub.js"}
-        )
+        ) and not self.domain_in_canonical_link("papers.ssrn.com")
 
     def authors_found(self):
         return self.soup.findAll("li", class_="author")

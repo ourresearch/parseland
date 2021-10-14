@@ -24,11 +24,16 @@ class RXIV(PublisherParser):
 
     def get_authors_method_1(self):
         results = []
+        attempts = 0
         i = 0
         while True:
             author = self.soup.find("div", class_=f"author-tooltip-{i}")
             if author:
-                name = author.find("div", class_="author-tooltip-name").text.strip()
+                name_soup = author.find("div", class_="author-tooltip-name")
+                if not name_soup:
+                    i += 1
+                    continue
+                name = name_soup.text.strip()
 
                 # affiliations
                 affiliations = []
@@ -45,6 +50,10 @@ class RXIV(PublisherParser):
 
                 results.append(AuthorAffiliations(name=name, affiliations=affiliations))
                 i += 1
+            elif not author and attempts < 2:
+                # handle skipped numbers
+                i += 1
+                attempts += 1
             else:
                 break
         return results

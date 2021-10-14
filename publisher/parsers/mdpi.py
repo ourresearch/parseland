@@ -27,7 +27,7 @@ class MDPI(PublisherParser):
                 name = author.div.text
             else:
                 name = author.a.text
-            aff_ids = self.format_ids(author.sup.text)
+            aff_ids = self.format_ids(author.sup.text, self.chars_to_ignore)
             authors.append(Author(name=name, aff_ids=aff_ids))
         return authors
 
@@ -48,17 +48,6 @@ class MDPI(PublisherParser):
                     aff_id = int(aff_id) if aff_id else None
                     results.append(Affiliation(organization=aff, aff_id=aff_id))
         return results
-
-    def format_ids(self, ids):
-        ids_cleaned = ids.strip()
-        for char in self.chars_to_ignore:
-            ids_cleaned = ids_cleaned.replace(f",{char}", "").replace(f"{char}", "")
-        ids_split = ids_cleaned.split(",")
-        aff_ids = []
-        for aff_id in ids_split:
-            if aff_id:
-                aff_ids.append(int(aff_id))
-        return aff_ids
 
     test_cases = [
         {

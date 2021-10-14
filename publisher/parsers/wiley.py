@@ -1,5 +1,6 @@
 from unicodedata import normalize
 
+from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
 
 
@@ -36,7 +37,7 @@ class Wiley(PublisherParser):
                 ):
                     break
                 affiliations.append(normalize("NFKD", aff.text))
-            results.append({"name": name, "affiliations": affiliations})
+            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
         return results
 
     test_cases = [
