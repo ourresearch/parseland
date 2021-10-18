@@ -1,3 +1,5 @@
+import re
+
 from repository.parsers.parser import RepositoryParser
 
 
@@ -5,7 +7,14 @@ class HAL(RepositoryParser):
     parser_name = "HAL"
 
     def is_correct_parser(self):
-        return self.domain_in_meta_og_url("hal.archives-ouvertes.fr")
+        meta_dc_identifiers = self.soup.find_all('meta', {'name': 'DC.identifier'})
+
+        for meta_dc_identifier in meta_dc_identifiers:
+            if content := meta_dc_identifier.get('content'):
+                if re.match(r'^hal-\d+$', content):
+                    return True
+
+        return False
 
     def authors_found(self):
         return self.soup.find("meta", {"name": "citation_author"})
