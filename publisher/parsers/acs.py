@@ -6,7 +6,7 @@ class ACS(PublisherParser):
     parser_name = "acs"
 
     def is_correct_parser(self):
-        return self.domain_in_meta_og_url("acs.org")
+        return self.domain_in_meta_og_url(".acs.org")
 
     def authors_found(self):
         return self.soup.find("ul", class_="loa")
