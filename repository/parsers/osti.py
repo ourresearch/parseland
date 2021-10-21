@@ -5,7 +5,10 @@ class OSTI(RepositoryParser):
     parser_name = "OSTI"
 
     def is_correct_parser(self):
-        return self.domain_in_canonical_link('osti.gov/pages/biblio/')
+        return (
+            self.domain_in_canonical_link('osti.gov/pages/biblio/')
+            or 'osti.gov' in self.soup.find('body').get('data-baseurl', '')
+        )
 
     def authors_found(self):
         return self.soup.find("meta", {"name": "citation_author"})
