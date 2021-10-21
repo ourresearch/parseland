@@ -56,14 +56,13 @@ class RepositoryParser(ABC):
                 if result:
                     # reset for next author
                     results.append(result)
-                    result = None
-                name = self.format_name(meta["content"])
+                name = meta["content"].strip()
                 result = {
                     "name": name,
                     "affiliations": [],
                 }
             if result and meta.get("name") == "citation_author_institution":
-                result["affiliations"].append(meta["content"])
+                result["affiliations"].append(meta["content"].strip())
 
         # append name from last loop
         if result:
