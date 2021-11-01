@@ -1,3 +1,4 @@
+import json
 from collections import defaultdict
 from unicodedata import normalize
 
@@ -20,13 +21,15 @@ class Springer(PublisherParser):
         return True
 
     def parse(self):
-        authors_affiliations = None
-        authors = self.get_authors()
-        if authors:
-            affiliations = self.get_affiliations()
-            authors_affiliations = self.combine_authors_affiliations(
-                authors, affiliations
-            )
+        authors_affiliations = self.parse_ld_json()
+
+        if not authors_affiliations:
+            authors = self.get_authors()
+            if authors:
+                affiliations = self.get_affiliations()
+                authors_affiliations = self.combine_authors_affiliations(
+                    authors, affiliations
+                )
 
         if not authors_affiliations:
             authors_affiliations = self.get_authors_method_2()
@@ -37,6 +40,33 @@ class Springer(PublisherParser):
         if not authors_affiliations:
             authors_affiliations = self.no_authors_ouput()
         return authors_affiliations
+
+    def parse_ld_json(self):
+        authors = []
+
+        for ld_json in self.soup.find_all('script', {'type': 'application/ld+json'}):
+            article_metadata = json.loads(ld_json.text)
+            for author in article_metadata.get('mainEntity', {}).get('author', []):
+                if author.get('@type') == 'Person':
+                    name = author.get('name')
+                    affiliations = []
+
+                    json_affiliations = author.get('affiliation')
+                    if isinstance(json_affiliations, str):
+                        affiliations = [json_affiliations]
+                    elif isinstance(json_affiliations, dict) and 'name' in json_affiliations:
+                        affiliations = [json_affiliations['name']]
+                    elif isinstance(json_affiliations, list):
+                        for json_affiliation in json_affiliations:
+                            if isinstance(json_affiliation, str) and json_affiliation not in affiliations:
+                                affiliations.append(json_affiliation)
+                            elif isinstance(json_affiliation, dict) and 'name' in json_affiliation:
+                                if json_affiliation['name'] not in affiliations:
+                                    affiliations.append(json_affiliation['name'])
+
+                    authors.append({'name': name, 'affiliations': affiliations})
+
+        return authors
 
     def get_authors(self):
         authors = []
@@ -93,7 +123,6 @@ class Springer(PublisherParser):
         # get mapping of affiliation -> authors
         results = []
         for item in list_items:
-            result = None
             affiliation = item.p.text
             authors = item.p.findNext("p").text
             result = {
@@ -117,6 +146,7 @@ class Springer(PublisherParser):
         ordered_response = []
         for name in ordered_names:
             ordered_response.append({"name": name, "affiliations": response[name]})
+
         return ordered_response
 
     @staticmethod
@@ -216,25 +246,23 @@ class Springer(PublisherParser):
             "doi": "10.3758/s13414-014-0792-2",
             "result": [
                 {
-                    "name": "Odette Scharenborg",
+                    "name": "Scharenborg, Odette",
                     "affiliations": [
-                        "Centre for Language Studies, Radboud University Nijmegen, Erasmusplein 1, 6525 HT, Nijmegen, The Netherlands",
-                        "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
+                        "Radboud University Nijmegen"
                     ],
                 },
                 {
-                    "name": "Andrea Weber",
+                    "name": "Weber, Andrea",
                     "affiliations": [
-                        "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
-                        "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands",
+                        "Max Planck Institute for Psycholinguistics",
+                        "Radboud University Nijmegen",
                     ],
                 },
                 {
-                    "name": "Esther Janse",
+                    "name": "Janse, Esther",
                     "affiliations": [
-                        "Centre for Language Studies, Radboud University Nijmegen, Erasmusplein 1, 6525 HT, Nijmegen, The Netherlands",
-                        "Donders Institute for Brain, Cognition, and Behaviour, Radboud University Nijmegen, Nijmegen, The Netherlands",
-                        "Max Planck Institute for Psycholinguistics, Nijmegen, The Netherlands",
+                        "Radboud University Nijmegen",
+                        "Max Planck Institute for Psycholinguistics",
                     ],
                 },
             ],
@@ -243,23 +271,94 @@ class Springer(PublisherParser):
             "doi": "10.1038/s41417-021-00297-6",
             "result": [
                 {
-                    "name": "Yanni Hong",
+                    "name": "Hong, Yanni",
                     "affiliations": [
-                        "Department of Oncology, Quanzhou First Hospital Affiliated Fujian Medical University, Quanzhou, P.R. China"
+                        "Quanzhou First Hospital Affiliated Fujian Medical University"
                     ],
                 },
                 {
-                    "name": "Xiaofeng Li",
+                    "name": "Li, Xiaofeng",
                     "affiliations": [
-                        "Department of Oncology, Quanzhou First Hospital Affiliated Fujian Medical University, Quanzhou, P.R. China"
+                        "Quanzhou First Hospital Affiliated Fujian Medical University"
                     ],
                 },
                 {
-                    "name": "Jinfeng Zhu",
+                    "name": "Zhu, Jinfeng",
                     "affiliations": [
-                        "Department of Oncology, Quanzhou First Hospital Affiliated Fujian Medical University, Quanzhou, P.R. China"
+                        "Quanzhou First Hospital Affiliated Fujian Medical University"
                     ],
                 },
             ],
+        },
+        {
+            "doi": "10.1038/s41416-020-01139-2",
+            "result": [
+                {
+                    "name": "Miligy, Islam M.",
+                    "affiliations": [
+                        "The University of Nottingham"
+                    ]
+                },
+                {
+                    "name": "Toss, Michael S.",
+                    "affiliations": [
+                        "The University of Nottingham"
+                    ]
+                },
+                {
+                    "name": "Shiino, Sho",
+                    "affiliations": [
+                        "The University of Nottingham"
+                    ]
+                },
+                {
+                    "name": "Oni, Georgette",
+                    "affiliations": [
+                        "Nottingham University Hospitals NHS Trust"
+                    ]
+                },
+                {
+                    "name": "Syed, Binafsha M.",
+                    "affiliations": [
+                        "Liaquat University of Medical & Health Sciences"
+                    ]
+                },
+                {
+                    "name": "Khout, Hazem",
+                    "affiliations": [
+                        "Nottingham University Hospitals NHS Trust"
+                    ]
+                },
+                {
+                    "name": "Tan, Qing Ting",
+                    "affiliations": [
+                        "Nottingham University Hospitals NHS Trust"
+                    ]
+                },
+                {
+                    "name": "Green, Andrew R.",
+                    "affiliations": [
+                        "The University of Nottingham"
+                    ]
+                },
+                {
+                    "name": "Macmillan, R. Douglas",
+                    "affiliations": [
+                        "Nottingham University Hospitals NHS Trust"
+                    ]
+                },
+                {
+                    "name": "Robertson, John F. R.",
+                    "affiliations": [
+                        "University of Nottingham Royal Derby Hospital"
+                    ]
+                },
+                {
+                    "name": "Rakha, Emad A.",
+                    "affiliations": [
+                        "The University of Nottingham"
+                    ]
+                },
+            ]
         },
     ]
