@@ -58,6 +58,9 @@ class Lippincott(PublisherParser):
         # affiliations with ids
         affiliations = aff_soup.findAll("sup")
         for aff in affiliations:
+            if aff.parent.get("id", "").startswith("cor"):
+                continue
+
             aff_id = aff.text
             organization = aff.next_element.next_element
             results.append(Affiliation(aff_id=aff_id, organization=organization))
@@ -132,6 +135,35 @@ class Lippincott(PublisherParser):
                     "name": "Zeng, Da-Xiong MD",
                     "affiliations": [
                         "Department of Pulmonary and Critical Care Medicine, First Affiliated Hospital of Soochow University Suzhou, China"
+                    ],
+                },
+            ],
+        },
+        {
+            "doi": "10.2106/jbjs.19.01395",
+            "result": [
+                {
+                    "name": "Castile, Ryan M. BS",
+                    "affiliations": [
+                        "Departments of Mechanical Engineering & Materials Science (R.M.C., M.J.J., and S.P.L.) and Orthopaedic Surgery (S.P.L. and R.H.B.), Washington University in St. Louis, St. Louis, Missouri"
+                    ],
+                },
+                {
+                    "name": "Jenkins, Matthew J. BS",
+                    "affiliations": [
+                        "Departments of Mechanical Engineering & Materials Science (R.M.C., M.J.J., and S.P.L.) and Orthopaedic Surgery (S.P.L. and R.H.B.), Washington University in St. Louis, St. Louis, Missouri"
+                    ],
+                },
+                {
+                    "name": "Lake, Spencer P. PhD",
+                    "affiliations": [
+                        "Departments of Mechanical Engineering & Materials Science (R.M.C., M.J.J., and S.P.L.) and Orthopaedic Surgery (S.P.L. and R.H.B.), Washington University in St. Louis, St. Louis, Missouri"
+                    ],
+                },
+                {
+                    "name": "Brophy, Robert H. MD",
+                    "affiliations": [
+                        "Departments of Mechanical Engineering & Materials Science (R.M.C., M.J.J., and S.P.L.) and Orthopaedic Surgery (S.P.L. and R.H.B.), Washington University in St. Louis, St. Louis, Missouri"
                     ],
                 },
             ],
