@@ -39,6 +39,15 @@ class Springer(PublisherParser):
 
         if not authors_affiliations:
             authors_affiliations = self.no_authors_ouput()
+
+        if not authors_affiliations:
+            authors = self.get_authors(try_editors=True)
+            if authors:
+                affiliations = self.get_affiliations(try_editors=True)
+                authors_affiliations = self.combine_authors_affiliations(
+                    authors, affiliations
+                )
+
         return authors_affiliations
 
     def parse_ld_json(self):
@@ -68,12 +77,18 @@ class Springer(PublisherParser):
 
         return authors
 
-    def get_authors(self):
+    def get_authors(self, try_editors=False):
         authors = []
-        section = self.soup.find(id="authorsandaffiliations")
+
+        section_id = "editorsandaffiliations" if try_editors else "authorsandaffiliations"
+        section = self.soup.find(id=section_id)
+
         if not section:
             return None
-        author_soup = section.findAll("li", {"itemprop": "author"})
+
+        author_itemprop = "editor" if try_editors else "author"
+        author_soup = section.findAll("li", {"itemprop": author_itemprop})
+
         for author in author_soup:
             ref_ids = []
             references = author.find("ul", {"data-role": "AuthorsIndexes"})
@@ -82,11 +97,15 @@ class Springer(PublisherParser):
                     ref_ids.append(int(reference.text))
             name = normalize("NFKD", author.span.text)
             authors.append({"name": name, "ref_ids": ref_ids})
+
         return authors
 
-    def get_affiliations(self):
+    def get_affiliations(self, try_editors=False):
         affiliations = {}
-        section = self.soup.find(id="authorsandaffiliations")
+
+        section_id = "editorsandaffiliations" if try_editors else "authorsandaffiliations"
+        section = self.soup.find(id=section_id)
+
         aff_soup = section.findAll("li", class_="affiliation")
         for aff in aff_soup:
             aff_id = int(aff["data-affiliation-highlight"][-1])
@@ -97,9 +116,11 @@ class Springer(PublisherParser):
             for span in spans:
                 if span.has_attr("itemprop") and span["itemprop"] != "address":
                     affiliation_data.append(span.text)
+
             affiliation = ", ".join(affiliation_data)
 
             affiliations[aff_id] = affiliation
+
         return affiliations
 
     def combine_authors_affiliations(self, authors, affiliations):
@@ -359,6 +380,35 @@ class Springer(PublisherParser):
                         "The University of Nottingham"
                     ]
                 },
+            ]
+        },
+        {
+            "doi": "10.1007/978-3-030-50899-9",
+            "result": [
+                {
+                    "name": "Cemal Cingi",
+                    "affiliations": [
+                        "Department of Otolaryngology, Eskisehir Osmangazi University, Eskisehir, Turkey"
+                    ]
+                },
+                {
+                    "name": "Nuray Bayar Muluk",
+                    "affiliations": [
+                        "Otolaryngology Department, Kırıkkale University, Faculty Medicine, Kirikkale, Turkey"
+                    ]
+                },
+                {
+                    "name": "Glenis K Scadding",
+                    "affiliations": [
+                        "Royal National ENT Hospital, London, UK"
+                    ]
+                },
+                {
+                    "name": "Ranko Mladina",
+                    "affiliations": [
+                        "Croatian Academy of Medical Sciences, Zagreb, Croatia"
+                    ]
+                }
             ]
         },
     ]
