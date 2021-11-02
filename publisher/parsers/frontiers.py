@@ -54,7 +54,7 @@ class Frontiers(PublisherParser):
                     aff_id = None
                 aff = aff_raw.text
                 if aff_id:
-                    aff = aff.replace(aff_id, "").strip()
+                    aff = re.sub(rf'^\s*{aff_id}\s*', '', aff).strip()
                 if aff_id != "*" and aff_id != "†":
                     aff_id = int(aff_id) if aff_id else None
                     results.append(Affiliation(aff_id=aff_id, organization=aff))
@@ -136,5 +136,35 @@ class Frontiers(PublisherParser):
                     ],
                 },
             ],
+        },
+        {
+            "doi": "10.3389/frwa.2021.729592",
+            "result": [
+                {
+                    "name": "Amol Patil",
+                    "affiliations": [
+                        "Institute of Geography, University of Augsburg, Augsburg, Germany"
+                    ]
+                },
+                {
+                    "name": "Benjamin Fersch",
+                    "affiliations": [
+                        "Institute of Meteorology and Climate Research (IMK-IFU), Karlsruhe Institute of Technology, Garmisch-Partenkirchen, Germany"
+                    ]
+                },
+                {
+                    "name": "Harrie-Jan Hendricks Franssen",
+                    "affiliations": [
+                        "Agrosphere (IBG-3), Forschungszentrum Jülich GmbH, Jülich, Germany"
+                    ]
+                },
+                {
+                    "name": "Harald Kunstmann",
+                    "affiliations": [
+                        "Institute of Geography, University of Augsburg, Augsburg, Germany",
+                        "Institute of Meteorology and Climate Research (IMK-IFU), Karlsruhe Institute of Technology, Garmisch-Partenkirchen, Germany"
+                    ]
+                }
+            ]
         },
     ]
