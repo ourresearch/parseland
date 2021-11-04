@@ -11,7 +11,7 @@ class OSTI(RepositoryParser):
         )
 
     def authors_found(self):
-        return self.soup.find("meta", {"name": "citation_author"})
+        return True
 
     def parse(self):
         authors = self.parse_meta_tags()
