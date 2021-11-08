@@ -24,7 +24,7 @@ class HAL(RepositoryParser):
 
     test_cases = [
         {
-            'page-id': 'uvg3rMMYJVL9XfvGTHC9',  # https://hal.archives-ouvertes.fr/hal-00889367
+            'page-id': 'VZut289qtYx4h5WRMEKn',  # https://hal.archives-ouvertes.fr/hal-00889367
             'result': [
                 {'name': 'F Enjalbert', 'affiliations': []},
                 {'name': 'Mc Nicot', 'affiliations': []},
@@ -33,7 +33,7 @@ class HAL(RepositoryParser):
             ]
         },
         {
-            'page-id': 'gmg9hYqeTLKSFifo9CvG',  # https://hal.archives-ouvertes.fr/hal-00874572
+            'page-id': 'aCS85rinbe2ywzSM8tUs',  # https://hal.archives-ouvertes.fr/hal-00874572
             'result': [
                 {
                     'name': 'Jérôme Garnier',
