@@ -63,7 +63,8 @@ class PublisherParser(ABC):
                     "affiliations": [],
                 }
             if meta.get("name", None) and meta["name"] == "citation_author_institution":
-                result["affiliations"].append(meta["content"])
+                if meta.get("content") and meta["content"].strip():
+                    result["affiliations"].append(meta["content"].strip())
 
         # append name from last loop
         if result:
