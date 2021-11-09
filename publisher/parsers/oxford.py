@@ -6,7 +6,7 @@ from publisher.parsers.parser import PublisherParser
 class Oxford(PublisherParser):
     parser_name = "oxford university press"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         if self.soup.find(
             "div", class_="explanation-message"
         ) and "help us confirm that you are not a robot and we will take you to your content" in str(

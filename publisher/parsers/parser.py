@@ -13,7 +13,7 @@ class PublisherParser(ABC):
         pass
 
     @abstractmethod
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         pass
 
     @abstractmethod

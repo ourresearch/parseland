@@ -4,7 +4,7 @@ from publisher.parsers.parser import PublisherParser
 class RSC(PublisherParser):
     parser_name = 'rsc'
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         return self.domain_in_meta_og_url('pubs.rsc.org')
 
     def authors_found(self):

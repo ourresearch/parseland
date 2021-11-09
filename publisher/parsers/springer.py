@@ -8,7 +8,7 @@ from publisher.parsers.parser import PublisherParser
 class Springer(PublisherParser):
     parser_name = "springer"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         if (
             self.domain_in_canonical_link("link.springer.com")
             or self.domain_in_canonical_link("springeropen.com")

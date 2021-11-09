@@ -6,7 +6,7 @@ class Copernicus(PublisherParser):
     parser_name = "copernicus"
     chars_to_ignore = ["*", "†", "‡", "§"]
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         link = self.soup.find("link", {"rel": "preconnect"})
         if link and "copernicus.org" in link.get("href"):
             return True

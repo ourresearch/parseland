@@ -5,7 +5,7 @@ from publisher.parsers.parser import PublisherParser
 class ElsevierBV(PublisherParser):
     parser_name = "Elsevier BV"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         return self.soup.find(
             "script", {"src": "https://cdn.cookielaw.org/scripttemplates/otSDKStub.js"}
         ) and not self.domain_in_canonical_link("papers.ssrn.com")

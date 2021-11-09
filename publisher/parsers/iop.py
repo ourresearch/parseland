@@ -5,7 +5,7 @@ from publisher.parsers.parser import PublisherParser
 class IOP(PublisherParser):
     parser_name = "IOP"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         if "iopscience.iop.org" in str(
             self.soup
         ) and "your activity and behavior on this site made us think that you are a bot" in str(

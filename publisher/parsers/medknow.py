@@ -5,7 +5,7 @@ from publisher.parsers.parser import PublisherParser
 class MedKnow(PublisherParser):
     parser_name = "medknow"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         script_url = "https://www.medknow.com/ss/ftr.js"
         return script_url in str(self.soup)
 

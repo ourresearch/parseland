@@ -8,7 +8,7 @@ from publisher.parsers.parser import PublisherParser
 class IEEE(PublisherParser):
     parser_name = "IEEE"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         return self.domain_in_canonical_link("ieee.org")
 
     def authors_found(self):

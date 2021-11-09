@@ -5,7 +5,7 @@ from publisher.parsers.parser import PublisherParser
 class AOM(PublisherParser):
     parser_name = "academy of management"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         return self.domain_in_meta_og_url("aom.org")
 
     def authors_found(self):

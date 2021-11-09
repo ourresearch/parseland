@@ -5,7 +5,7 @@ from publisher.parsers.parser import PublisherParser
 class SSRN(PublisherParser):
     parser_name = "ssrn"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         return self.domain_in_canonical_link("papers.ssrn.com")
 
     def authors_found(self):

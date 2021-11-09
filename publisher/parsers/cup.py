@@ -5,7 +5,7 @@ from publisher.parsers.parser import PublisherParser
 class CUP(PublisherParser):
     parser_name = "cambridge university press"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         return self.domain_in_meta_og_url("cambridge.org")
 
     def authors_found(self):

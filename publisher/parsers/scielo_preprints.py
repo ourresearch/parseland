@@ -6,7 +6,7 @@ from publisher.parsers.parser import PublisherParser
 class ScieloPreprints(PublisherParser):
     parser_name = "SciELO preprints"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         stylesheets = self.soup.find_all('link', {'rel': 'stylesheet'})
 
         if any('preprints.scielo.org/' in stylesheet.get('href') for stylesheet in stylesheets):

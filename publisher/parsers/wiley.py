@@ -7,7 +7,7 @@ from publisher.parsers.parser import PublisherParser
 class Wiley(PublisherParser):
     parser_name = "wiley"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         return self.domain_in_meta_og_url("onlinelibrary.wiley.com")
 
     def authors_found(self):

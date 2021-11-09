@@ -7,7 +7,7 @@ from publisher.parsers.parser import PublisherParser
 class SpringerMaterial(PublisherParser):
     parser_name = "springer material"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         head = self.soup.head
         if head:
             title = head.title

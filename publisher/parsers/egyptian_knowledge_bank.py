@@ -4,7 +4,7 @@ from publisher.parsers.parser import PublisherParser
 class EgyptianKnowledgeBank(PublisherParser):
     parser_name = "egyptian_knowledge_bank"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         for meta_citation_url in self.soup.find_all("meta", {"name": "citation_abstract_html_url"}):
             if 'journals.ekb.eg' in meta_citation_url.get("content", ""):
                 return True

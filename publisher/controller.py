@@ -1,9 +1,10 @@
 from gzip import decompress
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 from exceptions import ParserNotFoundError, S3FileNotFoundError
+from publisher.parsers.generic import GenericPublisherParser
 from publisher.parsers.parser import PublisherParser
 
 
@@ -28,6 +29,11 @@ class PublisherController:
     def find_parser(self):
         for cls in self.parsers:
             parser = cls(self.soup)
-            if parser.is_correct_parser():
+            if parser.is_publisher_specific_parser():
                 return parser
+
+        generic_parser = GenericPublisherParser(self.soup)
+        if generic_parser.authors_found():
+            return generic_parser
+
         raise ParserNotFoundError(f"Parser not found for {self.doi}")

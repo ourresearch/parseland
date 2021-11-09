@@ -5,7 +5,7 @@ from publisher.parsers.parser import PublisherParser
 class SPIE(PublisherParser):
     parser_name = "SPIE"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         link = self.soup.find("a", class_="logo")
         return link and "spie.org" in link.get("href")
 

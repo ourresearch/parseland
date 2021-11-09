@@ -4,7 +4,7 @@ from publisher.parsers.parser import PublisherParser
 class EDPSciences(PublisherParser):
     parser_name = "edp_sciences"
 
-    def is_correct_parser(self):
+    def is_publisher_specific_parser(self):
         for meta_citation_url in self.soup.find_all("meta", {"name": "citation_publisher"}):
             if 'EDP Sciences' in meta_citation_url.get("content", ""):
                 return True
