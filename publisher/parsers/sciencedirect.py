@@ -1,4 +1,5 @@
 import json
+import re
 
 from publisher.parsers.parser import PublisherParser
 
@@ -14,11 +15,11 @@ class ScienceDirect(PublisherParser):
 
     def parse(self):
         """Core function returning list of authors with their affiliations."""
-        return self.get_json_authors_affiliations()
+        return self.get_json_authors_affiliations_abstract()
 
-    def get_json_authors_affiliations(self):
+    def get_json_authors_affiliations_abstract(self):
         if not (science_direct_json := self.extract_json()):
-            return {"authors": []}
+            return {}
 
         all_authors = []
 
@@ -75,9 +76,35 @@ class ScienceDirect(PublisherParser):
                         'affiliations': list(group_affiliation_labels.values())
                     })
 
+        abstract = None
+        abstracts_content = science_direct_json.get('abstracts', {}).get('content', [])
+        if abstracts_content:
+            abstract = self.abstract_text(abstracts_content)
+            abstract = re.sub(r' +', ' ', abstract).strip()
+
         return {
-            "authors": all_authors
+            "authors": all_authors,
+            "abstract": abstract
         }
+
+    def abstract_text(self, abstracts_json):
+        if isinstance(abstracts_json, list):
+            return ' '.join([self.abstract_text(x) for x in abstracts_json])
+
+        if isinstance(abstracts_json, dict):
+            if (text_content := abstracts_json.get("_")) and isinstance(text_content, str):
+                if abstracts_json.get("#name") in [
+                    "section-title",
+                    "alt-text"
+                ]:
+                    return ""
+
+                return text_content
+
+            if "$$" in abstracts_json:
+                return self.abstract_text(abstracts_json["$$"])
+
+        return ""
 
     def extract_json(self):
         """Finds and loads json that contains affiliation data."""
@@ -103,6 +130,7 @@ class ScienceDirect(PublisherParser):
                         ],
                     },
                 ],
+                "abstract": None
             }
         },
         {
@@ -122,6 +150,7 @@ class ScienceDirect(PublisherParser):
                         ],
                     },
                 ],
+                "abstract": "According to a Theorem of B. Sz.-Nagy and C. Foiaş, every strongly continuous semigroup of contraction operators on a Hilbert space, can be decomposed into a completely non unitary part and a unitary part. In this note we wish to show that by appropriately perturbing its generator, a contraction semigroup can be reduced to a completely non unitary one. In control theory, such a perturbation is related to the so called state feedback, and the reduction presented here has application in the problem of stabilizing linear control systems on a Hilbert space. This will be briefly discussed."
             }
         },
         {
@@ -136,6 +165,7 @@ class ScienceDirect(PublisherParser):
                         ],
                     },
                 ],
+                "abstract": None
             }
         },
         {
@@ -149,6 +179,7 @@ class ScienceDirect(PublisherParser):
                         ],
                     },
                 ],
+                "abstract": "Given an invertible complex matrix T , a description is given of those matrices A with Moore-Penrose inverse A † such that ( TAT -1 ) † = TA † T -1 ."
             }
         },
         {
@@ -168,6 +199,7 @@ class ScienceDirect(PublisherParser):
                         ],
                     },
                 ],
+                "abstract": "The main result is that Drazin's “star” partial ordering A ⩽ ∗ B holds if and only if A ∠ B and B † −A † =(B−A) † , where A ⩽ ∗ B is defined by A ∗ A = A ∗ B and AA ∗ = BA ∗ , and where A ∠ B denotes rank subtractivity. Here A and B are m × n complex matrices and the superscript † denotes the Moore-Penrose inverse. Several other characterizations of A ⩽ ∗ B are given, with particular emphasis on what extra condition must be added in order that rank subtractivity becomes the stronger “star” order; a key tool is a new canonical form for rank subtractivity. Connections with simultaneous singular-value decompositions, Schur complements, and idempotent matrices are also mentioned."
             }
         },
         {
@@ -187,6 +219,7 @@ class ScienceDirect(PublisherParser):
                         ],
                     },
                 ],
+                "abstract": "PrC-210 is a direct-acting ROS-scavenger. It's active when administered orally, IV, or topically; it has none of the nausea/emesis nor hypotension side effects that have precluded human amifostine use. PrC-210 confers 100% survival to mice and rats that received an otherwise 100% lethal radiation dose and 36% reduction of ischemia-reperfusion-induced mouse myocardial infarct damage, and thus is a viable candidate to prevent human ROS-induced ischemia-reperfusion and ionizing radiation toxicities. We report the first assay for the pharmacologically active PrC-210 thiol in blood. PrC-210 has no double-bonds nor light absorption, so derivatizing the thiol with a UV-absorbing fluorochrome enables quantification. This assay: i) is done on the benchtop; it's read with a fluorescence plate reader, ii) provides linear product formation through 60\xa0min, iii) quantifies μM to low mM rodent blood levels of PrC-210 that confer complete radioprotection, iv) accurately reflects PrC-210 thiol formation of mixed disulfides with other thiols in blood, and v) shows excellent between-day assay outcome with very low standard deviation and coefficient of variation. A fluorescence assay quantifying formation of a PrC-210 thiol-bimane adduct enables measurement of blood PrC-210 thiol. A blood assay will help in the development of PrC-210 for use in the human clinical setting. • Assay quantifies μM-low mM PrC-210 blood concentration that confers 100% radioprotection. • No UV light absorbance, so chemically derivitize PrC-210 to yield a fluorochrome. • Derivitization reaction is specific to active-form PrC-210 thiol in blood. • Assay has very low coefficient of variation, same-day and between-days."
             }
         },
         {
@@ -230,6 +263,7 @@ class ScienceDirect(PublisherParser):
                         ],
                     },
                 ],
+                "abstract": "Knowledge of protein-ATP interaction can help for protein functional annotation and drug discovery. Accurately identifying protein-ATP binding residues is an important but challenging task to gain the knowledge of protein-ATP interactions, especially for the case where only protein sequence information is given. In this study, we propose a novel method, named DeepATPseq, to predict protein-ATP binding residues without using any information about protein three-dimension structure or sequence-derived structural information. In DeepATPseq, the HHBlits-generated position-specific frequency matrix (PSFM) profile is first employed to extract the feature information of each residue. Then, for each residue, the PSFM-based feature is fed into two prediction models, which are generated by the algorithms of deep convolutional neural network (DCNN) and support vector machine (SVM) separately. The final ATP-binding probability of the corresponding residue is calculated by the weighted sum of the outputted values of DCNN-based and SVM-based models. Experimental results on the independent validation data set demonstrate that DeepATPseq could achieve an accuracy of 77.71%, covering 57.42% of all ATP-binding residues, while achieving a Matthew's correlation coefficient value (0.655) that is significantly higher than that of existing sequence-based methods and comparable to that of the state-of-the-art structure-based predictors. Detailed data analysis show that the major advantage of DeepATPseq lies at the combination utilization of DCNN and SVM that helps dig out more discriminative information from the PSFM profiles. The online server and standalone package of DeepATPseq are freely available at: https://jun-csbio.github.io/DeepATPseq/ for academic use. • DeepATPseq is a novel method for predicting protein-ATP binding residues using position-specific frequency matrix. • The combination utilization of DCNN and SVM helps to dig out more discriminative information from the PSFM profiles. • DeepATPseq could achieve a higher performance than the existing sequence-based methods."
             }
         },
     ]
