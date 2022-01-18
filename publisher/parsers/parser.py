@@ -21,8 +21,13 @@ class PublisherParser(ABC):
         pass
 
     @staticmethod
-    def no_authors_ouput():
-        return []
+    def no_authors_output():
+        return {
+            "authors": [],
+            "abstract": None,
+            "published_date": None,
+            "genre": None
+        }
 
     @abstractmethod
     def parse(self):

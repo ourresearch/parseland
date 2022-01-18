@@ -39,7 +39,7 @@ class Springer(PublisherParser):
             authors_affiliations = self.parse_meta_tags()
 
         if not authors_affiliations:
-            authors_affiliations = self.no_authors_ouput()
+            authors_affiliations = []
 
         if not authors_affiliations:
             authors = self.get_authors(try_editors=True)

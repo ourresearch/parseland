@@ -25,7 +25,7 @@ def parse_publisher():
     if parser.authors_found():
         message = parser.parse()
     else:
-        message = parser.no_authors_ouput()
+        message = parser.no_authors_output()
     response = {
         "message": message,
         "metadata": {

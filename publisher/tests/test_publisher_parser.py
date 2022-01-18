@@ -27,7 +27,7 @@ def test_no_authors_found(client):
     assert (
         json_data["message"] == [] or (
             not json_data["message"].get('authors')
-            and not json_data["message"].get('authors')
+            and not json_data["message"].get('abstract')
             and not json_data["message"].get('published_date')
             and not json_data["message"].get('genre')
         )
