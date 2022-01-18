@@ -77,6 +77,17 @@ class PublisherParser(ABC):
 
         return results
 
+    def parse_abstract_meta_tags(self):
+        meta_tag_names = ["og:description", "dc.description", "description"]
+
+        for meta_tag_name in meta_tag_names:
+            if meta_tag := self.soup.find("meta", {"property": meta_tag_name}):
+                if description := meta_tag.get("content").strip():
+                    if len(description) > 200 and not description.endswith('...') and not description.endswith('…'):
+                        return description
+
+        return None
+
     @staticmethod
     def format_name(name):
         return " ".join(reversed(name.split(", ")))
