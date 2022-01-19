@@ -12,7 +12,7 @@ class ACS(PublisherParser):
         return self.soup.find("ul", class_="loa")
 
     def parse(self):
-        results = []
+        result_authors = []
         author_soup = self.soup.find("ul", class_="loa")
         authors = author_soup.findAll("li")
         for author in authors:
@@ -24,31 +24,37 @@ class ACS(PublisherParser):
                 for organization in affiliation_soup.findAll("div"):
                     affiliations.append(organization.text.strip())
 
-            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
-        return results
+            result_authors.append(AuthorAffiliations(name=name, affiliations=affiliations))
+        return {
+            "authors": result_authors,
+            "abstract": self.parse_abstract_meta_tags()
+        }
 
     test_cases = [
         {
             "doi": "10.1021/acs.jpcb.1c05793",
-            "result": [
-                {
-                    "name": "Piotr Wróbel",
-                    "affiliations": [
-                        "Faculty of Chemistry, Jagiellonian University, Gronostajowa 2, 30-387 Kraków, Poland",
-                    ],
-                },
-                {
-                    "name": "Piotr Kubisiak",
-                    "affiliations": [
-                        "Faculty of Chemistry, Jagiellonian University, Gronostajowa 2, 30-387 Kraków, Poland"
-                    ],
-                },
-                {
-                    "name": "Andrzej Eilmes",
-                    "affiliations": [
-                        "Faculty of Chemistry, Jagiellonian University, Gronostajowa 2, 30-387 Kraków, Poland"
-                    ],
-                },
-            ],
-        },
+            "result": {
+                "authors": [
+                    {
+                        "name": "Piotr Wróbel",
+                        "affiliations": [
+                            "Faculty of Chemistry, Jagiellonian University, Gronostajowa 2, 30-387 Kraków, Poland",
+                        ],
+                    },
+                    {
+                        "name": "Piotr Kubisiak",
+                        "affiliations": [
+                            "Faculty of Chemistry, Jagiellonian University, Gronostajowa 2, 30-387 Kraków, Poland"
+                        ],
+                    },
+                    {
+                        "name": "Andrzej Eilmes",
+                        "affiliations": [
+                            "Faculty of Chemistry, Jagiellonian University, Gronostajowa 2, 30-387 Kraków, Poland"
+                        ],
+                    },
+                ],
+                "abstract": "Classical molecular dynamics simulations have been performed for a series of electrolytes based on sodium bis(fluorosulfonyl)imide or sodium bis(trifluoromethylsulfonyl)imide salts and monoglyme, tetraglyme, and poly(ethylene oxide) as solvents. Structural properties have been assessed through the analysis of coordination numbers and binding patterns. Residence times for Na–O interactions have been used to investigate the stability of solvation shells. Diffusion coefficients of ions and electrical conductivity of the electrolytes have been estimated from molecular dynamics trajectories. Contributions to the total conductivity have been analyzed in order to investigate the role of ion–ion correlations. It has been found that the anion–cation interactions are more probable in the systems with NaTFSI salts. Accordingly, the degree of correlations between ion motions is larger in NaTFSI-based electrolytes."
+            },
+        }
     ]
