@@ -92,6 +92,7 @@ class PublisherParser(ABC):
                                 and not description.endswith('…')
                                 and not description.startswith('http')
                         ):
+                            description = re.sub(r'^abstract[:.]?\s*', '', description, flags=re.I)
                             return description
 
         return None
