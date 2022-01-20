@@ -14,7 +14,7 @@ class ElsevierBV(PublisherParser):
         return self.soup.findAll("li", class_="author")
 
     def parse(self):
-        results = []
+        author_results = []
         author_soup = self.soup.findAll("li", class_="author")
         for author in author_soup:
             name_soup = author.find("a", class_="loa__item__name")
@@ -46,40 +46,46 @@ class ElsevierBV(PublisherParser):
             if affiliation_soup and not info_groups:
                 for aff in affiliation_soup.stripped_strings:
                     affiliations.append(aff.strip())
-            results.append(
+            author_results.append(
                 AuthorAffiliations(name=name.strip(), affiliations=affiliations)
             )
-        return results
+        return {
+            "authors": author_results,
+            "abstract": self.parse_abstract_meta_tags()
+        }
 
     test_cases = [
         {
             "doi": "10.1016/j.jvs.2021.03.049",
-            "result": [
-                {
-                    "name": "Jessica Rouan, MD",
-                    "affiliations": [
-                        "Department of Surgery, University of North Carolina at Chapel Hill, Chapel Hill, NC"
-                    ],
-                },
-                {
-                    "name": "Gabriela Velazquez, MD",
-                    "affiliations": [
-                        "Department of Vascular and Endovascular Surgery, Wake Forest School of Medicine, Wake Forest, NC"
-                    ],
-                },
-                {
-                    "name": "Julie Freischlag, MD",
-                    "affiliations": [
-                        "Department of Vascular and Endovascular Surgery, Wake Forest School of Medicine, Wake Forest, NC"
-                    ],
-                },
-                {
-                    "name": "Melina R. Kibbe, MD",
-                    "affiliations": [
-                        "Department of Surgery, University of North Carolina at Chapel Hill, Chapel Hill, NC",
-                        "Department of Biomedical Engineering, University of North Carolina at Chapel Hill, Chapel Hill, NC",
-                    ],
-                },
-            ],
+            "result": {
+                "authors": [
+                    {
+                        "name": "Jessica Rouan, MD",
+                        "affiliations": [
+                            "Department of Surgery, University of North Carolina at Chapel Hill, Chapel Hill, NC"
+                        ],
+                    },
+                    {
+                        "name": "Gabriela Velazquez, MD",
+                        "affiliations": [
+                            "Department of Vascular and Endovascular Surgery, Wake Forest School of Medicine, Wake Forest, NC"
+                        ],
+                    },
+                    {
+                        "name": "Julie Freischlag, MD",
+                        "affiliations": [
+                            "Department of Vascular and Endovascular Surgery, Wake Forest School of Medicine, Wake Forest, NC"
+                        ],
+                    },
+                    {
+                        "name": "Melina R. Kibbe, MD",
+                        "affiliations": [
+                            "Department of Surgery, University of North Carolina at Chapel Hill, Chapel Hill, NC",
+                            "Department of Biomedical Engineering, University of North Carolina at Chapel Hill, Chapel Hill, NC",
+                        ],
+                    },
+                ],
+                "abstract": "Publication bias has been shown to exist in research across medical and surgical specialties.\nBias can occur at any stage of the publication process and can be related to race,\nethnicity, age, religion, sex, gender, or sexual orientation. Although some improvements\nhave been made toward addressing this issue, bias still spans the publication process\nfrom authors and peer reviewers, to editorial board members and editors, with poor\ninclusion of women and underrepresented minorities throughout. The result of bias\nremaining unchecked is the publication of research that leaves out certain groups,\nis not applicable to all people, and can result in harm to some populations."
+            }
         },
     ]
