@@ -1,3 +1,7 @@
+import re
+
+from bs4 import BeautifulSoup
+
 from publisher.elements import Author, Affiliation
 from publisher.parsers.parser import PublisherParser
 
@@ -14,13 +18,24 @@ class MedKnow(PublisherParser):
 
     def parse(self):
         authors = self.get_authors()
-        if not authors:
+        if authors:
+            affiliations = self.get_affiliations()
+            authors_affiliations = self.merge_authors_affiliations(authors, affiliations)
+        else:
             # try meta tags
-            return self.parse_meta_tags()
+            authors_affiliations = self.parse_meta_tags()
 
-        affiliations = self.get_affiliations()
-        authors_affiliations = self.merge_authors_affiliations(authors, affiliations)
-        return authors_affiliations
+        abstract = self.parse_abstract_meta_tags()
+        try:
+            abstract = BeautifulSoup(abstract, "html.parser").text
+            abstract = re.sub(r'^abstract[:.]?\s*', '', abstract, flags=re.I)
+        except Exception:
+            pass
+
+        return {
+            "authors": authors_affiliations,
+            "abstract": abstract
+        }
 
     def get_authors(self):
         results = []
@@ -73,31 +88,34 @@ class MedKnow(PublisherParser):
     test_cases = [
         {
             "doi": "10.4103/djo.djo_93_20",
-            "result": [
-                {
-                    "name": "Saleh A Naguib",
-                    "affiliations": [
-                        "Ophthalmology Department, Imbaba Ophthalmology Hospital, Cairo, Egypt"
-                    ],
-                },
-                {
-                    "name": "Omar A Barada",
-                    "affiliations": [
-                        "Ophthalmology Department, Faculty of Medicine, Cairo University, Cairo, Egypt"
-                    ],
-                },
-                {
-                    "name": "Esraa El-Mayah",
-                    "affiliations": [
-                        "Ophthalmology Department, Faculty of Medicine, Cairo University, Cairo, Egypt"
-                    ],
-                },
-                {
-                    "name": "Hany E Elmekawey",
-                    "affiliations": [
-                        "Ophthalmology Department, Faculty of Medicine, Cairo University, Cairo, Egypt"
-                    ],
-                },
-            ],
+            "result": {
+                "authors": [
+                    {
+                        "name": "Saleh A Naguib",
+                        "affiliations": [
+                            "Ophthalmology Department, Imbaba Ophthalmology Hospital, Cairo, Egypt"
+                        ],
+                    },
+                    {
+                        "name": "Omar A Barada",
+                        "affiliations": [
+                            "Ophthalmology Department, Faculty of Medicine, Cairo University, Cairo, Egypt"
+                        ],
+                    },
+                    {
+                        "name": "Esraa El-Mayah",
+                        "affiliations": [
+                            "Ophthalmology Department, Faculty of Medicine, Cairo University, Cairo, Egypt"
+                        ],
+                    },
+                    {
+                        "name": "Hany E Elmekawey",
+                        "affiliations": [
+                            "Ophthalmology Department, Faculty of Medicine, Cairo University, Cairo, Egypt"
+                        ],
+                    },
+                ],
+                "abstract": "Purpose The purpose of this study was to detect single or multiple best-performing parameters of corneal tomography and dynamic corneal biomechanics with high sensitivity and specificity in the diagnosis of keratoconus, subclinical keratoconus (SCKC), and forme fruste keratoconus (FFKC).Design This was a prospective observational study.Patients and methods In this study, one eye of each of 40 participants was included. They were divided into four groups: keratoconus, SCKC, FFKC, and a normal control group, with 10 participants in each group. All participants underwent a full ophthalmologic examination, analysis of corneal tomography using Pentacam HR and analysis of corneal biomechanical response using the Corvis ST at the initial visit and after 3 months.Results For the diagnosis of keratoconus, the 100% sensitive and specific parameters were Belin/Ambrósio Enhanced Ectasia Display (BAD d), Ambrósio’s relational thickness maximum (ARTmax), and tomographic biomechanical index (TBI) with cutoff values of 1.905, 344, and 0.785, respectively. For detection of SCKC, the 100% sensitive parameters were maximum keratometry and thickness profile index with cutoff values of 44.7 and 0.945, respectively. After 3 months of follow-up, maximum keratometry, index of surface variance, deflection amplitude, and deflection area showed 100% sensitivity with specificities of 90, 80, 70, and 60%, respectively. The highest percentage of change over time was for the index of highest decentration by 200%, followed by TBI by 133%. For FFKC, the deformation amplitude and corneal velocity 1 showed sensitivity of 90 and 80%, respectively, and specificity of 83 and 90%, respectively. After follow-up BAD d, deformation amplitude, deformation amplitude ratio, and TBI showed 100% sensitivity and specificity.Conclusion This study illustrated the efficacy of Corvis parameters for the diagnosis of keratoconus, but with lower discriminative ability than corneal tomography. It could also be used as a supplementary tool for the diagnosis and follow-up of SCKC and FFKC patients."
+            }
         },
     ]
