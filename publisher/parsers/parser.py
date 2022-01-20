@@ -82,8 +82,8 @@ class PublisherParser(ABC):
         meta_tag_names = ["citation_abstract", "og:description", "dc.description", "description"]
         meta_property_names = ["property", "name"]
 
-        for meta_property_name in meta_property_names:
-            for meta_tag_name in meta_tag_names:
+        for meta_tag_name in meta_tag_names:
+            for meta_property_name in meta_property_names:
                 if meta_tag := self.soup.find("meta", {meta_property_name: re.compile(f'^{meta_tag_name}$', re.I)}):
                     if description := meta_tag.get("content").strip():
                         if (
