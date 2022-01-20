@@ -16,7 +16,10 @@ class SPIE(PublisherParser):
         authors = self.get_authors()
         affiliations = self.get_affiliations()
         authors_affiliations = self.merge_authors_affiliations(authors, affiliations)
-        return authors_affiliations
+        return {
+            "authors": authors_affiliations,
+            "abstract": self.parse_abstract_meta_tags()
+        }
 
     def get_authors(self):
         authors = []
@@ -60,23 +63,26 @@ class SPIE(PublisherParser):
     test_cases = [
         {
             "doi": "10.1117/12.2602977",
-            "result": [
-                {
-                    "name": "Le Li",
-                    "affiliations": [
-                        "Naval Univ. of Engineering (China)",
-                    ],
-                },
-                {
-                    "name": "Zhi-hao Ye",
-                    "affiliations": ["Naval Univ. of Engineering (China)"],
-                },
-                {
-                    "name": "Yi-hui Xia",
-                    "affiliations": [
-                        "Naval Univ. of Engineering (China)",
-                    ],
-                },
-            ],
+            "result": {
+                "authors": [
+                    {
+                        "name": "Le Li",
+                        "affiliations": [
+                            "Naval Univ. of Engineering (China)",
+                        ],
+                    },
+                    {
+                        "name": "Zhi-hao Ye",
+                        "affiliations": ["Naval Univ. of Engineering (China)"],
+                    },
+                    {
+                        "name": "Yi-hui Xia",
+                        "affiliations": [
+                            "Naval Univ. of Engineering (China)",
+                        ],
+                    },
+                ],
+                "abstract": "In order to suppress the torque ripple of five-phase induction motor after phase fault, based on the idea of order reduction and decoupling, space transformation matrices under different faults are constructed, and new rotation transformation matrices are established. The mathematical model and simulation system of five-phase induction motor under three different phase-missing faults are established. and the effective action time carrier type pwm are adopted at the same time, so that the motor can continue to run smoothly and without disturbance in the event of a fault."
+            }
         },
     ]
