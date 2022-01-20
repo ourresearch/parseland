@@ -4,17 +4,24 @@ from publisher.parsers.parser import PublisherParser
 class GenericPublisherParser(PublisherParser):
     parser_name = "generic_publisher_parser"
 
+    def __init__(self, soup):
+        super().__init__(soup)
+        self._parse_result = None
+
     def is_publisher_specific_parser(self):
         return False
 
     def authors_found(self):
-        return self.soup.find("meta", {"name": "citation_author_institution"})
+        return self.parse() and (self.parse().get("authors") or self.parse().get("abstract"))
 
     def parse(self):
-        return {
-            "authors": self.parse_meta_tags(),
-            "abstract": self.parse_abstract_meta_tags()
-        }
+        if not self._parse_result:
+            self._parse_result = {
+                "authors": self.parse_meta_tags(),
+                "abstract": self.parse_abstract_meta_tags()
+            }
+
+        return self._parse_result
 
     test_cases = [
         {
