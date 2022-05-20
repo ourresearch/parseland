@@ -18,3 +18,4 @@ class Affiliation:
 class AuthorAffiliations:
     name: str
     affiliations: list
+    is_corresponding_author: bool = False
