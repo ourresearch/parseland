@@ -23,12 +23,7 @@ class PublisherParser(ABC):
 
     @staticmethod
     def no_authors_output():
-        return {
-            "authors": [],
-            "abstract": None,
-            "published_date": None,
-            "genre": None
-        }
+        return {"authors": [], "abstract": None, "published_date": None, "genre": None}
 
     @abstractmethod
     def parse(self):
@@ -79,20 +74,29 @@ class PublisherParser(ABC):
         return results
 
     def parse_abstract_meta_tags(self):
-        meta_tag_names = ["citation_abstract", "og:description", "dc.description", "description"]
+        meta_tag_names = [
+            "citation_abstract",
+            "og:description",
+            "dc.description",
+            "description",
+        ]
         meta_property_names = ["property", "name"]
 
         for meta_tag_name in meta_tag_names:
             for meta_property_name in meta_property_names:
-                if meta_tag := self.soup.find("meta", {meta_property_name: re.compile(f'^{meta_tag_name}$', re.I)}):
+                if meta_tag := self.soup.find(
+                    "meta", {meta_property_name: re.compile(f"^{meta_tag_name}$", re.I)}
+                ):
                     if description := meta_tag.get("content").strip():
                         if (
-                                len(description) > 200
-                                and not description.endswith('...')
-                                and not description.endswith('…')
-                                and not description.startswith('http')
+                            len(description) > 200
+                            and not description.endswith("...")
+                            and not description.endswith("…")
+                            and not description.startswith("http")
                         ):
-                            description = re.sub(r'^abstract[:.]?\s*', '', description, flags=re.I)
+                            description = re.sub(
+                                r"^abstract[:.]?\s*", "", description, flags=re.I
+                            )
                             return description
 
         return None

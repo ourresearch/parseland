@@ -49,10 +49,7 @@ class ElsevierBV(PublisherParser):
             author_results.append(
                 AuthorAffiliations(name=name.strip(), affiliations=affiliations)
             )
-        return {
-            "authors": author_results,
-            "abstract": self.parse_abstract_meta_tags()
-        }
+        return {"authors": author_results, "abstract": self.parse_abstract_meta_tags()}
 
     test_cases = [
         {
@@ -85,7 +82,7 @@ class ElsevierBV(PublisherParser):
                         ],
                     },
                 ],
-                "abstract": "Publication bias has been shown to exist in research across medical and surgical specialties.\nBias can occur at any stage of the publication process and can be related to race,\nethnicity, age, religion, sex, gender, or sexual orientation. Although some improvements\nhave been made toward addressing this issue, bias still spans the publication process\nfrom authors and peer reviewers, to editorial board members and editors, with poor\ninclusion of women and underrepresented minorities throughout. The result of bias\nremaining unchecked is the publication of research that leaves out certain groups,\nis not applicable to all people, and can result in harm to some populations."
-            }
+                "abstract": "Publication bias has been shown to exist in research across medical and surgical specialties.\nBias can occur at any stage of the publication process and can be related to race,\nethnicity, age, religion, sex, gender, or sexual orientation. Although some improvements\nhave been made toward addressing this issue, bias still spans the publication process\nfrom authors and peer reviewers, to editorial board members and editors, with poor\ninclusion of women and underrepresented minorities throughout. The result of bias\nremaining unchecked is the publication of research that leaves out certain groups,\nis not applicable to all people, and can result in harm to some populations.",
+            },
         },
     ]

@@ -24,13 +24,11 @@ def test_api_root(client):
 def test_no_authors_found(client):
     rv = client.get("/parse-publisher?doi=10.1007/0-387-27160-0_33")
     json_data = rv.get_json()
-    assert (
-        json_data["message"] == [] or (
-            not json_data["message"].get('authors')
-            and not json_data["message"].get('abstract')
-            and not json_data["message"].get('published_date')
-            and not json_data["message"].get('genre')
-        )
+    assert json_data["message"] == [] or (
+        not json_data["message"].get("authors")
+        and not json_data["message"].get("abstract")
+        and not json_data["message"].get("published_date")
+        and not json_data["message"].get("genre")
     )
 
 

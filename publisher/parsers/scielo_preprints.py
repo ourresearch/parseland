@@ -7,32 +7,41 @@ class ScieloPreprints(PublisherParser):
     parser_name = "SciELO preprints"
 
     def is_publisher_specific_parser(self):
-        stylesheets = self.soup.find_all('link', {'rel': 'stylesheet'})
+        stylesheets = self.soup.find_all("link", {"rel": "stylesheet"})
 
-        if any('preprints.scielo.org/' in stylesheet.get('href') for stylesheet in stylesheets):
+        if any(
+            "preprints.scielo.org/" in stylesheet.get("href")
+            for stylesheet in stylesheets
+        ):
             return True
 
         return False
 
     def authors_found(self):
-        return self.soup.find('ul', {'class': 'authors'})
+        return self.soup.find("ul", {"class": "authors"})
 
     def parse(self):
         authors = []
-        authors_list = self.soup.find('ul', {'class': 'authors'})
-        for author_li in authors_list.find_all('li'):
-            name_span = author_li.find('span', {'class': 'name'})
+        authors_list = self.soup.find("ul", {"class": "authors"})
+        for author_li in authors_list.find_all("li"):
+            name_span = author_li.find("span", {"class": "name"})
             if name_span and name_span.text and name_span.text.strip():
-                affiliation_spans = name_span.find_next_siblings('span', {'class': 'affiliation'})
+                affiliation_spans = name_span.find_next_siblings(
+                    "span", {"class": "affiliation"}
+                )
                 affiliations = []
                 for affiliation_span in affiliation_spans:
                     if affiliation_span.text and affiliation_span.text.strip():
-                        affiliations.append(re.sub(r'\s+', ' ', affiliation_span.text.strip()))
+                        affiliations.append(
+                            re.sub(r"\s+", " ", affiliation_span.text.strip())
+                        )
 
-                authors.append({
-                    'name': re.sub(r'\s+', ' ', name_span.text.strip()),
-                    'affiliations': affiliations
-                })
+                authors.append(
+                    {
+                        "name": re.sub(r"\s+", " ", name_span.text.strip()),
+                        "affiliations": affiliations,
+                    }
+                )
 
         return authors
 
@@ -60,9 +69,7 @@ class ScieloPreprints(PublisherParser):
                 },
                 {
                     "name": "Rogério Mugnaini",
-                    "affiliations": [
-                        "University of São Paulo"
-                    ],
+                    "affiliations": ["University of São Paulo"],
                 },
             ],
         },

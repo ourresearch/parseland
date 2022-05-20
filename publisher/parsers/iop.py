@@ -31,19 +31,21 @@ class IOP(PublisherParser):
                     "name": "Nicolaus Kratochwil",
                     "affiliations": [
                         "CERN, Esplanade des Particules 1, 1211 Meyrin, Switzerland",
-                        "University of Vienna, Universitaetsring 1, A-1010 Vienna, Austria"
+                        "University of Vienna, Universitaetsring 1, A-1010 Vienna, Austria",
                     ],
                 },
                 {
                     "name": "Stefan Gundacker",
                     "affiliations": [
                         "CERN, Esplanade des Particules 1, 1211 Meyrin, Switzerland",
-                        "Department of Physics of Molecular Imaging Systems, Institute for Experimental Molecular Imaging, RWTH Aachen University, Forckenbeckstrasse 55, D-52074 Aachen, Germany"
+                        "Department of Physics of Molecular Imaging Systems, Institute for Experimental Molecular Imaging, RWTH Aachen University, Forckenbeckstrasse 55, D-52074 Aachen, Germany",
                     ],
                 },
                 {
                     "name": "Etiennette Auffray",
-                    "affiliations": ["CERN, Esplanade des Particules 1, 1211 Meyrin, Switzerland"],
+                    "affiliations": [
+                        "CERN, Esplanade des Particules 1, 1211 Meyrin, Switzerland"
+                    ],
                 },
             ],
         },

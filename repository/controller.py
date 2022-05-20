@@ -10,7 +10,9 @@ from repository.parsers.parser import RepositoryParser
 class RepositoryController:
     def __init__(self, page_id):
         self.page_id = page_id
-        self.page_archive_endpoint = f"https://api.unpaywall.org/repo_page/{self.page_id}"
+        self.page_archive_endpoint = (
+            f"https://api.unpaywall.org/repo_page/{self.page_id}"
+        )
         self.parsers = RepositoryParser.__subclasses__()
         self.soup = self.get_soup()
 

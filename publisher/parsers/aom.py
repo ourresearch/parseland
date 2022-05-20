@@ -25,12 +25,11 @@ class AOM(PublisherParser):
                 bottom_info.clear()
                 affiliations.append(affiliation_soup.text.strip())
 
-            result_authors.append(AuthorAffiliations(name=name, affiliations=affiliations))
+            result_authors.append(
+                AuthorAffiliations(name=name, affiliations=affiliations)
+            )
 
-        return {
-            "authors": result_authors,
-            "abstract": self.parse_abstract_meta_tags()
-        }
+        return {"authors": result_authors, "abstract": self.parse_abstract_meta_tags()}
 
     test_cases = [
         {
@@ -48,7 +47,7 @@ class AOM(PublisherParser):
                         "affiliations": ["U. de les Illes Balears"],
                     },
                 ],
-                "abstract": "This study explores the cascading effect of board gender diversity within business groups. In particular, we empirically test whether board gender diversity in headquarters is positively associated with board gender diversity in lower layers of hierarchical business groups. We, moreover, analyze the empowerment of women directors in the boardroom, and we moderate by some business groups characteristics that may impact the influence of headquarters. We find a positive relationship between board gender diversity in headquarters and affiliates. This suggests that the existence of women at the top stimulates gender diversity in affiliates, and that this finding is influenced by several business group characteristics. However, the presence of women in board executive positions is not associated with an increase in gender diversity across business groups’ affiliates."
-            }
+                "abstract": "This study explores the cascading effect of board gender diversity within business groups. In particular, we empirically test whether board gender diversity in headquarters is positively associated with board gender diversity in lower layers of hierarchical business groups. We, moreover, analyze the empowerment of women directors in the boardroom, and we moderate by some business groups characteristics that may impact the influence of headquarters. We find a positive relationship between board gender diversity in headquarters and affiliates. This suggests that the existence of women at the top stimulates gender diversity in affiliates, and that this finding is influenced by several business group characteristics. However, the presence of women in board executive positions is not associated with an increase in gender diversity across business groups’ affiliates.",
+            },
         },
     ]

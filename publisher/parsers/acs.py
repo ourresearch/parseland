@@ -24,11 +24,13 @@ class ACS(PublisherParser):
                 for organization in affiliation_soup.findAll("div"):
                     affiliations.append(organization.text.strip())
 
-            result_authors.append(AuthorAffiliations(name=name, affiliations=affiliations))
-        return {
-            "authors": result_authors,
-            "abstract": self.parse_abstract_meta_tags()
-        }
+            result_authors.append(
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                )
+            )
+        return {"authors": result_authors, "abstract": self.parse_abstract_meta_tags()}
 
     test_cases = [
         {
@@ -54,7 +56,7 @@ class ACS(PublisherParser):
                         ],
                     },
                 ],
-                "abstract": "Classical molecular dynamics simulations have been performed for a series of electrolytes based on sodium bis(fluorosulfonyl)imide or sodium bis(trifluoromethylsulfonyl)imide salts and monoglyme, tetraglyme, and poly(ethylene oxide) as solvents. Structural properties have been assessed through the analysis of coordination numbers and binding patterns. Residence times for Na–O interactions have been used to investigate the stability of solvation shells. Diffusion coefficients of ions and electrical conductivity of the electrolytes have been estimated from molecular dynamics trajectories. Contributions to the total conductivity have been analyzed in order to investigate the role of ion–ion correlations. It has been found that the anion–cation interactions are more probable in the systems with NaTFSI salts. Accordingly, the degree of correlations between ion motions is larger in NaTFSI-based electrolytes."
+                "abstract": "Classical molecular dynamics simulations have been performed for a series of electrolytes based on sodium bis(fluorosulfonyl)imide or sodium bis(trifluoromethylsulfonyl)imide salts and monoglyme, tetraglyme, and poly(ethylene oxide) as solvents. Structural properties have been assessed through the analysis of coordination numbers and binding patterns. Residence times for Na–O interactions have been used to investigate the stability of solvation shells. Diffusion coefficients of ions and electrical conductivity of the electrolytes have been estimated from molecular dynamics trajectories. Contributions to the total conductivity have been analyzed in order to investigate the role of ion–ion correlations. It has been found that the anion–cation interactions are more probable in the systems with NaTFSI salts. Accordingly, the degree of correlations between ion motions is larger in NaTFSI-based electrolytes.",
             },
         }
     ]
