@@ -262,31 +262,31 @@ class Springer(PublisherParser):
                     {
                         "name": "Ping Zhang",
                         "affiliations": [
-                            "Department of Medicine, Section of Pulmonary and Critical Care Medicine, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
+                            "Department of Medicine, Section of Pulmonary and Critical Care Medicine, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans, LA, 70112"
                         ],
                     },
                     {
                         "name": "Gregory J. Bagby",
                         "affiliations": [
-                            "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Department of Physiology, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
+                            "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Department of Physiology, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans, LA, 70112"
                         ],
                     },
                     {
                         "name": "Jay K. Kolls",
                         "affiliations": [
-                            "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Alcohol Research Center and Gene Therapy Programs, Louisiana State University Health Sciences Center, New Orleans"
+                            "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Alcohol Research Center and Gene Therapy Programs, Louisiana State University Health Sciences Center, New Orleans, LA, 70112"
                         ],
                     },
                     {
                         "name": "Lee J. Quinton",
                         "affiliations": [
-                            "Department of Physiology and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
+                            "Department of Physiology and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans, LA, 70112"
                         ],
                     },
                     {
                         "name": "Steve Nelson",
                         "affiliations": [
-                            "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Department of Physiology, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans"
+                            "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Department of Physiology, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans, LA, 70112"
                         ],
                     },
                 ],
@@ -304,7 +304,7 @@ class Springer(PublisherParser):
                     {
                         "name": "Daniel Joseph Cahill",
                         "affiliations": [
-                            "Department of Psychology, California State University, Fresno, Fresno"
+                            "Department of Psychology, California State University, Fresno, Fresno, California"
                         ],
                     },
                 ],
