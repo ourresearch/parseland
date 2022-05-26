@@ -33,14 +33,21 @@ class Frontiers(PublisherParser):
 
             # set aff_ids
             aff_id_soup = name_soup.next_element
+            is_corresponding = False
             if aff_id_soup.name == "sup":
                 aff_ids = aff_id_soup.text
+                if "*" in aff_ids:
+                    is_corresponding = True
             else:
                 aff_ids = None
 
             aff_ids = self.format_ids(aff_ids) if aff_ids else []
 
-            authors.append(Author(name=name, aff_ids=aff_ids))
+            authors.append(
+                Author(
+                    name=name, aff_ids=aff_ids, is_corresponding_author=is_corresponding
+                )
+            )
         return authors
 
     def get_affiliations(self):
