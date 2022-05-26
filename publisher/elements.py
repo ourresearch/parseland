@@ -6,6 +6,7 @@ from typing import Optional, Union
 class Author:
     name: str
     aff_ids: list
+    is_corresponding_author: bool = False
 
 
 @dataclass

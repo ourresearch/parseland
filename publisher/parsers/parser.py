@@ -123,7 +123,11 @@ class PublisherParser(ABC):
                     author_affiliations.append(str(aff.organization))
 
             results.append(
-                AuthorAffiliations(name=author.name, affiliations=author_affiliations)
+                AuthorAffiliations(
+                    name=author.name,
+                    affiliations=author_affiliations,
+                    is_corresponding_author=author.is_corresponding_author,
+                )
             )
         return results
 

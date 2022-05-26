@@ -27,6 +27,7 @@ class BMJ(PublisherParser):
 
     def get_authors(self):
         authors = []
+        correspondence_name = self.get_correspondence_name()
         author_soup = self.soup.find("ol", class_="contributor-list")
         if not author_soup:
             return None
@@ -43,7 +44,16 @@ class BMJ(PublisherParser):
                 aff_id = aff_id_raw.text.strip()
                 if aff_id:
                     aff_ids.append(aff_id)
-            authors.append(Author(name=name, aff_ids=aff_ids))
+
+            if name.lower() in correspondence_name.lower():
+                is_corresponding = True
+            else:
+                is_corresponding = False
+            authors.append(
+                Author(
+                    name=name, aff_ids=aff_ids, is_corresponding_author=is_corresponding
+                )
+            )
         return authors
 
     def get_affiliations(self):
@@ -65,6 +75,10 @@ class BMJ(PublisherParser):
                 aff = aff_raw.text.strip()
                 results.append(Affiliation(organization=aff, aff_id=aff_id))
         return results
+
+    def get_correspondence_name(self):
+        corr_soup = self.soup.find("li", class_="corresp")
+        return corr_soup.text
 
     test_cases = [
         {
