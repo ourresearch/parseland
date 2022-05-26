@@ -30,8 +30,16 @@ class MDPI(PublisherParser):
                 name = author.div.text
             else:
                 name = author.a.text
+            if "*" in author.sup.text:
+                is_corresponding = True
+            else:
+                is_corresponding = False
             aff_ids = self.format_ids(author.sup.text, self.chars_to_ignore)
-            authors.append(Author(name=name, aff_ids=aff_ids))
+            authors.append(
+                Author(
+                    name=name, aff_ids=aff_ids, is_corresponding_author=is_corresponding
+                )
+            )
         return authors
 
     def get_affiliations(self):
