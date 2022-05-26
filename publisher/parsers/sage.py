@@ -14,8 +14,18 @@ class Sage(PublisherParser):
         results = []
         author_section = self.soup.find("div", class_="authors")
         author_soup = author_section.findAll("div", class_="authorLayer")
+        corresponding_text = self.get_corresponding_text()
         for author in author_soup:
-            name = author.find("a", class_="entryAuthor").text
+            name = author.find("a", class_="entryAuthor").text.strip()
+            name_lower = name.lower()
+            if (
+                name_lower in corresponding_text
+                and "corresponding" in corresponding_text
+            ):
+                is_corresponding = True
+            else:
+                is_corresponding = False
+
             affiliations = []
 
             # method 1
@@ -31,8 +41,20 @@ class Sage(PublisherParser):
                     if isinstance(affiliation, str):
                         affiliations.append(affiliation)
 
-            results.append({"name": name.strip(), "affiliations": affiliations})
+            results.append(
+                {
+                    "name": name.strip(),
+                    "affiliations": affiliations,
+                    "is_corresponding_author": is_corresponding,
+                }
+            )
         return results
+
+    def get_corresponding_text(self):
+        article_notes = self.soup.find("div", class_="artice-notes")
+        if article_notes:
+            article_notes_text = article_notes.text.lower()
+            return article_notes_text
 
     test_cases = [
         {
