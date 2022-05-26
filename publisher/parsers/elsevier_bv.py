@@ -22,6 +22,14 @@ class ElsevierBV(PublisherParser):
                 name = name_soup.text
             else:
                 continue
+            correspondence = author.find(
+                "span", class_="article-header__info__group__label"
+            )
+            if correspondence.text.lower().strip() == "correspondence":
+                is_corresponding = True
+            else:
+                is_corresponding = False
+
             affiliations = []
             # method 1
             info_groups = author.findAll("div", class_="article-header__info__group")
@@ -47,7 +55,11 @@ class ElsevierBV(PublisherParser):
                 for aff in affiliation_soup.stripped_strings:
                     affiliations.append(aff.strip())
             author_results.append(
-                AuthorAffiliations(name=name.strip(), affiliations=affiliations)
+                AuthorAffiliations(
+                    name=name.strip(),
+                    affiliations=affiliations,
+                    is_corresponding_author=is_corresponding,
+                )
             )
         return {"authors": author_results, "abstract": self.parse_abstract_meta_tags()}
 

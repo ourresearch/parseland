@@ -16,6 +16,10 @@ class CUP(PublisherParser):
         authors = self.soup.findAll("div", class_="author")
         for author in authors:
             name = author.find("dt").text
+            if "*" in name:
+                is_corresponding = True
+            else:
+                is_corresponding = False
             name = name.strip().replace("*", "")
 
             affiliations = []
@@ -25,7 +29,11 @@ class CUP(PublisherParser):
                     affiliations.append(organization.strip())
 
             result_authors.append(
-                AuthorAffiliations(name=name, affiliations=affiliations)
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding_author=is_corresponding,
+                )
             )
         return {"authors": result_authors, "abstract": self.parse_abstract_meta_tags()}
 
