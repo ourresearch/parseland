@@ -27,6 +27,12 @@ class Oxford(PublisherParser):
         for author in authors:
             name = author.find("div", class_="info-card-name").text.strip()
 
+            is_corresponding = (
+                True
+                if author.find("div", class_="info-author-correspondence")
+                else False
+            )
+
             affiliations = []
             affiliation_section = author.find("div", class_="info-card-affilitation")
             if affiliation_section:
@@ -34,7 +40,13 @@ class Oxford(PublisherParser):
                 for aff in affiliations_soup:
                     affiliations.append(aff.text)
 
-            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+            results.append(
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding_author=is_corresponding,
+                )
+            )
         return results
 
     test_cases = [
