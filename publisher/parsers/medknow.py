@@ -25,7 +25,9 @@ class MedKnow(PublisherParser):
             )
         else:
             # try meta tags
-            authors_affiliations = self.parse_meta_tags()
+            authors_affiliations = self.parse_meta_tags(
+                corresponding_tag="font", corresponding_class="CorrsAdd"
+            )
 
         abstract = self.parse_abstract_meta_tags()
         try:
@@ -44,6 +46,8 @@ class MedKnow(PublisherParser):
 
         authors = author_soup.findAll("a")
         affiliations = author_soup.findAll("sup")
+        corresponding_text = self.get_corresponding_text("font", "CorrsAdd")
+        is_corresponding = False
 
         # method 1
         if not authors and not affiliations:
@@ -51,14 +55,28 @@ class MedKnow(PublisherParser):
             if authors:
                 for author in authors:
                     name = author.strip()
-                    results.append(Author(name=name, aff_ids=[]))
+                    if corresponding_text and name.lower() in corresponding_text:
+                        is_corresponding = True
+                    results.append(
+                        Author(
+                            name=name,
+                            aff_ids=[],
+                            is_corresponding_author=is_corresponding,
+                        )
+                    )
             return results
 
         # method 2
         for author, affiliation in zip(authors, affiliations):
             name = author.text.strip()
+            if corresponding_text and name.lower() in corresponding_text:
+                is_corresponding = True
             aff_ids = self.format_ids(affiliation.text.strip())
-            results.append(Author(name=name, aff_ids=aff_ids))
+            results.append(
+                Author(
+                    name=name, aff_ids=aff_ids, is_corresponding_author=is_corresponding
+                )
+            )
         return results
 
     def get_affiliations(self):
