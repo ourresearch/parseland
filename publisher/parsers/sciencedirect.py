@@ -51,12 +51,15 @@ class ScienceDirect(PublisherParser):
             for author in author_dicts:
                 given = None
                 family = None
+                is_corresponding = False
                 affiliation_labels = []
                 for author_property in author.get("$$", []):
                     if author_property.get("#name") == "given-name":
                         given = author_property.get("_")
                     elif author_property.get("#name") == "surname":
                         family = author_property.get("_")
+                    elif author_property.get("#name") == "e-address":
+                        is_corresponding = True
                     elif author_property.get("#name") == "cross-ref":
                         affiliation_label = author_property.get("$", {}).get("refid")
                         if affiliation_label in group_affiliation_labels:
@@ -67,6 +70,7 @@ class ScienceDirect(PublisherParser):
                         {
                             "name": " ".join([n for n in [given, family] if n]),
                             "affiliation_labels": affiliation_labels,
+                            "is_corresponding_author": is_corresponding,
                         }
                     )
 
@@ -78,7 +82,13 @@ class ScienceDirect(PublisherParser):
                         for label in author["affiliation_labels"]
                     ]
                     all_authors.append(
-                        {"name": author["name"], "affiliations": affiliations}
+                        {
+                            "name": author["name"],
+                            "affiliations": affiliations,
+                            "is_corresponding_author": author[
+                                "is_corresponding_author"
+                            ],
+                        }
                     )
             else:
                 # assign all affiliations to all authors
@@ -87,6 +97,9 @@ class ScienceDirect(PublisherParser):
                         {
                             "name": author["name"],
                             "affiliations": list(group_affiliation_labels.values()),
+                            "is_corresponding_author": author[
+                                "is_corresponding_author"
+                            ],
                         }
                     )
 
