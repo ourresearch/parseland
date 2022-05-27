@@ -21,6 +21,8 @@ class PLOS(PublisherParser):
                 continue
             name = name.text.replace(",", "").strip()
 
+            is_corresponding = True if author.find("span", class_="email") else False
+
             affiliations = []
             affiliation_soup = author.findAll("p")
             if affiliation_soup:
@@ -35,7 +37,13 @@ class PLOS(PublisherParser):
                             elif aff.strip():
                                 affiliations.append(aff.strip())
 
-            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+            results.append(
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding_author=is_corresponding,
+                )
+            )
         return results
 
     test_cases = [
