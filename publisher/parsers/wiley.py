@@ -25,6 +25,12 @@ class Wiley(PublisherParser):
             affiliations = []
             name = author.a.text
             aff_soup = author.findAll("p", class_=None)
+
+            is_corresponding = False
+            for aff in aff_soup:
+                if "correspondence" in aff.text.lower():
+                    is_corresponding = True
+
             for aff in aff_soup:
                 if (
                     "correspondence" in aff.text.lower()[:25]
@@ -37,7 +43,13 @@ class Wiley(PublisherParser):
                 ):
                     break
                 affiliations.append(normalize("NFKD", aff.text))
-            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+            results.append(
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding_author=is_corresponding,
+                )
+            )
         return results
 
     def get_abstract(self):
