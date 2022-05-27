@@ -17,12 +17,28 @@ class Taylor(PublisherParser):
         authors = author_soup.findAll("div", class_="entryAuthor")
         for author in authors:
             name = author.a.text
+
+            correspondence_header = author.find("span", class_="heading")
+            if (
+                correspondence_header
+                and correspondence_header.text.lower() == "correspondence"
+            ):
+                is_corresponding = True
+            else:
+                is_corresponding = False
+
             affiliations = []
             affiliation = author.find("span", class_="overlay")
             if affiliation:
                 affiliation_trimmed = affiliation.contents[0].text[2:]
                 affiliations.append(affiliation_trimmed)
-            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+            results.append(
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding_author=is_corresponding,
+                )
+            )
         return results
 
     test_cases = [
