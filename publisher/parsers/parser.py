@@ -51,7 +51,6 @@ class PublisherParser(ABC):
         results = []
         metas = self.soup.findAll("meta")
 
-        is_corresponding = False
         corresponding_text = None
         if corresponding_tag and corresponding_class:
             corresponding_text = self.get_corresponding_text(
