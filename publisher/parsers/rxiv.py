@@ -35,6 +35,10 @@ class RXIV(PublisherParser):
                     continue
                 name = name_soup.text.strip()
 
+                is_corresponding = (
+                    True if "correspondence" in author.text.lower() else False
+                )
+
                 # affiliations
                 affiliations = []
                 affiliations_soup = author.findAll("div", class_="author-affiliation")
@@ -48,7 +52,13 @@ class RXIV(PublisherParser):
 
                     affiliations.append(organization)
 
-                results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+                results.append(
+                    AuthorAffiliations(
+                        name=name,
+                        affiliations=affiliations,
+                        is_corresponding_author=is_corresponding,
+                    )
+                )
                 i += 1
             elif not author and attempts < 2:
                 # handle skipped numbers
