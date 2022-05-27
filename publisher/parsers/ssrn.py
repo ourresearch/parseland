@@ -16,16 +16,26 @@ class SSRN(PublisherParser):
         authors = self.soup.find("div", class_="authors")
         name_soup = authors.findAll("h2")
         affiliation_soup = authors.findAll("p")
+        corresponding_text = self.soup.find("div", class_="author")
 
         for name, affiliation in zip(name_soup, affiliation_soup):
             name = name.text.strip()
+            is_corresponding = False
+            if f"{name.lower()} (contact author)" in corresponding_text.text.lower():
+                is_corresponding = True
             affiliations = []
             affiliation = affiliation.text.strip()
             if affiliation != "affiliation not provided to SSRN":
                 aff_split = affiliation.split(";")
                 for aff in aff_split:
                     affiliations.append(aff.strip())
-            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+            results.append(
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding_author=is_corresponding,
+                )
+            )
 
         return results
 
