@@ -18,6 +18,10 @@ class ResearchSquare(PublisherParser):
         for author in authors:
             name = author.find("h5").text.strip()
 
+            is_corresponding = (
+                True if "corresponding author" in author.text.lower() else False
+            )
+
             affiliations = []
             affiliations_soup = author.findAll("h6")
             for aff in affiliations_soup:
@@ -25,7 +29,13 @@ class ResearchSquare(PublisherParser):
                     break
                 affiliations.append(aff.text)
 
-            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+            results.append(
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding_author=is_corresponding,
+                )
+            )
         return results
 
     test_cases = [
