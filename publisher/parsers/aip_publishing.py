@@ -1,6 +1,6 @@
 import re
 
-from publisher.elements import Author, Affiliation, AuthorAffiliations
+from publisher.elements import Author, Affiliation
 from publisher.parsers.parser import PublisherParser
 
 
