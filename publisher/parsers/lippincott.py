@@ -99,6 +99,7 @@ class Lippincott(PublisherParser):
                     "affiliations": [
                         "Division of Allergy, Pulmonary, and Critical Care Medicine"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Lentz, Robert J. MD",
@@ -107,6 +108,7 @@ class Lippincott(PublisherParser):
                         "Department of Thoracic Surgery, Vanderbilt University Medical Center",
                         "Department of Veterans Affairs Medical Center, Nashville, TN",
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },
@@ -118,24 +120,28 @@ class Lippincott(PublisherParser):
                     "affiliations": [
                         "Department of Pulmonary and Critical Care Medicine, First Affiliated Hospital of Soochow University Suzhou, China"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Wang, Jia-Jia MM",
                     "affiliations": [
                         "Department of Pulmonary and Critical Care Medicine, First Affiliated Hospital of Soochow University Suzhou, China"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Liu, Ying-Ying MS",
                     "affiliations": [
                         "Department of Pulmonary and Critical Care Medicine, First Affiliated Hospital of Soochow University Suzhou, China"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Zeng, Da-Xiong MD",
                     "affiliations": [
                         "Department of Pulmonary and Critical Care Medicine, First Affiliated Hospital of Soochow University Suzhou, China"
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },
@@ -147,24 +153,28 @@ class Lippincott(PublisherParser):
                     "affiliations": [
                         "Departments of Mechanical Engineering & Materials Science (R.M.C., M.J.J., and S.P.L.) and Orthopaedic Surgery (S.P.L. and R.H.B.), Washington University in St. Louis, St. Louis, Missouri"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Jenkins, Matthew J. BS",
                     "affiliations": [
                         "Departments of Mechanical Engineering & Materials Science (R.M.C., M.J.J., and S.P.L.) and Orthopaedic Surgery (S.P.L. and R.H.B.), Washington University in St. Louis, St. Louis, Missouri"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Lake, Spencer P. PhD",
                     "affiliations": [
                         "Departments of Mechanical Engineering & Materials Science (R.M.C., M.J.J., and S.P.L.) and Orthopaedic Surgery (S.P.L. and R.H.B.), Washington University in St. Louis, St. Louis, Missouri"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Brophy, Robert H. MD",
                     "affiliations": [
                         "Departments of Mechanical Engineering & Materials Science (R.M.C., M.J.J., and S.P.L.) and Orthopaedic Surgery (S.P.L. and R.H.B.), Washington University in St. Louis, St. Louis, Missouri"
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },
