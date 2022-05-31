@@ -24,7 +24,9 @@ class Emerald(PublisherParser):
             )
             if affiliation_soup:
                 for organization in affiliation_soup.text.split(", and"):
-                    organization = organization.strip().replace(", and", "")
+                    organization = (
+                        organization.strip().replace(", and", "").replace("\n", "")
+                    )
                     if organization.startswith("("):
                         organization = organization[1:]
                     if organization.endswith(")"):
@@ -44,24 +46,28 @@ class Emerald(PublisherParser):
                         "School of Business and Economics, Universiti Putra Malaysia, Serdang, Malaysia",
                         "Kulliyyah of Economics and Management Sciences, International Islamic University Malaysia, Gombak, Malaysia",
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Normaz Wana Ismail",
                     "affiliations": [
                         "School of Business and Economics, Universiti Putra Malaysia, Serdang, Malaysia"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "N.A.M. Naseem",
                     "affiliations": [
                         "School of Business and Economics, Universiti Putra Malaysia, Serdang, Malaysia"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Ly Slesman",
                     "affiliations": [
                         "Centre for Advanced Research (CARe), Universiti Brunei Darussalam, Bandar Seri Begawan, Brunei Darussalam"
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },

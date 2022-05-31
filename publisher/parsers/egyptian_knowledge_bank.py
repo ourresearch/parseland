@@ -28,42 +28,54 @@ class EgyptianKnowledgeBank(PublisherParser):
                     "affiliations": [
                         "Department of Chemistry, College of Science, Al-Nahrain University, Baghdad, Iraq."
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Ismaeel Y. Majeed",
                     "affiliations": [
                         "Department of Chemistry, College of Education for Pure Science Ibn-Al-Haitham, University of\r\nBaghdad, Iraq"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Noora Asaad",
                     "affiliations": [
                         "Department of Chemistry, College of Science, Al-Nahrain University, Baghdad, Iraq."
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Riyadh Mahmood Ahmed",
                     "affiliations": [
                         "Department of Chemistry, College of Education for Pure Science Ibn-Al-Haitham, University of\nBaghdad, Iraq."
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Ghada M. Kamil",
                     "affiliations": [
                         "Department Of Applied sciences, Branch of Applied Chemistry, University Of Technology, Baghdad, Iraq."
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Sarah Abdul Rahman",
                     "affiliations": [
                         "Department of Chemistry, College of Education for Pure Science Ibn-Al-Haitham, University of\nBaghdad, Iraq."
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },
         {
             "doi": "10.21608/jlaw.2021.190634",
-            "result": [{"name": "حسين السيد حسين محمد", "affiliations": []}],
+            "result": [
+                {
+                    "name": "حسين السيد حسين محمد",
+                    "affiliations": [],
+                    "is_corresponding_author": False,
+                }
+            ],
         },
         {
             "doi": "10.21608/jstc.2021.191414",
@@ -73,6 +85,7 @@ class EgyptianKnowledgeBank(PublisherParser):
                     "affiliations": [
                         "أستاذ متفرغ الحاسب الآلى ونظم المعلومات\nقسم الحاسب الآلى ونظم المعلومات\nأکاديمية السادات للعلوم الادارية"
                     ],
+                    "is_corresponding_author": False,
                 }
             ],
         },
@@ -82,14 +95,17 @@ class EgyptianKnowledgeBank(PublisherParser):
                 {
                     "name": "محمود حسن الحوفي",
                     "affiliations": ["کلية التربية الرياضيه جامعه مدينه السادات"],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "محمد صلاح ابوسريع",
                     "affiliations": ["کلية التربية الرياضيه جامعه مدينه السادات"],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Mohamed Zaki",
                     "affiliations": ["مدينة السادات - المنطقة الرابعة - کشک الکاشف"],
+                    "is_corresponding_author": False,
                 },
             ],
         },

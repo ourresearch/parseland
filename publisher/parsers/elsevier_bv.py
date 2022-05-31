@@ -25,7 +25,10 @@ class ElsevierBV(PublisherParser):
             correspondence = author.find(
                 "span", class_="article-header__info__group__label"
             )
-            if correspondence.text.lower().strip() == "correspondence":
+            if (
+                correspondence
+                and correspondence.text.lower().strip() == "correspondence"
+            ):
                 is_corresponding = True
             else:
                 is_corresponding = False
@@ -73,18 +76,21 @@ class ElsevierBV(PublisherParser):
                         "affiliations": [
                             "Department of Surgery, University of North Carolina at Chapel Hill, Chapel Hill, NC"
                         ],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Gabriela Velazquez, MD",
                         "affiliations": [
                             "Department of Vascular and Endovascular Surgery, Wake Forest School of Medicine, Wake Forest, NC"
                         ],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Julie Freischlag, MD",
                         "affiliations": [
                             "Department of Vascular and Endovascular Surgery, Wake Forest School of Medicine, Wake Forest, NC"
                         ],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Melina R. Kibbe, MD",
@@ -92,9 +98,10 @@ class ElsevierBV(PublisherParser):
                             "Department of Surgery, University of North Carolina at Chapel Hill, Chapel Hill, NC",
                             "Department of Biomedical Engineering, University of North Carolina at Chapel Hill, Chapel Hill, NC",
                         ],
+                        "is_corresponding_author": True,
                     },
                 ],
-                "abstract": "Publication bias has been shown to exist in research across medical and surgical specialties.\nBias can occur at any stage of the publication process and can be related to race,\nethnicity, age, religion, sex, gender, or sexual orientation. Although some improvements\nhave been made toward addressing this issue, bias still spans the publication process\nfrom authors and peer reviewers, to editorial board members and editors, with poor\ninclusion of women and underrepresented minorities throughout. The result of bias\nremaining unchecked is the publication of research that leaves out certain groups,\nis not applicable to all people, and can result in harm to some populations.",
+                "abstract": "<h2>Abstract</h2><p>Publication bias has been shown to exist in research across medical and surgical specialties. Bias can occur at any stage of the publication process and can be related to race, ethnicity, age, religion, sex, gender, or sexual orientation. Although some improvements have been made toward addressing this issue, bias still spans the publication process from authors and peer reviewers, to editorial board members and editors, with poor inclusion of women and underrepresented minorities throughout. The result of bias remaining unchecked is the publication of research that leaves out certain groups, is not applicable to all people, and can result in harm to some populations. We have highlighted the current landscape of publication bias and strived to demonstrate the importance of addressing it. We have also provided solutions for reducing bias at multiple stages throughout the publication process. Increasing diversity, equity, and inclusion throughout all aspects of the publication process, requiring diversity, equity, and inclusion statements in reports, and providing specific education and guidelines will ensure the identification and eradication of publication bias. By following these measures, we hope that publication bias will be eliminated, which will reduce further harm to certain populations and promote better, more effective research pertinent to all people.</p>",
             },
         },
     ]
