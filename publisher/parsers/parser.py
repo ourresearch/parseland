@@ -1,7 +1,7 @@
 import re
 from abc import ABC, abstractmethod
 
-from publisher.elements import AuthorAffiliations
+from publisher.elements import Author, AuthorAffiliations
 
 
 class PublisherParser(ABC):
@@ -47,9 +47,15 @@ class PublisherParser(ABC):
         ):
             return True
 
-    def parse_meta_tags(self):
+    def parse_meta_tags(self, corresponding_tag=None, corresponding_class=None):
         results = []
         metas = self.soup.findAll("meta")
+
+        corresponding_text = None
+        if corresponding_tag and corresponding_class:
+            corresponding_text = self.get_corresponding_text(
+                corresponding_tag, corresponding_class
+            )
 
         result = None
         for meta in metas:
@@ -59,9 +65,14 @@ class PublisherParser(ABC):
                     results.append(result)
                     result = None
                 name = self.format_name(meta["content"])
+                if corresponding_text and name.lower() in corresponding_text:
+                    is_corresponding = True
+                else:
+                    is_corresponding = False
                 result = {
                     "name": name,
                     "affiliations": [],
+                    "is_corresponding": is_corresponding,
                 }
             if meta.get("name", None) and meta["name"] == "citation_author_institution":
                 if meta.get("content") and meta["content"].strip():
@@ -123,7 +134,11 @@ class PublisherParser(ABC):
                     author_affiliations.append(str(aff.organization))
 
             results.append(
-                AuthorAffiliations(name=author.name, affiliations=author_affiliations)
+                AuthorAffiliations(
+                    name=author.name,
+                    affiliations=author_affiliations,
+                    is_corresponding=author.is_corresponding,
+                )
             )
         return results
 

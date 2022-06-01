@@ -35,6 +35,10 @@ class RXIV(PublisherParser):
                     continue
                 name = name_soup.text.strip()
 
+                is_corresponding = (
+                    True if "correspondence" in author.text.lower() else False
+                )
+
                 # affiliations
                 affiliations = []
                 affiliations_soup = author.findAll("div", class_="author-affiliation")
@@ -48,7 +52,13 @@ class RXIV(PublisherParser):
 
                     affiliations.append(organization)
 
-                results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+                results.append(
+                    AuthorAffiliations(
+                        name=name,
+                        affiliations=affiliations,
+                        is_corresponding=is_corresponding,
+                    )
+                )
                 i += 1
             elif not author and attempts < 2:
                 # handle skipped numbers
@@ -67,6 +77,7 @@ class RXIV(PublisherParser):
                     "affiliations": [
                         "Department of Radiology and Cognitive Imaging Research Center, Michigan State University, East Lansing, MI, USA"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Takashi Tarumi",
@@ -74,6 +85,7 @@ class RXIV(PublisherParser):
                         "Institute for Exercise and Environmental Medicine, Texas Health Presbyterian Hospital, Dallas, TX, USA",
                         "Human Informatics and Interaction Research Institute, National Institute of Advanced Industrial Science and Technology, Tsukuba, Ibaraki, Japan",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Tsubasa Tomoto",
@@ -81,6 +93,7 @@ class RXIV(PublisherParser):
                         "Institute for Exercise and Environmental Medicine, Texas Health Presbyterian Hospital, Dallas, TX, USA",
                         "Department of Neurology, University of Texas Southwestern Medical Center, Dallas, TX, USA",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "C. Munro Cullum",
@@ -89,6 +102,7 @@ class RXIV(PublisherParser):
                         "Department of Neurology, University of Texas Southwestern Medical Center, Dallas, TX, USA",
                         "Department of Neurological Surgery, University of Texas Southwestern Medical Center, Dallas, TX, USA",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Rong Zhang",
@@ -96,12 +110,14 @@ class RXIV(PublisherParser):
                         "Institute for Exercise and Environmental Medicine, Texas Health Presbyterian Hospital, Dallas, TX, USA",
                         "Department of Neurology, University of Texas Southwestern Medical Center, Dallas, TX, USA",
                     ],
+                    "is_corresponding": True,
                 },
                 {
                     "name": "David C. Zhu",
                     "affiliations": [
                         "Department of Radiology and Cognitive Imaging Research Center, Michigan State University, East Lansing, MI, USA"
                     ],
+                    "is_corresponding": True,
                 },
             ],
         },
@@ -113,18 +129,21 @@ class RXIV(PublisherParser):
                     "affiliations": [
                         "Department of Neuroscience, University of Pittsburgh"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Huiyuan Zheng",
                     "affiliations": [
                         "Department of Psychology, Program in Neuroscience, Florida State University",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Linda Rinaman",
                     "affiliations": [
                         "Department of Psychology, Program in Neuroscience, Florida State University",
                     ],
+                    "is_corresponding": False,
                 },
             ],
         },

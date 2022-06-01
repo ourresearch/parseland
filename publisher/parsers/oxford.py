@@ -27,6 +27,12 @@ class Oxford(PublisherParser):
         for author in authors:
             name = author.find("div", class_="info-card-name").text.strip()
 
+            is_corresponding = (
+                True
+                if author.find("div", class_="info-author-correspondence")
+                else False
+            )
+
             affiliations = []
             affiliation_section = author.find("div", class_="info-card-affilitation")
             if affiliation_section:
@@ -34,7 +40,13 @@ class Oxford(PublisherParser):
                 for aff in affiliations_soup:
                     affiliations.append(aff.text)
 
-            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+            results.append(
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding=is_corresponding,
+                )
+            )
         return results
 
     test_cases = [
@@ -46,22 +58,26 @@ class Oxford(PublisherParser):
                     "affiliations": [
                         "School of Information and Control Engineering, China University of Mining and Technology"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Chen-Di Han",
                     "affiliations": [
                         "School of Information and Control Engineering, China University of Mining and Technology"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Qi Zhao",
                     "affiliations": [
                         "School of Computer Science and Software Engineering, University of Science and Technology Liaoning"
                     ],
+                    "is_corresponding": True,
                 },
                 {
                     "name": "Xing Chen",
                     "affiliations": ["China University of Mining and Technology"],
+                    "is_corresponding": True,
                 },
             ],
         },
@@ -73,6 +89,7 @@ class Oxford(PublisherParser):
                     "affiliations": [
                         "Department of Biomedical Informatics, Columbia University, New York, New York, USA"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Patrick B Ryan",
@@ -81,30 +98,35 @@ class Oxford(PublisherParser):
                         "Observational Health Data Sciences and Informatics, New York, New York, USA",
                         "Epidemiology Analytics, Janssen Research and Development, Titusville, New Jersey, USA",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Casey N Ta",
                     "affiliations": [
                         "Department of Biomedical Informatics, Columbia University, New York, New York, USA"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Jae Hyun Kim",
                     "affiliations": [
                         "Department of Biomedical Informatics, Columbia University, New York, New York, USA"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Ziran Li",
                     "affiliations": [
                         "Department of Biomedical Informatics, Columbia University, New York, New York, USA"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Chunhua Weng",
                     "affiliations": [
                         "Department of Biomedical Informatics, Columbia University, New York, New York, USA"
                     ],
+                    "is_corresponding": True,
                 },
             ],
         },
@@ -114,14 +136,17 @@ class Oxford(PublisherParser):
                 {
                     "name": "Julianne Wilson",
                     "affiliations": [],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Amanda R Rabinowitz",
                     "affiliations": [],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Tessa Hart",
                     "affiliations": [],
+                    "is_corresponding": False,
                 },
             ],
         },

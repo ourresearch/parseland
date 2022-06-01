@@ -16,6 +16,10 @@ class CUP(PublisherParser):
         authors = self.soup.findAll("div", class_="author")
         for author in authors:
             name = author.find("dt").text
+            if "*" in name:
+                is_corresponding = True
+            else:
+                is_corresponding = False
             name = name.strip().replace("*", "")
 
             affiliations = []
@@ -25,7 +29,11 @@ class CUP(PublisherParser):
                     affiliations.append(organization.strip())
 
             result_authors.append(
-                AuthorAffiliations(name=name, affiliations=affiliations)
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding=is_corresponding,
+                )
             )
         return {"authors": result_authors, "abstract": self.parse_abstract_meta_tags()}
 
@@ -40,12 +48,14 @@ class CUP(PublisherParser):
                             "Université Paris-Saclay, INRAE, AgroParisTech, Economie Publique, Thiverval-Grignon, France",
                             "Climate Economics Chair, Palais Brongniart, Paris, France",
                         ],
+                        "is_corresponding": True,
                     },
                     {
                         "name": "Gregory S. Amacher",
                         "affiliations": [
                             "Virginia Polytechnic Institute and State University, Blacksburg, VA, USA"
                         ],
+                        "is_corresponding": False,
                     },
                     {
                         "name": "Philippe Delacote",
@@ -53,10 +63,12 @@ class CUP(PublisherParser):
                             "Climate Economics Chair, Palais Brongniart, Paris, France",
                             "BETA, Université Lorraine, INRAE, AgroParisTech, Nancy, France",
                         ],
+                        "is_corresponding": False,
                     },
                     {
                         "name": "Arnaud Dragicevic",
                         "affiliations": ["IRSTEA, Clermont-Ferrand, Aubiere, France"],
+                        "is_corresponding": False,
                     },
                 ],
                 "abstract": "We develop a model of optimal land allocation in a developing economy that features three possible land uses: agriculture, primary and secondary forests. The distinction between those forest types reflects their different contributions in terms of public goods. In our model, reforestation is costly because it undermines land title security. Using the forest transition concept, we study long-term land-use change and explain important features of cumulative deforestation across countries. Our results shed light on the speed at which net deforestation ends, on the effect of tenure costs in this process, and on composition in steady state. We also present a policy analysis that emphasizes the critical role of institutional reforms addressing the costs of both deforestation and tenure in order to promote a transition. We find that focusing only on net forest losses can be misleading since late transitions may yield, upon given conditions, a higher level of environmental benefits.",

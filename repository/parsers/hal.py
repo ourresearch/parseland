@@ -26,10 +26,26 @@ class HAL(RepositoryParser):
         {
             "page-id": "VZut289qtYx4h5WRMEKn",  # https://hal.archives-ouvertes.fr/hal-00889367
             "result": [
-                {"name": "F Enjalbert", "affiliations": []},
-                {"name": "Mc Nicot", "affiliations": []},
-                {"name": "C Bayourthe", "affiliations": []},
-                {"name": "R Moncoulon", "affiliations": []},
+                {
+                    "name": "F Enjalbert",
+                    "affiliations": [],
+                    "is_corresponding": False,
+                },
+                {
+                    "name": "Mc Nicot",
+                    "affiliations": [],
+                    "is_corresponding": False,
+                },
+                {
+                    "name": "C Bayourthe",
+                    "affiliations": [],
+                    "is_corresponding": False,
+                },
+                {
+                    "name": "R Moncoulon",
+                    "affiliations": [],
+                    "is_corresponding": False,
+                },
             ],
         },
         {
@@ -40,26 +56,31 @@ class HAL(RepositoryParser):
                     "affiliations": [
                         "Institut Charles Gerhardt Montpellier - Institut de Chimie Moléculaire et des Matériaux de Montpellier",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Jérôme Warnant",
                     "affiliations": [
                         "Institut Charles Gerhardt Montpellier - Institut de Chimie Moléculaire et des Matériaux de Montpellier",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Patrick Lacroix-Desmazes",
                     "affiliations": [
                         "Institut Charles Gerhardt Montpellier - Institut de Chimie Moléculaire et des Matériaux de Montpellier"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Pierre-Emmanuel Dufils",
                     "affiliations": ["Solvay"],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Jérôme Vinas",
                     "affiliations": ["Solvay"],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Alex van Herk",
@@ -67,6 +88,7 @@ class HAL(RepositoryParser):
                         "Eindhoven University of Technology [Eindhoven]",
                         "Institute of Chemical and Engineering Sciences",
                     ],
+                    "is_corresponding": False,
                 },
             ],
         },

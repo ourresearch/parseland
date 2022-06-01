@@ -1,5 +1,6 @@
 import re
 
+from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
 
 
@@ -37,10 +38,10 @@ class ScieloPreprints(PublisherParser):
                         )
 
                 authors.append(
-                    {
-                        "name": re.sub(r"\s+", " ", name_span.text.strip()),
-                        "affiliations": affiliations,
-                    }
+                    AuthorAffiliations(
+                        name=re.sub(r"\s+", " ", name_span.text.strip()),
+                        affiliations=affiliations,
+                    )
                 )
 
         return authors
@@ -54,22 +55,26 @@ class ScieloPreprints(PublisherParser):
                     "affiliations": [
                         "Scientific Electronic Library Online",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Grischa Fraumann",
                     "affiliations": [
                         "TIB Leibniz Information Centre for Science and Technology, Hannover, Germany"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Simone Belli",
                     "affiliations": [
                         "Complutense University of Madrid",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Rogério Mugnaini",
                     "affiliations": ["University of São Paulo"],
+                    "is_corresponding": False,
                 },
             ],
         },

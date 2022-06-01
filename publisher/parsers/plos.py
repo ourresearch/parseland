@@ -21,6 +21,8 @@ class PLOS(PublisherParser):
                 continue
             name = name.text.replace(",", "").strip()
 
+            is_corresponding = True if author.find("span", class_="email") else False
+
             affiliations = []
             affiliation_soup = author.findAll("p")
             if affiliation_soup:
@@ -35,7 +37,13 @@ class PLOS(PublisherParser):
                             elif aff.strip():
                                 affiliations.append(aff.strip())
 
-            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+            results.append(
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding=is_corresponding,
+                )
+            )
         return results
 
     test_cases = [
@@ -45,18 +53,22 @@ class PLOS(PublisherParser):
                 {
                     "name": "Niclas Kuper",
                     "affiliations": ["Bielefeld University, Bielefeld, Germany"],
+                    "is_corresponding": True,
                 },
                 {
                     "name": "Nick Modersitzki",
                     "affiliations": ["Bielefeld University, Bielefeld, Germany"],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Le Vy Phan",
                     "affiliations": ["Bielefeld University, Bielefeld, Germany"],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "John Rauthmann",
                     "affiliations": ["Bielefeld University, Bielefeld, Germany"],
+                    "is_corresponding": False,
                 },
             ],
         },
@@ -71,28 +83,33 @@ class PLOS(PublisherParser):
                         "INSERM, U900, Paris, France",
                         "CBIO-Centre for Computational Biology, MINES ParisTech, PSL Research University, Paris, France",
                     ],
+                    "is_corresponding": True,
                 },
                 {
                     "name": "Dominique de Vienne",
                     "affiliations": [
                         "Université Paris-Saclay, INRAE, CNRS, AgroParisTech, GQE–Le Moulon, Gif-sur-Yvette, France"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Thibault Nidelet",
                     "affiliations": [
                         "SPO, INRAE, Montpellier SupAgro, Université de Montpellier, Montpellier, France"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Camille Noûs",
                     "affiliations": ["Laboratoire Cogitamus, France"],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Christine Dillmann",
                     "affiliations": [
                         "Université Paris-Saclay, INRAE, CNRS, AgroParisTech, GQE–Le Moulon, Gif-sur-Yvette, France"
                     ],
+                    "is_corresponding": False,
                 },
             ],
         },

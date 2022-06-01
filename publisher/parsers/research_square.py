@@ -18,6 +18,10 @@ class ResearchSquare(PublisherParser):
         for author in authors:
             name = author.find("h5").text.strip()
 
+            is_corresponding = (
+                True if "corresponding author" in author.text.lower() else False
+            )
+
             affiliations = []
             affiliations_soup = author.findAll("h6")
             for aff in affiliations_soup:
@@ -25,7 +29,13 @@ class ResearchSquare(PublisherParser):
                     break
                 affiliations.append(aff.text)
 
-            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+            results.append(
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding=is_corresponding,
+                )
+            )
         return results
 
     test_cases = [
@@ -37,24 +47,28 @@ class ResearchSquare(PublisherParser):
                     "affiliations": [
                         "College of Electrical and Mechanical Engineering"
                     ],
+                    "is_corresponding": True,
                 },
                 {
                     "name": "Chao-Qing Dai",
                     "affiliations": [
                         "College of Optical,Mechanical and Electrical Engineering,Zhejiang A&F University"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Yue-Yue Wang",
                     "affiliations": [
                         "College of Optical,Mechanical and Engineering,Zhejiang A&F University,Lin'an 311300,China"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Peng-Fei Li",
                     "affiliations": [
                         "Department of Physics, Taiyuan Normal University"
                     ],
+                    "is_corresponding": False,
                 },
             ],
         },

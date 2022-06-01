@@ -14,8 +14,19 @@ class Sage(PublisherParser):
         results = []
         author_section = self.soup.find("div", class_="authors")
         author_soup = author_section.findAll("div", class_="authorLayer")
+        corresponding_text = self.get_corresponding_text()
         for author in author_soup:
-            name = author.find("a", class_="entryAuthor").text
+            name = author.find("a", class_="entryAuthor").text.strip()
+            name_lower = name.lower()
+            if (
+                corresponding_text
+                and name_lower in corresponding_text
+                and "corresponding" in corresponding_text
+            ):
+                is_corresponding = True
+            else:
+                is_corresponding = False
+
             affiliations = []
 
             # method 1
@@ -31,8 +42,20 @@ class Sage(PublisherParser):
                     if isinstance(affiliation, str):
                         affiliations.append(affiliation)
 
-            results.append({"name": name.strip(), "affiliations": affiliations})
+            results.append(
+                {
+                    "name": name.strip(),
+                    "affiliations": affiliations,
+                    "is_corresponding": is_corresponding,
+                }
+            )
         return results
+
+    def get_corresponding_text(self):
+        article_notes = self.soup.find("div", class_="artice-notes")
+        if article_notes:
+            article_notes_text = article_notes.text.lower()
+            return article_notes_text
 
     test_cases = [
         {
@@ -43,18 +66,21 @@ class Sage(PublisherParser):
                     "affiliations": [
                         "Department of Mechanical Engineering, Amrita College of Engineering and Technology, Nagercoil, Tamil Nadu, India"
                     ],
+                    "is_corresponding": True,
                 },
                 {
                     "name": "VA Nagarajan",
                     "affiliations": [
                         "Department of Mechanical Engineering, University College of Engineering, Konam Post, Tamil Nadu, India"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "KP Vinod Kumar",
                     "affiliations": [
                         "Department of Chemistry, University College of Engineering, Konam Post, Tamil Nadu, India"
                     ],
+                    "is_corresponding": False,
                 },
             ],
         },
@@ -64,10 +90,23 @@ class Sage(PublisherParser):
                 {
                     "name": "Malik Abdul Rouf",
                     "affiliations": [],
+                    "is_corresponding": True,
                 },
-                {"name": "Venkatesh Kumar", "affiliations": []},
-                {"name": "Anshuman Agarwal", "affiliations": []},
-                {"name": "Suresh Rawat", "affiliations": []},
+                {
+                    "name": "Venkatesh Kumar",
+                    "affiliations": [],
+                    "is_corresponding": False,
+                },
+                {
+                    "name": "Anshuman Agarwal",
+                    "affiliations": [],
+                    "is_corresponding": False,
+                },
+                {
+                    "name": "Suresh Rawat",
+                    "affiliations": [],
+                    "is_corresponding": False,
+                },
             ],
         },
         {
@@ -79,6 +118,7 @@ class Sage(PublisherParser):
                         "The Interface Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                         "Epithelial Transport Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Martin Faltys",
@@ -86,6 +126,7 @@ class Sage(PublisherParser):
                         "Epithelial Transport Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                         "Department of Intensive Care Medicine, University Hospital, University of Bern, Bern, Switzerland",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Vartan Kurtcuoglu",
@@ -93,6 +134,7 @@ class Sage(PublisherParser):
                         "The Interface Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                         "National Center of Competence in Research, Kidney CH, Switzerland",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "François Verrey",
@@ -100,6 +142,7 @@ class Sage(PublisherParser):
                         "Epithelial Transport Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                         "National Center of Competence in Research, Kidney CH, Switzerland",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Victoria Makrides",
@@ -108,6 +151,7 @@ class Sage(PublisherParser):
                         "Epithelial Transport Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                         "EIC BioMedical Labs, Norwood, MA, USA",
                     ],
+                    "is_corresponding": True,
                 },
             ],
         },
@@ -119,24 +163,28 @@ class Sage(PublisherParser):
                     "affiliations": [
                         "Department of Economics, Abdul Wali Khan University Mardan, KPK, Pakistan"
                     ],
+                    "is_corresponding": True,
                 },
                 {
                     "name": "Unbreen Qayyum",
                     "affiliations": [
                         "Department of Economics, Henan University, Kaifeng, P.R. China"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Saleem Khan",
                     "affiliations": [
                         "Department of Economics, Abdul Wali Khan University Mardan, KPK, Pakistan"
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Bosede Ngozi Adeleye",
                     "affiliations": [
                         "Department of Economics and Development Studies, Covenant University, Nigeria"
                     ],
+                    "is_corresponding": False,
                 },
             ],
         },

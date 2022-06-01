@@ -16,16 +16,30 @@ class SSRN(PublisherParser):
         authors = self.soup.find("div", class_="authors")
         name_soup = authors.findAll("h2")
         affiliation_soup = authors.findAll("p")
+        corresponding_text = self.soup.find("div", class_="author")
 
         for name, affiliation in zip(name_soup, affiliation_soup):
             name = name.text.strip()
+            is_corresponding = False
+            if (
+                corresponding_text
+                and f"{name.lower()} (contact author)"
+                in corresponding_text.text.lower()
+            ):
+                is_corresponding = True
             affiliations = []
             affiliation = affiliation.text.strip()
             if affiliation != "affiliation not provided to SSRN":
                 aff_split = affiliation.split(";")
                 for aff in aff_split:
                     affiliations.append(aff.strip())
-            results.append(AuthorAffiliations(name=name, affiliations=affiliations))
+            results.append(
+                AuthorAffiliations(
+                    name=name,
+                    affiliations=affiliations,
+                    is_corresponding=is_corresponding,
+                )
+            )
 
         return results
 
@@ -38,6 +52,7 @@ class SSRN(PublisherParser):
                     "affiliations": [
                         "RAND Corporation",
                     ],
+                    "is_corresponding": True,
                 },
                 {
                     "name": "Robert J. Willis",
@@ -45,6 +60,7 @@ class SSRN(PublisherParser):
                         "University of Michigan at Ann Arbor - Department of Economics",
                         "National Bureau of Economic Research (NBER)",
                     ],
+                    "is_corresponding": False,
                 },
             ],
         },
@@ -57,6 +73,7 @@ class SSRN(PublisherParser):
                         "Boston University - School of Law",
                         "New York University School of Law",
                     ],
+                    "is_corresponding": True,
                 },
             ],
         },

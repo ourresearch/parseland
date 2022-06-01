@@ -45,12 +45,14 @@ class OSTI(RepositoryParser):
                             "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States). Center for Nanophase Materials Sciences (CNMS)",
                             "Univ. of Tennessee, Knoxville, TN (United States)",
                         ],
+                        "is_corresponding": False,
                     },
                     {
                         "name": "Kim, Sung Wng",
                         "affiliations": [
                             "Sungkyunkwan Univ., Cheoncheon (South Korea)",
                         ],
+                        "is_corresponding": False,
                     },
                     {
                         "name": "Yoon, Mina",
@@ -58,6 +60,7 @@ class OSTI(RepositoryParser):
                             "Oak Ridge National Lab. (ORNL), Oak Ridge, TN (United States). Center for Nanophase Materials Sciences (CNMS)",
                             "Univ. of Tennessee, Knoxville, TN (United States)",
                         ],
+                        "is_corresponding": False,
                     },
                 ],
                 "genre": "Journal Article: Accepted Manuscript",

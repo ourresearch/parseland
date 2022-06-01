@@ -15,7 +15,11 @@ class DOAJ(RepositoryParser):
         dl = self.soup.find("dl", {"id": "authors-affiliations"})
 
         for dt in dl.find_all("dt"):
-            author = {"name": dt.text, "affiliations": []}
+            author = {
+                "name": dt.text,
+                "affiliations": [],
+                "is_corresponding": False,
+            }
 
             for dd_or_dt in dt.find_next_siblings():
                 if dd_or_dt.name == "dd":
@@ -31,8 +35,16 @@ class DOAJ(RepositoryParser):
         {
             "page-id": "VEXAwqyTcm3QfoybFTPa",  # https://doaj.org/article/f2d8edcb996c46ee98f9b41469254e52
             "result": [
-                {"name": "Maria Cecília de Souza Minayo", "affiliations": []},
-                {"name": "Luiza Gualhano", "affiliations": []},
+                {
+                    "name": "Maria Cecília de Souza Minayo",
+                    "affiliations": [],
+                    "is_corresponding": False,
+                },
+                {
+                    "name": "Luiza Gualhano",
+                    "affiliations": [],
+                    "is_corresponding": False,
+                },
             ],
         },
         {
@@ -43,24 +55,29 @@ class DOAJ(RepositoryParser):
                     "affiliations": [
                         "Universidad Nacional Mayor de San Marcos",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Ivon Bernui",
                     "affiliations": [
                         "Universidad Nacional Mayor de San Marcos",
                     ],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Jesús Rocca",
                     "affiliations": ["Hospital Nacional Dos de Mayo"],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Lizardo Torres",
                     "affiliations": ["Hospital Nacional Dos de Mayo"],
+                    "is_corresponding": False,
                 },
                 {
                     "name": "Lilia Soto",
                     "affiliations": ["Hospital Nacional Dos de Mayo"],
+                    "is_corresponding": False,
                 },
             ],
         },
