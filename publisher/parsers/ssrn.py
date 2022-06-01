@@ -21,7 +21,11 @@ class SSRN(PublisherParser):
         for name, affiliation in zip(name_soup, affiliation_soup):
             name = name.text.strip()
             is_corresponding = False
-            if f"{name.lower()} (contact author)" in corresponding_text.text.lower():
+            if (
+                corresponding_text
+                and f"{name.lower()} (contact author)"
+                in corresponding_text.text.lower()
+            ):
                 is_corresponding = True
             affiliations = []
             affiliation = affiliation.text.strip()
@@ -48,6 +52,7 @@ class SSRN(PublisherParser):
                     "affiliations": [
                         "RAND Corporation",
                     ],
+                    "is_corresponding_author": True,
                 },
                 {
                     "name": "Robert J. Willis",
@@ -55,6 +60,7 @@ class SSRN(PublisherParser):
                         "University of Michigan at Ann Arbor - Department of Economics",
                         "National Bureau of Economic Research (NBER)",
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },
@@ -67,6 +73,7 @@ class SSRN(PublisherParser):
                         "Boston University - School of Law",
                         "New York University School of Law",
                     ],
+                    "is_corresponding_author": True,
                 },
             ],
         },

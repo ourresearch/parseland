@@ -50,26 +50,31 @@ class Taylor(PublisherParser):
                     "affiliations": [
                         "Department of Agricultural Economics, Faculty of Agriculture, University of Nairobi, Nairobi, Kenya"
                     ],
+                    "is_corresponding_author": True,
                 },
                 {
                     "name": "David Jakinda Otieno",
                     "affiliations": [
                         "Department of Agricultural Economics, Faculty of Agriculture, University of Nairobi, Nairobi, Kenya"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Willis Oluoch-Kosura",
                     "affiliations": [
                         "Department of Agricultural Economics, Faculty of Agriculture, University of Nairobi, Nairobi, Kenya"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Justus Ochieng",
                     "affiliations": ["World Vegetable Center, Arusha, Tanzania"],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Manuel Tejada Moral",
                     "affiliations": ["University of Seville, Seville, SPAIN"],
+                    "is_corresponding_author": False,
                 },
             ],
         },
