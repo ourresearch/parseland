@@ -28,7 +28,13 @@ class Zenodo(RepositoryParser):
                     elif isinstance(json_affiliation, list):
                         affiliations = json_affiliation
 
-                    authors.append({"name": name, "affiliations": affiliations})
+                    authors.append(
+                        {
+                            "name": name,
+                            "affiliations": affiliations,
+                            "is_corresponding_author": False,
+                        }
+                    )
 
         return {"authors": authors}
 
@@ -42,18 +48,21 @@ class Zenodo(RepositoryParser):
                         "affiliations": [
                             "Department of Computer Science and  Engineering, Sreenidhi Institute of Science and Technology, Yamnampet,  Ghatkesar, Hyderabad, Telangana, India."
                         ],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Prasanta Kumar Sahoo",
                         "affiliations": [
                             "Department of Computer Science and  Engineering, Sreenidhi Institute of Science and Technology, Yamnampet,  Ghatkesar, Hyderabad, Telangana, India."
                         ],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "K.Eswaran",
                         "affiliations": [
                             "Department of Computer Science and  Engineering, Sreenidhi Institute of Science and Technology, Yamnampet,  Ghatkesar, Hyderabad, Telangana, India."
                         ],
+                        "is_corresponding_author": False,
                     },
                 ]
             },

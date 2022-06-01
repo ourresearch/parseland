@@ -29,7 +29,11 @@ class DergiPark(RepositoryParser):
 
             # format is name / affiliation (optional) / orcid (optional) / country
             if author_strings:
-                author = {"name": author_strings[0], "affiliations": []}
+                author = {
+                    "name": author_strings[0],
+                    "affiliations": [],
+                    "is_corresponding_author": False,
+                }
 
                 author_strings.pop(0)
                 # format is affiliation (optional) / orcid (optional) / country
@@ -61,6 +65,7 @@ class DergiPark(RepositoryParser):
                         "affiliations": [
                             "Bandırma Onyedi Eylül Üniversitesi",
                         ],
+                        "is_corresponding_author": False,
                     }
                 ]
             },
@@ -73,21 +78,25 @@ class DergiPark(RepositoryParser):
                         "name": "Buse YILDIRIM",
                         "orcid": "0000-0001-5927-598X",
                         "affiliations": [],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Zehra PAMUK",
                         "orcid": "0000-0002-5721-3483",
                         "affiliations": [],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Otabek JEPBAROV",
                         "orcid": "0000-0003-1479-9127",
                         "affiliations": [],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Esra PEHLİVAN",
                         "orcid": "0000-0002-1791-5392",
                         "affiliations": [],
+                        "is_corresponding_author": False,
                     },
                 ]
             },
@@ -100,36 +109,43 @@ class DergiPark(RepositoryParser):
                         "name": "Cagatay CETINKAYA",
                         "orcid": "0000-0002-4342-8053",
                         "affiliations": ["MEMORIAL ATAŞEHİR HASTANESİ"],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Zeynep BILGI",
                         "orcid": "0000-0003-4981-047X",
                         "affiliations": ["ISTANBUL MEDENIYET UNIVERSITY"],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Tunc LACIN",
                         "orcid": "0000-0002-6584-7814",
                         "affiliations": ["MARMARA UNIVERSITY"],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Korkut BOSTANCI",
                         "orcid": "0000-0002-1904-4404",
                         "affiliations": ["MARMARA UNIVERSITY"],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Bedrettin YILDIZELI",
                         "orcid": "0000-0002-1316-4552",
                         "affiliations": ["MARMARA UNIVERSITY"],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Mustafa YUKSEL",
                         "orcid": "0000-0001-9493-4194",
                         "affiliations": ["MARMARA UNIVERSITY"],
+                        "is_corresponding_author": False,
                     },
                     {
                         "name": "Hasan Fevzi BATIREL",
                         "orcid": "0000-0002-9349-7022",
                         "affiliations": ["MARMARA UNIVERSITY"],
+                        "is_corresponding_author": False,
                     },
                 ]
             },

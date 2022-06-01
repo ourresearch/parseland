@@ -60,6 +60,7 @@ class RepositoryParser(ABC):
                 result = {
                     "name": name,
                     "affiliations": [],
+                    "is_corresponding_author": False,
                 }
             if result and meta.get("name") == "citation_author_institution":
                 result["affiliations"].append(meta["content"].strip())
