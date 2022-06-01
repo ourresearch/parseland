@@ -1,6 +1,7 @@
 import re
 
 from exceptions import UnusualTrafficError
+from publisher.elements import Author, Affiliation
 from publisher.parsers.parser import PublisherParser
 
 
@@ -22,7 +23,7 @@ class SpringerMaterial(PublisherParser):
     def parse(self):
         authors = self.get_authors()
         affiliations = self.get_affiliations()
-        authors_affiliations = self.get_authors_affiliations(authors, affiliations)
+        authors_affiliations = self.merge_authors_affiliations(authors, affiliations)
         return authors_affiliations
 
     def get_authors(self):
@@ -35,10 +36,10 @@ class SpringerMaterial(PublisherParser):
         name_soup = section.findAll("li")
         for name in name_soup:
             authors.append(
-                {
-                    "name": self.format_name(name),
-                    "aff_id": self.find_aff_id_in_name(name),
-                }
+                Author(
+                    name=self.format_name(name),
+                    aff_ids=[self.find_aff_id_in_name(name)],
+                )
             )
         return authors
 
@@ -52,25 +53,7 @@ class SpringerMaterial(PublisherParser):
                 aff_raw = aff_raw.text
                 aff_id = self.find_aff_id_in_aff(aff_raw)
                 aff = aff_raw.replace(str(aff_id), "").strip()
-                results.append({"aff_id": aff_id, "affiliation": aff})
-        return results
-
-    def get_authors_affiliations(self, authors, affiliations):
-        results = []
-        for author in authors:
-            matching_affiliation = None
-            for affiliation in affiliations:
-                if author["aff_id"] == affiliation["aff_id"]:
-                    matching_affiliation = affiliation["affiliation"]
-
-            results.append(
-                {
-                    "name": author["name"],
-                    "affiliations": [matching_affiliation]
-                    if matching_affiliation
-                    else [],
-                }
-            )
+                results.append(Affiliation(aff_id=aff_id, organization=aff))
         return results
 
     @staticmethod
@@ -101,26 +84,17 @@ class SpringerMaterial(PublisherParser):
 
     test_cases = [
         {
-            "doi": "10.1007/10783448_2306",
-            "result": [
-                {
-                    "name": "H. Duddeck",
-                    "affiliations": [
-                        "Institut für Organische Chemie, Universität Hannover, 30167, Hannover, Germany"
-                    ],
-                },
-            ],
-        },
-        {
             "doi": "10.1007/10201640_144",
             "result": [
                 {
                     "name": "H. von Philipsborn",
                     "affiliations": [],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "L. Treitinger",
                     "affiliations": [],
+                    "is_corresponding_author": False,
                 },
             ],
         },
@@ -132,12 +106,14 @@ class SpringerMaterial(PublisherParser):
                     "affiliations": [
                         "Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Z.N. Soroko",
                     "affiliations": [
                         "Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },
