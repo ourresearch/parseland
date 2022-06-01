@@ -47,24 +47,28 @@ class ResearchSquare(PublisherParser):
                     "affiliations": [
                         "College of Electrical and Mechanical Engineering"
                     ],
+                    "is_corresponding_author": True,
                 },
                 {
                     "name": "Chao-Qing Dai",
                     "affiliations": [
                         "College of Optical,Mechanical and Electrical Engineering,Zhejiang A&F University"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Yue-Yue Wang",
                     "affiliations": [
                         "College of Optical,Mechanical and Engineering,Zhejiang A&F University,Lin'an 311300,China"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Peng-Fei Li",
                     "affiliations": [
                         "Department of Physics, Taiyuan Normal University"
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },

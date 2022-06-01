@@ -154,12 +154,4 @@ class PublisherParser(ABC):
                 aff_ids.append(int(aff_id))
         return aff_ids
 
-    def get_corresponding_text(self, html_tag, class_name):
-        text = None
-        corresponding_soup = self.soup.find(html_tag, class_=class_name)
-        if corresponding_soup:
-            text = corresponding_soup.text
-            text = text.replace("  ", " ").lower()
-        return text
-
     test_cases = []

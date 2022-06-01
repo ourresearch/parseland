@@ -19,7 +19,8 @@ class Sage(PublisherParser):
             name = author.find("a", class_="entryAuthor").text.strip()
             name_lower = name.lower()
             if (
-                name_lower in corresponding_text
+                corresponding_text
+                and name_lower in corresponding_text
                 and "corresponding" in corresponding_text
             ):
                 is_corresponding = True
@@ -65,18 +66,21 @@ class Sage(PublisherParser):
                     "affiliations": [
                         "Department of Mechanical Engineering, Amrita College of Engineering and Technology, Nagercoil, Tamil Nadu, India"
                     ],
+                    "is_corresponding_author": True,
                 },
                 {
                     "name": "VA Nagarajan",
                     "affiliations": [
                         "Department of Mechanical Engineering, University College of Engineering, Konam Post, Tamil Nadu, India"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "KP Vinod Kumar",
                     "affiliations": [
                         "Department of Chemistry, University College of Engineering, Konam Post, Tamil Nadu, India"
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },
@@ -86,10 +90,23 @@ class Sage(PublisherParser):
                 {
                     "name": "Malik Abdul Rouf",
                     "affiliations": [],
+                    "is_corresponding_author": True,
                 },
-                {"name": "Venkatesh Kumar", "affiliations": []},
-                {"name": "Anshuman Agarwal", "affiliations": []},
-                {"name": "Suresh Rawat", "affiliations": []},
+                {
+                    "name": "Venkatesh Kumar",
+                    "affiliations": [],
+                    "is_corresponding_author": False,
+                },
+                {
+                    "name": "Anshuman Agarwal",
+                    "affiliations": [],
+                    "is_corresponding_author": False,
+                },
+                {
+                    "name": "Suresh Rawat",
+                    "affiliations": [],
+                    "is_corresponding_author": False,
+                },
             ],
         },
         {
@@ -101,6 +118,7 @@ class Sage(PublisherParser):
                         "The Interface Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                         "Epithelial Transport Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Martin Faltys",
@@ -108,6 +126,7 @@ class Sage(PublisherParser):
                         "Epithelial Transport Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                         "Department of Intensive Care Medicine, University Hospital, University of Bern, Bern, Switzerland",
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Vartan Kurtcuoglu",
@@ -115,6 +134,7 @@ class Sage(PublisherParser):
                         "The Interface Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                         "National Center of Competence in Research, Kidney CH, Switzerland",
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "François Verrey",
@@ -122,6 +142,7 @@ class Sage(PublisherParser):
                         "Epithelial Transport Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                         "National Center of Competence in Research, Kidney CH, Switzerland",
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Victoria Makrides",
@@ -130,6 +151,7 @@ class Sage(PublisherParser):
                         "Epithelial Transport Group, Institute of Physiology, University of Zürich, Zürich, Switzerland",
                         "EIC BioMedical Labs, Norwood, MA, USA",
                     ],
+                    "is_corresponding_author": True,
                 },
             ],
         },
@@ -141,24 +163,28 @@ class Sage(PublisherParser):
                     "affiliations": [
                         "Department of Economics, Abdul Wali Khan University Mardan, KPK, Pakistan"
                     ],
+                    "is_corresponding_author": True,
                 },
                 {
                     "name": "Unbreen Qayyum",
                     "affiliations": [
                         "Department of Economics, Henan University, Kaifeng, P.R. China"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Saleem Khan",
                     "affiliations": [
                         "Department of Economics, Abdul Wali Khan University Mardan, KPK, Pakistan"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Bosede Ngozi Adeleye",
                     "affiliations": [
                         "Department of Economics and Development Studies, Covenant University, Nigeria"
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },

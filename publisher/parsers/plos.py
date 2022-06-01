@@ -53,18 +53,22 @@ class PLOS(PublisherParser):
                 {
                     "name": "Niclas Kuper",
                     "affiliations": ["Bielefeld University, Bielefeld, Germany"],
+                    "is_corresponding_author": True,
                 },
                 {
                     "name": "Nick Modersitzki",
                     "affiliations": ["Bielefeld University, Bielefeld, Germany"],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Le Vy Phan",
                     "affiliations": ["Bielefeld University, Bielefeld, Germany"],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "John Rauthmann",
                     "affiliations": ["Bielefeld University, Bielefeld, Germany"],
+                    "is_corresponding_author": False,
                 },
             ],
         },
@@ -79,28 +83,33 @@ class PLOS(PublisherParser):
                         "INSERM, U900, Paris, France",
                         "CBIO-Centre for Computational Biology, MINES ParisTech, PSL Research University, Paris, France",
                     ],
+                    "is_corresponding_author": True,
                 },
                 {
                     "name": "Dominique de Vienne",
                     "affiliations": [
                         "Université Paris-Saclay, INRAE, CNRS, AgroParisTech, GQE–Le Moulon, Gif-sur-Yvette, France"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Thibault Nidelet",
                     "affiliations": [
                         "SPO, INRAE, Montpellier SupAgro, Université de Montpellier, Montpellier, France"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Camille Noûs",
                     "affiliations": ["Laboratoire Cogitamus, France"],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Christine Dillmann",
                     "affiliations": [
                         "Université Paris-Saclay, INRAE, CNRS, AgroParisTech, GQE–Le Moulon, Gif-sur-Yvette, France"
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },

@@ -77,6 +77,7 @@ class RXIV(PublisherParser):
                     "affiliations": [
                         "Department of Radiology and Cognitive Imaging Research Center, Michigan State University, East Lansing, MI, USA"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Takashi Tarumi",
@@ -84,6 +85,7 @@ class RXIV(PublisherParser):
                         "Institute for Exercise and Environmental Medicine, Texas Health Presbyterian Hospital, Dallas, TX, USA",
                         "Human Informatics and Interaction Research Institute, National Institute of Advanced Industrial Science and Technology, Tsukuba, Ibaraki, Japan",
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Tsubasa Tomoto",
@@ -91,6 +93,7 @@ class RXIV(PublisherParser):
                         "Institute for Exercise and Environmental Medicine, Texas Health Presbyterian Hospital, Dallas, TX, USA",
                         "Department of Neurology, University of Texas Southwestern Medical Center, Dallas, TX, USA",
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "C. Munro Cullum",
@@ -99,6 +102,7 @@ class RXIV(PublisherParser):
                         "Department of Neurology, University of Texas Southwestern Medical Center, Dallas, TX, USA",
                         "Department of Neurological Surgery, University of Texas Southwestern Medical Center, Dallas, TX, USA",
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Rong Zhang",
@@ -106,12 +110,14 @@ class RXIV(PublisherParser):
                         "Institute for Exercise and Environmental Medicine, Texas Health Presbyterian Hospital, Dallas, TX, USA",
                         "Department of Neurology, University of Texas Southwestern Medical Center, Dallas, TX, USA",
                     ],
+                    "is_corresponding_author": True,
                 },
                 {
                     "name": "David C. Zhu",
                     "affiliations": [
                         "Department of Radiology and Cognitive Imaging Research Center, Michigan State University, East Lansing, MI, USA"
                     ],
+                    "is_corresponding_author": True,
                 },
             ],
         },
@@ -123,18 +129,21 @@ class RXIV(PublisherParser):
                     "affiliations": [
                         "Department of Neuroscience, University of Pittsburgh"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Huiyuan Zheng",
                     "affiliations": [
                         "Department of Psychology, Program in Neuroscience, Florida State University",
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Linda Rinaman",
                     "affiliations": [
                         "Department of Psychology, Program in Neuroscience, Florida State University",
                     ],
+                    "is_corresponding_author": False,
                 },
             ],
         },

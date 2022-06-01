@@ -58,22 +58,26 @@ class Oxford(PublisherParser):
                     "affiliations": [
                         "School of Information and Control Engineering, China University of Mining and Technology"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Chen-Di Han",
                     "affiliations": [
                         "School of Information and Control Engineering, China University of Mining and Technology"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Qi Zhao",
                     "affiliations": [
                         "School of Computer Science and Software Engineering, University of Science and Technology Liaoning"
                     ],
+                    "is_corresponding_author": True,
                 },
                 {
                     "name": "Xing Chen",
                     "affiliations": ["China University of Mining and Technology"],
+                    "is_corresponding_author": True,
                 },
             ],
         },
@@ -85,6 +89,7 @@ class Oxford(PublisherParser):
                     "affiliations": [
                         "Department of Biomedical Informatics, Columbia University, New York, New York, USA"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Patrick B Ryan",
@@ -93,30 +98,35 @@ class Oxford(PublisherParser):
                         "Observational Health Data Sciences and Informatics, New York, New York, USA",
                         "Epidemiology Analytics, Janssen Research and Development, Titusville, New Jersey, USA",
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Casey N Ta",
                     "affiliations": [
                         "Department of Biomedical Informatics, Columbia University, New York, New York, USA"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Jae Hyun Kim",
                     "affiliations": [
                         "Department of Biomedical Informatics, Columbia University, New York, New York, USA"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Ziran Li",
                     "affiliations": [
                         "Department of Biomedical Informatics, Columbia University, New York, New York, USA"
                     ],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Chunhua Weng",
                     "affiliations": [
                         "Department of Biomedical Informatics, Columbia University, New York, New York, USA"
                     ],
+                    "is_corresponding_author": True,
                 },
             ],
         },
@@ -126,14 +136,17 @@ class Oxford(PublisherParser):
                 {
                     "name": "Julianne Wilson",
                     "affiliations": [],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Amanda R Rabinowitz",
                     "affiliations": [],
+                    "is_corresponding_author": False,
                 },
                 {
                     "name": "Tessa Hart",
                     "affiliations": [],
+                    "is_corresponding_author": False,
                 },
             ],
         },
