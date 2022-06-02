@@ -58,7 +58,10 @@ class ScienceDirect(PublisherParser):
                         given = author_property.get("_")
                     elif author_property.get("#name") == "surname":
                         family = author_property.get("_")
-                    elif author_property.get("#name") == "e-address":
+                    elif (
+                        author_property.get("#name") == "e-address"
+                        or author_property.get("#name") == "encoded-e-address"
+                    ):
                         is_corresponding = True
                     elif author_property.get("#name") == "cross-ref":
                         affiliation_label = author_property.get("$", {}).get("refid")
