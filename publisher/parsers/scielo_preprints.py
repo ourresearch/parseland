@@ -55,26 +55,26 @@ class ScieloPreprints(PublisherParser):
                     "affiliations": [
                         "Scientific Electronic Library Online",
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Grischa Fraumann",
                     "affiliations": [
                         "TIB Leibniz Information Centre for Science and Technology, Hannover, Germany"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Simone Belli",
                     "affiliations": [
                         "Complutense University of Madrid",
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Rogério Mugnaini",
                     "affiliations": ["University of São Paulo"],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },

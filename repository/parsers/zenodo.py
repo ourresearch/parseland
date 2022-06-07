@@ -32,7 +32,7 @@ class Zenodo(RepositoryParser):
                         {
                             "name": name,
                             "affiliations": affiliations,
-                            "is_corresponding": False,
+                            "is_corresponding": None,
                         }
                     )
 
@@ -48,21 +48,21 @@ class Zenodo(RepositoryParser):
                         "affiliations": [
                             "Department of Computer Science and  Engineering, Sreenidhi Institute of Science and Technology, Yamnampet,  Ghatkesar, Hyderabad, Telangana, India."
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Prasanta Kumar Sahoo",
                         "affiliations": [
                             "Department of Computer Science and  Engineering, Sreenidhi Institute of Science and Technology, Yamnampet,  Ghatkesar, Hyderabad, Telangana, India."
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "K.Eswaran",
                         "affiliations": [
                             "Department of Computer Science and  Engineering, Sreenidhi Institute of Science and Technology, Yamnampet,  Ghatkesar, Hyderabad, Telangana, India."
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ]
             },

@@ -18,7 +18,7 @@ class DOAJ(RepositoryParser):
             author = {
                 "name": dt.text,
                 "affiliations": [],
-                "is_corresponding": False,
+                "is_corresponding": None,
             }
 
             for dd_or_dt in dt.find_next_siblings():
@@ -38,12 +38,12 @@ class DOAJ(RepositoryParser):
                 {
                     "name": "Maria Cecília de Souza Minayo",
                     "affiliations": [],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Luiza Gualhano",
                     "affiliations": [],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },
@@ -55,29 +55,29 @@ class DOAJ(RepositoryParser):
                     "affiliations": [
                         "Universidad Nacional Mayor de San Marcos",
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Ivon Bernui",
                     "affiliations": [
                         "Universidad Nacional Mayor de San Marcos",
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Jesús Rocca",
                     "affiliations": ["Hospital Nacional Dos de Mayo"],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Lizardo Torres",
                     "affiliations": ["Hospital Nacional Dos de Mayo"],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Lilia Soto",
                     "affiliations": ["Hospital Nacional Dos de Mayo"],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },

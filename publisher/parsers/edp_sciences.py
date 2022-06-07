@@ -28,47 +28,47 @@ class EDPSciences(PublisherParser):
                     "affiliations": [
                         "Shenzhen Tagen<group> Co., Ltd, 518034, Shenzhen, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Tao Liu",
                     "affiliations": [
                         "Shenzhen Yuetong Construction Engineering Co., Ltd, 518019, Shenzhen, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Tao Wang",
                     "affiliations": [
                         "Shenzhen Yuetong Construction Engineering Co., Ltd, 518019, Shenzhen, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Xiayi Liang",
                     "affiliations": [
                         "Shenzhen Yuetong Construction Engineering Co., Ltd, 518019, Shenzhen, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Hanxin Wei",
                     "affiliations": [
                         "Shenzhen Yuetong Construction Engineering Co., Ltd, 518019, Shenzhen, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Zhigang Zheng",
                     "affiliations": [
                         "Shenzhen Yuetong Construction Engineering Co., Ltd, 518019, Shenzhen, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Xin Xiao",
                     "affiliations": ["Foshan University, 528000, Foshan, China"],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },
@@ -80,14 +80,14 @@ class EDPSciences(PublisherParser):
                     "affiliations": [
                         "Institute of Technology and Business, School of Expertness and Valuation, Okružní 517/10, 37001 české Budějovice Czech Republic"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Simona Hašková",
                     "affiliations": [
                         "Institute of Technology and Business, School of Expertness and Valuation, Okružní 517/10, 37001 české Budějovice Czech Republic"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },

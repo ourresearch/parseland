@@ -24,8 +24,10 @@ class Sage(PublisherParser):
                 and "corresponding" in corresponding_text
             ):
                 is_corresponding = True
-            else:
+            elif corresponding_text:
                 is_corresponding = False
+            else:
+                is_corresponding = None
 
             affiliations = []
 

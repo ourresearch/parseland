@@ -23,28 +23,28 @@ class RSC(PublisherParser):
                         "State Key Laboratory for Oxo Synthesis and Selective Oxidation Department, Center for Excellence in Molecular Synthesis, Suzhou Research Institute of Lanzhou Institute of Chemical Physics (LICP), Chinese Academy of Sciences, Lanzhou 730000, China",
                         "School of Chemistry and Chemical Engineering, Lanzhou City University, Lanzhou 730070, China",
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Qiangsheng Sun",
                     "affiliations": [
                         "State Key Laboratory for Oxo Synthesis and Selective Oxidation Department, Center for Excellence in Molecular Synthesis, Suzhou Research Institute of Lanzhou Institute of Chemical Physics (LICP), Chinese Academy of Sciences, Lanzhou 730000, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Jin Lin",
                     "affiliations": [
                         "State Key Laboratory for Oxo Synthesis and Selective Oxidation Department, Center for Excellence in Molecular Synthesis, Suzhou Research Institute of Lanzhou Institute of Chemical Physics (LICP), Chinese Academy of Sciences, Lanzhou 730000, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Wei Sun",
                     "affiliations": [
                         "State Key Laboratory for Oxo Synthesis and Selective Oxidation Department, Center for Excellence in Molecular Synthesis, Suzhou Research Institute of Lanzhou Institute of Chemical Physics (LICP), Chinese Academy of Sciences, Lanzhou 730000, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },
@@ -56,63 +56,63 @@ class RSC(PublisherParser):
                     "affiliations": [
                         "Zhuhai Interventional Medical Center, Zhuhai Precision Medical Center, Zhuhai People's Hospital, Zhuhai Hospital Affiliated with Jinan University, Zhuhai 519000, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Xin-Feng Tang",
                     "affiliations": [
                         "School of Life Sciences, University of Science and Technology of China, Hefei 230027, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "You-Cui Xu",
                     "affiliations": [
                         "School of Life Sciences, University of Science and Technology of China, Hefei 230027, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Wei Jiang",
                     "affiliations": [
                         "Zhuhai Interventional Medical Center, Zhuhai Precision Medical Center, Zhuhai People's Hospital, Zhuhai Hospital Affiliated with Jinan University, Zhuhai 519000, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Yong-Jie Xin",
                     "affiliations": [
                         "Zhuhai Interventional Medical Center, Zhuhai Precision Medical Center, Zhuhai People's Hospital, Zhuhai Hospital Affiliated with Jinan University, Zhuhai 519000, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Wei Zhao",
                     "affiliations": [
                         "Zhuhai Interventional Medical Center, Zhuhai Precision Medical Center, Zhuhai People's Hospital, Zhuhai Hospital Affiliated with Jinan University, Zhuhai 519000, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Xu He",
                     "affiliations": [
                         "Zhuhai Interventional Medical Center, Zhuhai Precision Medical Center, Zhuhai People's Hospital, Zhuhai Hospital Affiliated with Jinan University, Zhuhai 519000, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Li-Gong Lu",
                     "affiliations": [
                         "Zhuhai Interventional Medical Center, Zhuhai Precision Medical Center, Zhuhai People's Hospital, Zhuhai Hospital Affiliated with Jinan University, Zhuhai 519000, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Mei-Xiao Zhan",
                     "affiliations": [
                         "Zhuhai Interventional Medical Center, Zhuhai Precision Medical Center, Zhuhai People's Hospital, Zhuhai Hospital Affiliated with Jinan University, Zhuhai 519000, China"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },

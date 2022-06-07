@@ -6,7 +6,7 @@ from typing import Optional, Union
 class Author:
     name: str
     aff_ids: list
-    is_corresponding: bool = False
+    is_corresponding: Optional[bool] = None
 
 
 @dataclass
@@ -19,4 +19,4 @@ class Affiliation:
 class AuthorAffiliations:
     name: str
     affiliations: list
-    is_corresponding: bool = False
+    is_corresponding: Optional[bool] = None

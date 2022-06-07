@@ -89,12 +89,12 @@ class SpringerMaterial(PublisherParser):
                 {
                     "name": "H. von Philipsborn",
                     "affiliations": [],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "L. Treitinger",
                     "affiliations": [],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },
@@ -106,14 +106,14 @@ class SpringerMaterial(PublisherParser):
                     "affiliations": [
                         "Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Z.N. Soroko",
                     "affiliations": [
                         "Petersburg Nuclear Physics Institute, 188350, Gatchina, Leningrad District, Russia"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },

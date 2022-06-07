@@ -222,12 +222,12 @@ class Springer(PublisherParser):
                         "affiliations": [
                             "Professor,        Orthopaedic Surgery and Sports Traumatology, University of Nice-Sophia Antipolis, L’Archet 2 Hospital, Nice, 06200, France"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Christopher R. Chuinard MD, MPH",
                         "affiliations": [],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": "The tendon of the long head of the biceps (LHB) is a frequent source of pain in the shoulder and is subject to numerous pathologies.1\u20133 Treatment of pathology of the LHB involves resection of the intra-articular portion with a simple tenotomy or a tenodesis. Tenodesis of the LHB, with or without a rotator cuff repair, is an intervention known to reliably and effectively reduce the pain.4,5 We were not satisfied with the results obtained with other techniques. Because of our experience with the use of interference screw for surgery of the anterior cruciate ligament (ACL), we developed a technique for tenodesis of the biceps utilizing a bioresorbable interference screw.6,7\nKeywordsAnterior Cruciate LigamentRotator CuffBone TunnelInterference ScrewRotator Cuff RepairThese keywords were added by machine and not by the authors. This process is experimental and the keywords may be updated as the learning algorithm improves.",
@@ -242,14 +242,14 @@ class Springer(PublisherParser):
                         "affiliations": [
                             "Department of Psychology, Philadelphia College of Osteopathic Medicine, Philadelphia"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Christina Esposito",
                         "affiliations": [
                             "Department of Psychology, Philadelphia College of Osteopathic Medicine, Philadelphia"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": None,
@@ -264,35 +264,35 @@ class Springer(PublisherParser):
                         "affiliations": [
                             "Department of Medicine, Section of Pulmonary and Critical Care Medicine, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans, LA, 70112"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Gregory J. Bagby",
                         "affiliations": [
                             "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Department of Physiology, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans, LA, 70112"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Jay K. Kolls",
                         "affiliations": [
                             "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Alcohol Research Center and Gene Therapy Programs, Louisiana State University Health Sciences Center, New Orleans, LA, 70112"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Lee J. Quinton",
                         "affiliations": [
                             "Department of Physiology and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans, LA, 70112"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Steve Nelson",
                         "affiliations": [
                             "Department of Medicine, Section of Pulmonary and Critical Care Medicine, Department of Physiology, and Alcohol Research Center, Louisiana State University Health Sciences Center, New Orleans, LA, 70112"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": None,
@@ -305,14 +305,14 @@ class Springer(PublisherParser):
                     {
                         "name": "Christine Bowman Edmondson",
                         "affiliations": [],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Daniel Joseph Cahill",
                         "affiliations": [
                             "Department of Psychology, California State University, Fresno, Fresno, California"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": None,
@@ -452,26 +452,26 @@ class Springer(PublisherParser):
                         "affiliations": [
                             "Department of Otolaryngology, Eskisehir Osmangazi University, Eskisehir, Turkey"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Nuray Bayar Muluk",
                         "affiliations": [
                             "Otolaryngology Department, Kırıkkale University, Faculty Medicine, Kirikkale, Turkey"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Glenis K Scadding",
                         "affiliations": ["Royal National ENT Hospital, London, UK"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Ranko Mladina",
                         "affiliations": [
                             "Croatian Academy of Medical Sciences, Zagreb, Croatia"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": None,

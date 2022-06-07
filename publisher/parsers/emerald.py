@@ -46,28 +46,28 @@ class Emerald(PublisherParser):
                         "School of Business and Economics, Universiti Putra Malaysia, Serdang, Malaysia",
                         "Kulliyyah of Economics and Management Sciences, International Islamic University Malaysia, Gombak, Malaysia",
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Normaz Wana Ismail",
                     "affiliations": [
                         "School of Business and Economics, Universiti Putra Malaysia, Serdang, Malaysia"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "N.A.M. Naseem",
                     "affiliations": [
                         "School of Business and Economics, Universiti Putra Malaysia, Serdang, Malaysia"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Ly Slesman",
                     "affiliations": [
                         "Centre for Advanced Research (CARe), Universiti Brunei Darussalam, Bandar Seri Begawan, Brunei Darussalam"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },

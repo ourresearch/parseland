@@ -32,7 +32,7 @@ class DergiPark(RepositoryParser):
                 author = {
                     "name": author_strings[0],
                     "affiliations": [],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 }
 
                 author_strings.pop(0)
@@ -65,7 +65,7 @@ class DergiPark(RepositoryParser):
                         "affiliations": [
                             "Bandırma Onyedi Eylül Üniversitesi",
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     }
                 ]
             },
@@ -78,25 +78,25 @@ class DergiPark(RepositoryParser):
                         "name": "Buse YILDIRIM",
                         "orcid": "0000-0001-5927-598X",
                         "affiliations": [],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Zehra PAMUK",
                         "orcid": "0000-0002-5721-3483",
                         "affiliations": [],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Otabek JEPBAROV",
                         "orcid": "0000-0003-1479-9127",
                         "affiliations": [],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Esra PEHLİVAN",
                         "orcid": "0000-0002-1791-5392",
                         "affiliations": [],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ]
             },
@@ -109,43 +109,43 @@ class DergiPark(RepositoryParser):
                         "name": "Cagatay CETINKAYA",
                         "orcid": "0000-0002-4342-8053",
                         "affiliations": ["MEMORIAL ATAŞEHİR HASTANESİ"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Zeynep BILGI",
                         "orcid": "0000-0003-4981-047X",
                         "affiliations": ["ISTANBUL MEDENIYET UNIVERSITY"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Tunc LACIN",
                         "orcid": "0000-0002-6584-7814",
                         "affiliations": ["MARMARA UNIVERSITY"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Korkut BOSTANCI",
                         "orcid": "0000-0002-1904-4404",
                         "affiliations": ["MARMARA UNIVERSITY"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Bedrettin YILDIZELI",
                         "orcid": "0000-0002-1316-4552",
                         "affiliations": ["MARMARA UNIVERSITY"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Mustafa YUKSEL",
                         "orcid": "0000-0001-9493-4194",
                         "affiliations": ["MARMARA UNIVERSITY"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Hasan Fevzi BATIREL",
                         "orcid": "0000-0002-9349-7022",
                         "affiliations": ["MARMARA UNIVERSITY"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ]
             },

@@ -47,7 +47,7 @@ class MedKnow(PublisherParser):
         authors = author_soup.findAll("a")
         affiliations = author_soup.findAll("sup")
         corresponding_text = self.get_corresponding_text("font", "CorrsAdd")
-        is_corresponding = False
+        is_corresponding = None
 
         # method 1
         if not authors and not affiliations:
@@ -57,6 +57,8 @@ class MedKnow(PublisherParser):
                     name = author.strip()
                     if corresponding_text and name.lower() in corresponding_text:
                         is_corresponding = True
+                    elif corresponding_text and name.lower() not in corresponding_text:
+                        is_corresponding = False
                     results.append(
                         Author(
                             name=name,
@@ -71,6 +73,8 @@ class MedKnow(PublisherParser):
             name = author.text.strip()
             if corresponding_text and name.lower() in corresponding_text:
                 is_corresponding = True
+            elif corresponding_text and name.lower() not in corresponding_text:
+                is_corresponding = False
             aff_ids = self.format_ids(affiliation.text.strip())
             results.append(
                 Author(name=name, aff_ids=aff_ids, is_corresponding=is_corresponding)

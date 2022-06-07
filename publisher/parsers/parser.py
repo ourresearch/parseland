@@ -67,8 +67,10 @@ class PublisherParser(ABC):
                 name = self.format_name(meta["content"])
                 if corresponding_text and name.lower() in corresponding_text:
                     is_corresponding = True
-                else:
+                elif corresponding_text and name.lower() not in corresponding_text:
                     is_corresponding = False
+                else:
+                    is_corresponding = None
                 result = {
                     "name": name,
                     "affiliations": [],

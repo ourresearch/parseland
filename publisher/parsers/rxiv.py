@@ -129,21 +129,21 @@ class RXIV(PublisherParser):
                     "affiliations": [
                         "Department of Neuroscience, University of Pittsburgh"
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Huiyuan Zheng",
                     "affiliations": [
                         "Department of Psychology, Program in Neuroscience, Florida State University",
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Linda Rinaman",
                     "affiliations": [
                         "Department of Psychology, Program in Neuroscience, Florida State University",
                     ],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },
