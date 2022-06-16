@@ -27,8 +27,13 @@ class Wiley(PublisherParser):
             aff_soup = author.findAll("p", class_=None)
 
             is_corresponding = False
+
+            author_type = author.find("p", class_="author-type")
+            if author_type and "corresponding" in author_type.text.lower():
+                is_corresponding = True
+
             for aff in aff_soup:
-                if "correspondence" in aff.text.lower():
+                if "correspondence" in aff.text.lower() or "e-mail" in aff.text.lower():
                     is_corresponding = True
 
             for aff in aff_soup:
