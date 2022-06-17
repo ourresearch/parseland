@@ -136,17 +136,17 @@ class Oxford(PublisherParser):
                 {
                     "name": "Julianne Wilson",
                     "affiliations": [],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Amanda R Rabinowitz",
                     "affiliations": [],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
                 {
                     "name": "Tessa Hart",
                     "affiliations": [],
-                    "is_corresponding": False,
+                    "is_corresponding": None,
                 },
             ],
         },

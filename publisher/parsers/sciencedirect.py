@@ -144,14 +144,14 @@ class ScienceDirect(PublisherParser):
                         "affiliations": [
                             "U.E.R. de Mathématiques et Informatique et Laboratoire associé au C.N.R.S. n∘ 226, Université de Bordeaux 1, 33405 Talence, France"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Giovanni M Troianiello",
                         "affiliations": [
                             "Istituto Matematico, Universitá di Roma, 00185 Rome, Italy"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": None,
@@ -166,14 +166,14 @@ class ScienceDirect(PublisherParser):
                         "affiliations": [
                             "Department of System Science, 4532 Boelter Hall, University of California, Los Angeles, California 90024 U.S.A."
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "L Rigby",
                         "affiliations": [
                             "Department of Computing and Control, Huxley Building, Imperial College, London SW7 2BZ, Great Britain"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": "According to a Theorem of B. Sz.-Nagy and C. Foiaş, every strongly continuous semigroup of contraction operators on a Hilbert space, can be decomposed into a completely non unitary part and a unitary part. In this note we wish to show that by appropriately perturbing its generator, a contraction semigroup can be reduced to a completely non unitary one. In control theory, such a perturbation is related to the so called state feedback, and the reduction presented here has application in the problem of stabilizing linear control systems on a Hilbert space. This will be briefly discussed.",
@@ -189,7 +189,7 @@ class ScienceDirect(PublisherParser):
                             "Department of Mathematics, University of Lagos, Lagos, Nigeria",
                             "Department of Mathematics, Kossuth Lajos University, Debrecen, Hungary",
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": None,
@@ -204,7 +204,7 @@ class ScienceDirect(PublisherParser):
                         "affiliations": [
                             "Department of Mathematics Brigham Young University Provo, Utah 84602, USA"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": "Given an invertible complex matrix T , a description is given of those matrices A with Moore-Penrose inverse A † such that ( TAT -1 ) † = TA † T -1 .",
@@ -219,14 +219,14 @@ class ScienceDirect(PublisherParser):
                         "affiliations": [
                             "Department of Mathematics North Carolina State University Box 8205 Raleigh, North Carolina 27695-820 USA"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "George P.H. Styan",
                         "affiliations": [
                             "Department of Mathematics and Statistics McGill University 805 ouest, rue Sherbrooke Montréal, Québec, Canada H3A 2K6"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": "The main result is that Drazin's “star” partial ordering A ⩽ ∗ B holds if and only if A ∠ B and B † −A † =(B−A) † , where A ⩽ ∗ B is defined by A ∗ A = A ∗ B and AA ∗ = BA ∗ , and where A ∠ B denotes rank subtractivity. Here A and B are m × n complex matrices and the superscript † denotes the Moore-Penrose inverse. Several other characterizations of A ⩽ ∗ B are given, with particular emphasis on what extra condition must be added in order that rank subtractivity becomes the stronger “star” order; a key tool is a new canonical form for rank subtractivity. Connections with simultaneous singular-value decompositions, Schur complements, and idempotent matrices are also mentioned.",

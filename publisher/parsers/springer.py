@@ -325,7 +325,7 @@ class Springer(PublisherParser):
                     {
                         "name": "Scharenborg, Odette",
                         "affiliations": ["Radboud University Nijmegen"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Weber, Andrea",
@@ -333,7 +333,7 @@ class Springer(PublisherParser):
                             "Max Planck Institute for Psycholinguistics",
                             "Radboud University Nijmegen",
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Janse, Esther",
@@ -341,7 +341,7 @@ class Springer(PublisherParser):
                             "Radboud University Nijmegen",
                             "Max Planck Institute for Psycholinguistics",
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": "This study investigates two variables that may modify lexically guided perceptual learning: individual hearing sensitivity and attentional abilities. Older Dutch listeners (aged 60+ years, varying from good hearing to mild-to-moderate high-frequency hearing loss) were tested on a lexically guided perceptual learning task using the contrast [f]-[s]. This contrast mainly differentiates between the two consonants in the higher frequencies, and thus is supposedly challenging for listeners with hearing loss. The analyses showed that older listeners generally engage in lexically guided perceptual learning. Hearing loss and selective attention did not modify perceptual learning in our participant sample, while attention-switching control did: listeners with poorer attention-switching control showed a stronger perceptual learning effect. We postulate that listeners with better attention-switching control may, in general, rely more strongly on bottom-up acoustic information compared to listeners with poorer attention-switching control, making them in turn less susceptible to lexically guided perceptual learning. Our results, moreover, clearly show that lexically guided perceptual learning is not lost when acoustic processing is less accurate.",
@@ -383,61 +383,61 @@ class Springer(PublisherParser):
                     {
                         "name": "Miligy, Islam M.",
                         "affiliations": ["The University of Nottingham"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Toss, Michael S.",
                         "affiliations": ["The University of Nottingham"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Shiino, Sho",
                         "affiliations": ["The University of Nottingham"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Oni, Georgette",
                         "affiliations": ["Nottingham University Hospitals NHS Trust"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Syed, Binafsha M.",
                         "affiliations": [
                             "Liaquat University of Medical & Health Sciences"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Khout, Hazem",
                         "affiliations": ["Nottingham University Hospitals NHS Trust"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Tan, Qing Ting",
                         "affiliations": ["Nottingham University Hospitals NHS Trust"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Green, Andrew R.",
                         "affiliations": ["The University of Nottingham"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Macmillan, R. Douglas",
                         "affiliations": ["Nottingham University Hospitals NHS Trust"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Robertson, John F. R.",
                         "affiliations": [
                             "University of Nottingham Royal Derby Hospital"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "Rakha, Emad A.",
                         "affiliations": ["The University of Nottingham"],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": None,

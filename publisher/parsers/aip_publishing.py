@@ -210,14 +210,14 @@ class AIPPublishing(PublisherParser):
                         "affiliations": [
                             "Department of Electrical Engineering, Indian Institute of Technology Gandhinagar"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                     {
                         "name": "P. Sumathi",
                         "affiliations": [
                             "Department of Electrical Engineering, Indian Institute of Technology Roorkee"
                         ],
-                        "is_corresponding": False,
+                        "is_corresponding": None,
                     },
                 ],
                 "abstract": "The process of capacitance measurement consists of converting the capacitance under measurement into a secondary variable such as voltage, time-period, and frequency. This paper lays special focus on the capacitance-frequency measurement due to the offered advantages by this technique over the other methods. For this purpose, a review of the various frequency estimation techniques is presented while exploring the possibility of applying them for capacitance measurement. These techniques are mainly classified as phase-locked loop, frequency-locked loop (FLL), parameter estimation methods, and discrete Fourier transform (DFT) based FLL structures. Furthermore, the possibility of integrating computationally efficient DFT structures in frequency locked loops has been investigated. The performance comparison of these techniques proves that a more accurate measurement of capacitance could be achieved through them. The proposed methodology of capacitance measurement offers good accuracy, wider range, quick convergence, and system-on-chip implementation. Moreover, FLLs could be applied for the capacitance measurement when the input signal is nonsinusoidal.",
