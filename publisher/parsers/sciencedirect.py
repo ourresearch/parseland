@@ -30,9 +30,15 @@ class ScienceDirect(PublisherParser):
         ]:
             group_authors = []
             group_affiliation_labels = {}
+            group_footnote_labels = {}
 
             affiliation_dicts = [
-                x for x in author_group.get("$$", []) if x.get("#name") == "affiliation"
+                x
+                for x in author_group.get("$$", [])
+                if x.get("#name") == "affiliation" or x.get("#name") == "footnote"
+            ]
+            footnote_dicts = [
+                x for x in author_group.get("$$", []) if x.get("#name") == "footnote"
             ]
 
             for affiliation in affiliation_dicts:
@@ -43,6 +49,15 @@ class ScienceDirect(PublisherParser):
                             group_affiliation_labels[
                                 affiliation_label
                             ] = affiliation_property["_"]
+
+            for footnote in footnote_dicts:
+                footnote_label = footnote.get("$", {}).get("id")
+                for footnote_property in footnote.get("$$", []):
+                    if footnote_property.get("#name") == "note-para":
+                        if footnote_label and footnote_property.get("_"):
+                            group_footnote_labels[footnote_label] = footnote_property[
+                                "_"
+                            ]
 
             author_dicts = [
                 x for x in author_group.get("$$", []) if x.get("#name") == "author"
@@ -67,6 +82,12 @@ class ScienceDirect(PublisherParser):
                         affiliation_label = author_property.get("$", {}).get("refid")
                         if affiliation_label in group_affiliation_labels:
                             affiliation_labels.append(affiliation_label)
+                        elif (
+                            affiliation_label in group_footnote_labels
+                            and "correspond"
+                            in group_footnote_labels.get(affiliation_label).lower()
+                        ):
+                            is_corresponding = True
 
                 if given or family:
                     group_authors.append(
