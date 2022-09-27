@@ -16,7 +16,12 @@ class ACS(PublisherParser):
         author_soup = self.soup.find("ul", class_="loa")
         authors = author_soup.findAll("li")
         for author in authors:
-            name = author.find("div", class_="loa-info-name").text.strip()
+            # method 1
+            name = author.find("div", class_="loa-info-name")
+            if name:
+                name = name.text.strip()
+            else:
+                name = author.text
 
             if author.find("strong") and author.find("strong").text == "*":
                 is_corresponding = True
