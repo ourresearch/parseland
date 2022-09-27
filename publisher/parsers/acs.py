@@ -1,3 +1,4 @@
+from exceptions import UnusualTrafficError
 from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
 
@@ -6,6 +7,8 @@ class ACS(PublisherParser):
     parser_name = "acs"
 
     def is_publisher_specific_parser(self):
+        if "Request forbidden by administrative rules" in str(self.soup):
+            raise UnusualTrafficError(f"Page blocked within parser {self.parser_name}")
         return self.domain_in_meta_og_url(".acs.org")
 
     def authors_found(self):
