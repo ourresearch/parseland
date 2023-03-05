@@ -31,12 +31,11 @@ class PublisherParser(ABC):
 
     def domain_in_canonical_link(self, domain):
         canonical_link = self.soup.find("link", {"rel": "canonical"})
-        if (
+        return (
             canonical_link
             and canonical_link.get("href")
             and domain in canonical_link.get("href")
-        ):
-            return True
+        )
 
     def domain_in_meta_og_url(self, domain):
         meta_og_url = self.soup.find("meta", property="og:url")
