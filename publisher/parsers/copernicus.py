@@ -21,7 +21,8 @@ class Copernicus(PublisherParser):
     def parse(self):
         authors = self.get_authors()
         affiliations = self.get_affiliations()
-        authors_affiliations = self.merge_authors_affiliations(authors, affiliations)
+        authors_affiliations = self.merge_authors_affiliations(authors,
+                                                               affiliations)
 
         abstract = self.parse_abstract_meta_tags()
         try:
@@ -48,7 +49,10 @@ class Copernicus(PublisherParser):
                 name = name[:-1].strip()
             if name.startswith("and"):
                 name = name[3:].strip()
-            authors.append(Author(name=name, aff_ids=aff_ids))
+            is_corresponding = bool(
+                author.find('a', class_='orcid-authors-logo'))
+            authors.append(Author(name=name, aff_ids=aff_ids,
+                                  is_corresponding=is_corresponding))
         return authors
 
     def get_affiliations(self):
