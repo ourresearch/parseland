@@ -19,11 +19,12 @@ class ScienceDirect(PublisherParser):
         return self.get_json_authors_affiliations_abstract()
 
     @staticmethod
-    def _get_corresponding_id(author_group):
+    def _get_corresponding_ids(author_group):
+        ids = set()
         for item in author_group.get('$$', []):
             if 'correspond' in item.get('#name', ''):
-                return item.get('$', {}).get('id')
-        return None
+                ids.add(item.get('$', {}).get('id'))
+        return ids
 
     def get_json_authors_affiliations_abstract(self):
         if not (science_direct_json := self.extract_json()):
@@ -52,7 +53,7 @@ class ScienceDirect(PublisherParser):
                 x.get("#name") == "footnote"
             ]
 
-            corresponding_id = self._get_corresponding_id(author_group)
+            corresponding_ids = self._get_corresponding_ids(author_group)
 
             for affiliation in affiliation_dicts:
                 affiliation_label = affiliation.get("$", {}).get("id")
@@ -78,7 +79,6 @@ class ScienceDirect(PublisherParser):
                 x.get("#name") == "author"
             ]
 
-            found_corresponding = False
             for author in author_dicts:
                 given = None
                 family = None
@@ -95,25 +95,20 @@ class ScienceDirect(PublisherParser):
                         if affiliation_label in group_affiliation_labels:
                             affiliation_labels.append(affiliation_label)
                         elif (
-                                not found_corresponding and
                                 (
                                         affiliation_label in group_footnote_labels
                                         and "correspond"
                                         in group_footnote_labels.get(
                                     affiliation_label).lower()
                                 )
-                                or affiliation_label == corresponding_id
+                                or affiliation_label in corresponding_ids
                         ):
                             is_corresponding = True
-                            found_corresponding = True
-                    elif (
-                            not found_corresponding and
-                            (author_property.get("#name") == "e-address"
-                             or author_property.get(
-                                        "#name") == "encoded-e-address")
+                    elif (author_property.get("#name") == "e-address"
+                          or author_property.get(
+                                "#name") == "encoded-e-address"
                     ):
                         is_corresponding = True
-                        found_corresponding = True
 
                 if given or family:
                     group_authors.append(
