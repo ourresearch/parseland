@@ -39,7 +39,9 @@ class Taylor(PublisherParser):
                     is_corresponding=is_corresponding,
                 )
             )
-        return results
+        abstract_tag = self.soup.find('div', class_='abstractInFull')
+        abstract = abstract_tag.text.strip('ABSTRACT').strip('Abstract') if abstract_tag else None
+        return {"authors": results, "abstract": abstract}
 
     test_cases = [
         {
