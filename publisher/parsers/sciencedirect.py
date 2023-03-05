@@ -11,11 +11,19 @@ class ScienceDirect(PublisherParser):
         return self.domain_in_canonical_link("sciencedirect.com")
 
     def authors_found(self):
-        return self.soup.find_all("a", class_="author")
+        return self.soup.find_all("a", class_="author") or self.soup.select(
+            'div#author-group')
 
     def parse(self):
         """Core function returning list of authors with their affiliations."""
         return self.get_json_authors_affiliations_abstract()
+
+    @staticmethod
+    def _get_corresponding_id(author_group):
+        for item in author_group.get('$$', []):
+            if 'correspond' in item.get('#name', ''):
+                return item.get('$', {}).get('id')
+        return None
 
     def get_json_authors_affiliations_abstract(self):
         if not (science_direct_json := self.extract_json()):
@@ -23,7 +31,8 @@ class ScienceDirect(PublisherParser):
 
         all_authors = []
 
-        authors_content = science_direct_json.get("authors", {}).get("content", {})
+        authors_content = science_direct_json.get("authors", {}).get("content",
+                                                                     {})
 
         for author_group in [
             ac for ac in authors_content if ac.get("#name") == "author-group"
@@ -35,11 +44,15 @@ class ScienceDirect(PublisherParser):
             affiliation_dicts = [
                 x
                 for x in author_group.get("$$", [])
-                if x.get("#name") == "affiliation" or x.get("#name") == "footnote"
+                if
+                x.get("#name") == "affiliation" or x.get("#name") == "footnote"
             ]
             footnote_dicts = [
-                x for x in author_group.get("$$", []) if x.get("#name") == "footnote"
+                x for x in author_group.get("$$", []) if
+                x.get("#name") == "footnote"
             ]
+
+            corresponding_id = self._get_corresponding_id(author_group)
 
             for affiliation in affiliation_dicts:
                 affiliation_label = affiliation.get("$", {}).get("id")
@@ -55,14 +68,17 @@ class ScienceDirect(PublisherParser):
                 for footnote_property in footnote.get("$$", []):
                     if footnote_property.get("#name") == "note-para":
                         if footnote_label and footnote_property.get("_"):
-                            group_footnote_labels[footnote_label] = footnote_property[
-                                "_"
-                            ]
+                            group_footnote_labels[footnote_label] = \
+                                footnote_property[
+                                    "_"
+                                ]
 
             author_dicts = [
-                x for x in author_group.get("$$", []) if x.get("#name") == "author"
+                x for x in author_group.get("$$", []) if
+                x.get("#name") == "author"
             ]
 
+            found_corresponding = False
             for author in author_dicts:
                 given = None
                 family = None
@@ -73,21 +89,31 @@ class ScienceDirect(PublisherParser):
                         given = author_property.get("_")
                     elif author_property.get("#name") == "surname":
                         family = author_property.get("_")
-                    elif (
-                        author_property.get("#name") == "e-address"
-                        or author_property.get("#name") == "encoded-e-address"
-                    ):
-                        is_corresponding = True
                     elif author_property.get("#name") == "cross-ref":
-                        affiliation_label = author_property.get("$", {}).get("refid")
+                        affiliation_label = author_property.get("$", {}).get(
+                            "refid")
                         if affiliation_label in group_affiliation_labels:
                             affiliation_labels.append(affiliation_label)
                         elif (
-                            affiliation_label in group_footnote_labels
-                            and "correspond"
-                            in group_footnote_labels.get(affiliation_label).lower()
+                                not found_corresponding and
+                                (
+                                        affiliation_label in group_footnote_labels
+                                        and "correspond"
+                                        in group_footnote_labels.get(
+                                    affiliation_label).lower()
+                                )
+                                or affiliation_label == corresponding_id
                         ):
                             is_corresponding = True
+                            found_corresponding = True
+                    elif (
+                            not found_corresponding and
+                            (author_property.get("#name") == "e-address"
+                             or author_property.get(
+                                        "#name") == "encoded-e-address")
+                    ):
+                        is_corresponding = True
+                        found_corresponding = True
 
                 if given or family:
                     group_authors.append(
@@ -98,7 +124,8 @@ class ScienceDirect(PublisherParser):
                         }
                     )
 
-            if any(author.get("affiliation_labels") for author in group_authors):
+            if any(author.get("affiliation_labels") for author in
+                   group_authors):
                 # assign affiliations by label
                 for author in group_authors:
                     affiliations = [
@@ -118,16 +145,21 @@ class ScienceDirect(PublisherParser):
                     all_authors.append(
                         {
                             "name": author["name"],
-                            "affiliations": list(group_affiliation_labels.values()),
+                            "affiliations": list(
+                                group_affiliation_labels.values()),
                             "is_corresponding": author["is_corresponding"],
                         }
                     )
-
-        abstract = None
-        abstracts_content = science_direct_json.get("abstracts", {}).get("content", [])
-        if abstracts_content:
-            abstract = self.abstract_text(abstracts_content)
-            abstract = re.sub(r" +", " ", abstract).strip()
+        # first try parsing abstract text through html
+        abstract_tag = self.soup.select_one('div.abstract.author p')
+        abstract = abstract_tag.text if abstract_tag else ''
+        if not abstract:
+            # try parsing through json
+            abstracts_content = science_direct_json.get("abstracts", {}).get(
+                "content", [])
+            if abstracts_content:
+                abstract = self.abstract_text(abstracts_content)
+                abstract = re.sub(r" +", " ", abstract).strip()
 
         return {"authors": all_authors, "abstract": abstract}
 
@@ -137,7 +169,7 @@ class ScienceDirect(PublisherParser):
 
         if isinstance(abstracts_json, dict):
             if (text_content := abstracts_json.get("_")) and isinstance(
-                text_content, str
+                    text_content, str
             ):
                 if abstracts_json.get("#name") in ["section-title", "alt-text"]:
                     return ""
