@@ -1,3 +1,5 @@
+import json
+
 from exceptions import UnusualTrafficError
 from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
@@ -8,7 +10,7 @@ class Oxford(PublisherParser):
 
     def is_publisher_specific_parser(self):
         if self.soup.find(
-            "div", class_="explanation-message"
+                "div", class_="explanation-message"
         ) and "help us confirm that you are not a robot and we will take you to your content" in str(
             self.soup
         ):
@@ -24,6 +26,7 @@ class Oxford(PublisherParser):
         results = []
         author_soup = self.soup.find("div", class_="at-ArticleAuthors")
         authors = author_soup.findAll("div", class_="info-card-author")
+
         for author in authors:
             name = author.find("div", class_="info-card-name").text.strip()
 
@@ -34,9 +37,11 @@ class Oxford(PublisherParser):
             )
 
             affiliations = []
-            affiliation_section = author.find("div", class_="info-card-affilitation")
+            affiliation_section = author.find("div",
+                                              class_="info-card-affilitation")
             if affiliation_section:
-                affiliations_soup = affiliation_section.findAll("div", class_="aff")
+                affiliations_soup = affiliation_section.findAll("div",
+                                                                class_="aff")
                 for aff in affiliations_soup:
                     affiliations.append(aff.text)
 
@@ -47,7 +52,9 @@ class Oxford(PublisherParser):
                     is_corresponding=is_corresponding,
                 )
             )
-        return results
+        abstract_tag = self.soup.select_one('section.abstract p')
+        abstract = abstract_tag.text if abstract_tag else None
+        return {"authors": results, "abstract": abstract}
 
     test_cases = [
         {
@@ -76,7 +83,8 @@ class Oxford(PublisherParser):
                 },
                 {
                     "name": "Xing Chen",
-                    "affiliations": ["China University of Mining and Technology"],
+                    "affiliations": [
+                        "China University of Mining and Technology"],
                     "is_corresponding": True,
                 },
             ],
