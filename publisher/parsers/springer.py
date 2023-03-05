@@ -22,8 +22,17 @@ class Springer(PublisherParser):
     def authors_found(self):
         return True
 
+    @staticmethod
+    def _try_find_abstract_in_metadatas(metadatas):
+        for md in metadatas:
+            if 'description' in md:
+                return md['description']
+        return None
+
     def parse(self):
-        authors_affiliations = self.parse_ld_json()
+        article_metadatas = self.parse_article_metadatas()
+        abstract = self._try_find_abstract_in_metadatas(article_metadatas)
+        authors_affiliations = self.parse_ld_json(article_metadatas)
 
         if not authors_affiliations:
             authors = self.get_authors()
@@ -50,7 +59,8 @@ class Springer(PublisherParser):
                     authors, affiliations
                 )
 
-        return {"authors": authors_affiliations, "abstract": self.parse_abstract()}
+        return {"authors": authors_affiliations,
+                "abstract": abstract or self.parse_abstract()}
 
     def parse_abstract(self):
         if abstract_soup := self.soup.find("section", class_="Abstract"):
@@ -64,7 +74,7 @@ class Springer(PublisherParser):
 
             return abstract_soup.text.strip()
 
-        if abstract_soup := self.soup.find("section", {"data-title": "Abstract"}):
+        elif abstract_soup := self.soup.select_one('section[data-title=Abstract] div[class*=c-article-section] p'):
             for abstract_heading in abstract_soup.find_all(
                 re.compile("^h[1-6]$"), string="Abstract"
             ):
@@ -74,12 +84,21 @@ class Springer(PublisherParser):
 
         return None
 
-    def parse_ld_json(self):
-        authors = []
-
+    def parse_article_metadatas(self):
+        metadatas = []
         for ld_json in self.soup.find_all("script", {"type": "application/ld+json"}):
             article_metadata = json.loads(ld_json.text)
-            for author in article_metadata.get("mainEntity", {}).get("author", []):
+            if 'mainEntity' in article_metadata:
+                article_metadata = article_metadata['mainEntity']
+            metadatas.append(article_metadata)
+        return metadatas
+
+    @staticmethod
+    def parse_ld_json(metadatas):
+        authors = []
+
+        for article_metadata in metadatas:
+            for author in article_metadata.get("author", []):
                 if author.get("@type") == "Person":
                     name = author.get("name")
                     affiliations = []
