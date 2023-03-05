@@ -66,7 +66,9 @@ class RXIV(PublisherParser):
                 attempts += 1
             else:
                 break
-        return results
+        abstract_tag = self.soup.select_one('div.section.abstract p')
+        abstract = abstract_tag.text if abstract_tag else None
+        return {"authors": results, "abstract": abstract}
 
     test_cases = [
         {
