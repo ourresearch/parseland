@@ -23,11 +23,10 @@ def parse_publisher():
     doi = request.args.get("doi")
     pc = PublisherController(doi)
     parser = pc.find_parser()
-    if parser.authors_found():
-        parsed_message = parser.parse()
-        message = alter_is_corresponding(parsed_message)
-    else:
-        message = parser.no_authors_output()
+
+    parsed_message = parser.parse()
+    message = alter_is_corresponding(parsed_message)
+
     response = {
         "message": message,
         "metadata": {

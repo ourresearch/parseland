@@ -29,7 +29,7 @@ class PublisherController:
     def find_parser(self):
         for cls in self.parsers:
             parser = cls(self.soup)
-            if parser.is_publisher_specific_parser():
+            if parser.is_publisher_specific_parser() and parser.authors_found():
                 return parser
 
         generic_parser = GenericPublisherParser(self.soup)

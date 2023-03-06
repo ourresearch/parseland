@@ -11,7 +11,7 @@ class ElsevierBV(PublisherParser):
         ) and not self.domain_in_canonical_link("papers.ssrn.com")
 
     def authors_found(self):
-        return self.soup.findAll("li", class_="author")
+        return bool(self.soup.findAll("li", class_="author"))
 
     def parse(self):
         author_results = []
