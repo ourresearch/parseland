@@ -63,7 +63,8 @@ class PublisherParser(ABC):
                     # reset for next author
                     results.append(result)
                     result = None
-                name = self.format_name(meta["content"])
+                if not (name := meta.get('content')):
+                    continue
                 if corresponding_text and name.lower() in corresponding_text:
                     is_corresponding = True
                 elif corresponding_text and name.lower() not in corresponding_text:
