@@ -104,10 +104,13 @@ class ScienceDirect(PublisherParser):
                                 or affiliation_label in corresponding_ids
                         ):
                             is_corresponding = True
-                    elif (author_property.get("#name") == "e-address"
-                          or author_property.get(
-                                "#name") == "encoded-e-address"
-                    ):
+                    elif (
+                        # if corresponding ids not found, use email link as indicator of correspondence
+                            not corresponding_ids and
+                            (author_property.get("#name") == "e-address"
+                             or author_property.get(
+                                        "#name") == "encoded-e-address"
+                            )):
                         is_corresponding = True
 
                 if given or family:
