@@ -15,7 +15,9 @@ class Lippincott(PublisherParser):
         authors = self.get_authors()
         affiliations = self.get_affiliations()
         authors_affiliations = self.merge_authors_affiliations(authors, affiliations)
-        return authors_affiliations
+        abstract_tag = self.soup.select_one('section#ArticleBody')
+        abstract = abstract_tag.text if abstract_tag else None
+        return {"authors": authors_affiliations, "abstract": abstract}
 
     def get_authors(self):
         authors = []
