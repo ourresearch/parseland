@@ -19,8 +19,10 @@ class Wiley(PublisherParser):
 
     def get_authors(self):
         results = []
-        author_soup = self.soup.find("div", class_="loa-authors")
-        authors = author_soup.findAll("span", class_="accordion__closed")
+        if author_soup := self.soup.find("div", class_="loa-authors"):
+            authors = author_soup.findAll("span", class_="accordion__closed")
+        else:
+            authors = []
         for author in authors:
             affiliations = []
             name = author.a.text
@@ -58,9 +60,13 @@ class Wiley(PublisherParser):
         return results
 
     def get_abstract(self):
-        if abstract_heading := self.soup.find(
+        abs_headings = self.soup.find_all(
             re.compile("^h[1-6]$"), string="Abstract"
-        ):
+        )
+        for abstract_heading in abs_headings:
+            # if graphical abstract is the only abstract, then take it, otherwise try to find actual abstract
+            if any(['graphical' in cls for cls in abstract_heading['class']]) and len(abs_headings) > 1:
+                continue
             if abstract_body := abstract_heading.find_next_sibling():
                 if abstract := abstract_body.text.strip():
                     return abstract
