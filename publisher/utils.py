@@ -19,6 +19,12 @@ def alter_is_corresponding(message):
         if True not in is_corresponding_list:
             for i, val in enumerate(message["authors"]):
                 message["authors"][i]["is_corresponding"] = None
+
+        # we have at least one corresponding author, but the non-corresponding authors have is_corresponding = None (need to be set to False)
+        elif None in is_corresponding_list:
+            for i, val in enumerate(message["authors"]):
+                if val['is_corresponding'] is None:
+                    message["authors"][i]["is_corresponding"] = False
     else:
         for author in message:
             if is_dataclass(author):

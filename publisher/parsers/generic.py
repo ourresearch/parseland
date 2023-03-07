@@ -13,13 +13,48 @@ class GenericPublisherParser(PublisherParser):
 
     def authors_found(self):
         return self.parse() and (
-            self.parse().get("authors") or self.parse().get("abstract")
+                self.parse().get("authors") or self.parse().get("abstract")
         )
+
+    def try_mark_corresponding_authors(self, authors):
+        def func(tag):
+            for attr, value in tag.attrs.items():
+                if ('author' in str(value).lower() and
+                        tag.select_one('a[href*=mailto]')):
+                    return True
+            return False
+
+        tags = self.soup.find_all(func)
+
+        # Return only smallest tags, we don't want any tags with class*= authors that may contain multiple author names
+        final_tags = []
+        for tag1 in tags:
+            is_parent = False
+            for tag2 in tags:
+                if tag1 == tag2:
+                    continue
+                tag1_children = list(tag1.children)
+                if tag2 in tag1_children:
+                    is_parent = True
+            if not is_parent:
+                final_tags.append(tag1)
+
+        for tag in final_tags:
+            tag_str = str(tag)
+            for author in authors:
+                if author['name'] in tag_str:
+                    author['is_corresponding'] = True
+                elif ',' in author['name']:
+                    if all([name.strip(' ') in tag_str for name in author['name'].split(',')]):
+                        author['is_corresponding'] = True
+        return authors
 
     def parse(self):
         if not self._parse_result:
+            authors = self.parse_meta_tags()
+            authors = self.try_mark_corresponding_authors(authors)
             self._parse_result = {
-                "authors": self.parse_meta_tags(),
+                "authors": authors,
                 "abstract": self.parse_abstract_meta_tags(),
             }
 
