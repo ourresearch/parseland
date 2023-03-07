@@ -30,7 +30,7 @@ class Taylor(PublisherParser):
             affiliations = []
             affiliation = author.find("span", class_="overlay")
             if affiliation:
-                affiliation_trimmed = affiliation.contents[0].text[2:]
+                affiliation_trimmed = affiliation.contents[0].text
                 affiliations.append(affiliation_trimmed)
             results.append(
                 AuthorAffiliations(
