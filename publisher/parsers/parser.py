@@ -1,7 +1,7 @@
 import re
 from abc import ABC, abstractmethod
 
-from publisher.elements import Author, AuthorAffiliations
+from publisher.elements import AuthorAffiliations
 
 
 class PublisherParser(ABC):
@@ -166,5 +166,39 @@ class PublisherParser(ABC):
             if aff_id and aff_id.isdigit():
                 aff_ids.append(int(aff_id))
         return aff_ids
+
+    def try_mark_corresponding_authors(self, authors):
+        def func(tag):
+            for attr, value in tag.attrs.items():
+                if ('author' in str(value).lower() and
+                        tag.select_one('a[href*=mailto]')):
+                    return True
+            return False
+
+        tags = self.soup.find_all(func)
+
+        # Return only smallest tags, we don't want any tags with class*= authors that may contain multiple author names
+        final_tags = []
+        for tag1 in tags:
+            is_parent = False
+            for tag2 in tags:
+                if tag1 == tag2:
+                    continue
+                tag1_children = list(tag1.children)
+                if tag2 in tag1_children:
+                    is_parent = True
+            if not is_parent:
+                final_tags.append(tag1)
+
+        for tag in final_tags:
+            tag_str = str(tag)
+            for author in authors:
+                if author['name'] in tag_str:
+                    author['is_corresponding'] = True
+                elif ',' in author['name']:
+                    if all([name.strip(' ') in tag_str for name in
+                            author['name'].split(',')]):
+                        author['is_corresponding'] = True
+        return authors
 
     test_cases = []

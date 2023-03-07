@@ -1,7 +1,23 @@
 from dataclasses import asdict, is_dataclass
 
 
-def sanitize_message(message):
+def has_corresponding(message):
+    authors = message['authors']
+    return bool([author for author in authors if author['is_corresponding']])
+
+
+def sanitize_message(message, parser):
+    if isinstance(message, list):
+        message = {'authors': message, 'abstract': None}
+
+    message['authors'] = [asdict(author) if is_dataclass(author) else author for author in message['authors']]
+
+    if not message['authors']:
+        message = parser.no_authors_output()
+
+    if not has_corresponding(message):
+        message['authors'] = parser.try_mark_corresponding_authors(message['authors'])
+
     message = alter_is_corresponding(message)
     message = sanitize_affiliations(message)
     return message
@@ -9,8 +25,7 @@ def sanitize_message(message):
 
 def alter_is_corresponding(message):
     """If all is_corresponding are False, change them to None."""
-    authors = message['authors'] if 'authors' in message else message
-    authors = [asdict(author) if is_dataclass(author) else author for author in authors]
+    authors = message['authors']
 
     is_corresponding_list = [
         author["is_corresponding"]
@@ -35,11 +50,11 @@ def alter_is_corresponding(message):
 
 
 def sanitize_affiliations(message):
-    authors = message['authors'] if 'authors' in message else message
-    authors = [asdict(author) if is_dataclass(author) else author for author in authors]
+    authors = message['authors']
 
     for author in authors:
-        author['affiliations'] = [aff for aff in author['affiliations'] if 'corresponding' not in aff.lower()]
+        author['affiliations'] = [aff for aff in author['affiliations'] if
+                                  'corresponding' not in aff.lower()]
 
     if 'authors' in message:
         message['authors'] = authors

@@ -25,9 +25,8 @@ def parse_publisher():
     parser = pc.find_parser()
 
     parsed_message = parser.parse()
-    if not parsed_message['authors']:
-        parsed_message = parser.no_authors_output()
-    message = sanitize_message(parsed_message)
+
+    message = sanitize_message(parsed_message, parser)
     response = {
         "message": message,
         "metadata": {
