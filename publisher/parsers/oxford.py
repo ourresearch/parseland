@@ -52,7 +52,7 @@ class Oxford(PublisherParser):
                     is_corresponding=is_corresponding,
                 )
             )
-        abstract_tag = self.soup.select_one('section.abstract p')
+        abstract_tag = self.soup.select_one('section.abstract')
         abstract = abstract_tag.text if abstract_tag else None
         return {"authors": results, "abstract": abstract}
 
