@@ -23,7 +23,8 @@ class PublisherParser(ABC):
 
     @staticmethod
     def no_authors_output():
-        return {"authors": [], "abstract": None, "published_date": None, "genre": None}
+        return {"authors": [], "abstract": None, "published_date": None,
+                "genre": None}
 
     @abstractmethod
     def parse(self):
@@ -32,19 +33,24 @@ class PublisherParser(ABC):
     def domain_in_canonical_link(self, domain):
         canonical_link = self.soup.find("link", {"rel": "canonical"})
         return (
-            canonical_link
-            and canonical_link.get("href")
-            and domain in canonical_link.get("href")
+                canonical_link
+                and canonical_link.get("href")
+                and domain in canonical_link.get("href")
         )
 
     def domain_in_meta_og_url(self, domain):
         meta_og_url = self.soup.find("meta", property="og:url")
-        if (
-            meta_og_url
-            and meta_og_url.get("content")
-            and domain in meta_og_url.get("content")
-        ):
-            return True
+        return (meta_og_url
+                and meta_og_url.get("content")
+                and domain in meta_og_url.get("content")
+                )
+
+    def text_in_meta_og_site_name(self, txt):
+        meta_og_site_name = self.soup.find('meta', property='og:site_name')
+        return (meta_og_site_name
+                and meta_og_site_name.get("content")
+                and txt in meta_og_site_name.get("content")
+                )
 
     def parse_meta_tags(self, corresponding_tag=None, corresponding_class=None):
         results = []
@@ -76,7 +82,8 @@ class PublisherParser(ABC):
                     "affiliations": [],
                     "is_corresponding": is_corresponding,
                 }
-            if meta.get("name", None) and meta["name"] == "citation_author_institution":
+            if meta.get("name", None) and meta[
+                "name"] == "citation_author_institution":
                 if meta.get("content") and meta["content"].strip():
                     result["affiliations"].append(meta["content"].strip())
 
@@ -98,17 +105,20 @@ class PublisherParser(ABC):
         for meta_tag_name in meta_tag_names:
             for meta_property_name in meta_property_names:
                 if meta_tag := self.soup.find(
-                    "meta", {meta_property_name: re.compile(f"^{meta_tag_name}$", re.I)}
+                        "meta", {
+                            meta_property_name: re.compile(f"^{meta_tag_name}$",
+                                                           re.I)}
                 ):
                     if description := meta_tag.get("content").strip():
                         if (
-                            len(description) > 200
-                            and not description.endswith("...")
-                            and not description.endswith("…")
-                            and not description.startswith("http")
+                                len(description) > 200
+                                and not description.endswith("...")
+                                and not description.endswith("…")
+                                and not description.startswith("http")
                         ):
                             description = re.sub(
-                                r"^abstract[:.]?\s*", "", description, flags=re.I
+                                r"^abstract[:.]?\s*", "", description,
+                                flags=re.I
                             )
                             return description
 
@@ -148,7 +158,8 @@ class PublisherParser(ABC):
         ids_cleaned = ids.strip()
         if chars_to_ignore:
             for char in chars_to_ignore:
-                ids_cleaned = ids_cleaned.replace(f",{char}", "").replace(f"{char}", "")
+                ids_cleaned = ids_cleaned.replace(f",{char}", "").replace(
+                    f"{char}", "")
         ids_split = ids_cleaned.split(",")
         aff_ids = []
         for aff_id in ids_split:

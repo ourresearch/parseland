@@ -9,7 +9,7 @@ class Wiley(PublisherParser):
     parser_name = "wiley"
 
     def is_publisher_specific_parser(self):
-        return self.domain_in_meta_og_url("onlinelibrary.wiley.com")
+        return self.domain_in_meta_og_url("onlinelibrary.wiley.com") or self.text_in_meta_og_site_name('Wiley Online Library')
 
     def authors_found(self):
         return self.soup.find("div", class_="loa-authors")
@@ -60,8 +60,9 @@ class Wiley(PublisherParser):
         return results
 
     def get_abstract(self):
+
         abs_headings = self.soup.find_all(
-            re.compile("^h[1-6]$"), string="Abstract"
+            lambda tag: re.match('^h[1-6]$', tag.name) and tag.text.lower().strip() == 'abstract'
         )
         for abstract_heading in abs_headings:
             # if graphical abstract is the only abstract, then take it, otherwise try to find actual abstract

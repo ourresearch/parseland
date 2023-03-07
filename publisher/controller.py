@@ -27,13 +27,18 @@ class PublisherController:
         return soup
 
     def find_parser(self):
+        best_parser = None
         for cls in self.parsers:
             parser = cls(self.soup)
-            if parser.is_publisher_specific_parser() and parser.authors_found():
-                return parser
+            if parser.is_publisher_specific_parser():
+                best_parser = parser
+                if parser.authors_found():
+                    return parser
 
         generic_parser = GenericPublisherParser(self.soup)
         if generic_parser.authors_found():
-            return generic_parser
+            best_parser = generic_parser
 
+        if best_parser:
+            return best_parser
         raise ParserNotFoundError(f"Parser not found for {self.doi}")
