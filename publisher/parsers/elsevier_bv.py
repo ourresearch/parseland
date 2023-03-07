@@ -13,6 +13,9 @@ class ElsevierBV(PublisherParser):
     def authors_found(self):
         return bool(self.soup.findAll("li", class_="author"))
 
+    def parse_abstract(self):
+        return '\n'.join([tag.text for tag in self.soup.select('div[class*=article__sections] div.section-paragraph')])
+
     def parse(self):
         author_results = []
         author_soup = self.soup.findAll("li", class_="author")
@@ -64,7 +67,8 @@ class ElsevierBV(PublisherParser):
                     is_corresponding=is_corresponding,
                 )
             )
-        return {"authors": author_results, "abstract": self.parse_abstract_meta_tags()}
+
+        return {"authors": author_results, "abstract": self.parse_abstract() or self.parse_abstract_meta_tags()}
 
     test_cases = [
         {
