@@ -52,8 +52,7 @@ class Oxford(PublisherParser):
                     is_corresponding=is_corresponding,
                 )
             )
-        abstract_tag = self.soup.select_one('section.abstract')
-        abstract = abstract_tag.text if abstract_tag else None
+        abstract = '\n'.join([tag.text for tag in self.soup.select('section.abstract p')])
         return {"authors": results, "abstract": abstract}
 
     test_cases = [
