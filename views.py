@@ -3,7 +3,7 @@ from flask import jsonify, request
 from app import app
 from exceptions import APIError
 from publisher.controller import PublisherController
-from publisher.utils import alter_is_corresponding
+from publisher.utils import sanitize_message
 from repository.controller import RepositoryController
 
 
@@ -25,8 +25,9 @@ def parse_publisher():
     parser = pc.find_parser()
 
     parsed_message = parser.parse()
-    message = alter_is_corresponding(parsed_message)
-
+    if not parsed_message['authors']:
+        parsed_message = parser.no_authors_output()
+    message = sanitize_message(parsed_message)
     response = {
         "message": message,
         "metadata": {
