@@ -13,8 +13,10 @@ class Sage(PublisherParser):
         return self.soup.find("div", class_="authors")
 
     def parse_abstract(self):
-        if abs_header := self.soup.find(lambda tag: re.match('^h[1-6]$', tag.name) and tag.text.strip().lower() == 'abstract'):
-            if abs_tag := abs_header.find_next_sibling(lambda tag: len(tag.text) > 100):
+        if abs_header := self.soup.find(lambda tag: re.match('^h[1-6]$',
+                                                             tag.name) and tag.text.strip().lower() == 'abstract'):
+            if abs_tag := abs_header.find_next_sibling(
+                    lambda tag: len(tag.text) > 100):
                 return abs_tag.text.strip()
         selectors = ['section#abstract div', '.abstractInFull']
         for selector in selectors:
@@ -23,10 +25,33 @@ class Sage(PublisherParser):
 
         return None
 
-    def parse(self):
+    def parse_authors_1(self):
+        author_tags = self.soup.find_all(
+            'section.core-authors div[typeof=Person]')
+        authors = []
+        for author_tag in author_tags:
+            given_name = author_tag.select_one(
+                'h4 span[property=givenName]').text
+            family_name = author_tag.select_one(
+                'h4 span[property=familyName]').text
+            name = f'{given_name} {family_name}'
+            if hon_suffix_tag := author_tag.select_one(
+                    'h4 span[property=honorificSuffix]'):
+                hon_suffix = hon_suffix_tag.text
+                name += ', ' + hon_suffix
+            aff_tags = author_tag.select('[property=affiliation]')
+            affs = [aff_tag.text for aff_tag in aff_tags]
+            is_corresponding = bool(author_tag.select_one('a[property=email]'))
+            authors.append({'name': name, 'affiliations': affs,
+                            'is_corresponding': is_corresponding})
+        return authors
+
+    def parse_authors_2(self):
         results = []
-        author_section = self.soup.find("div", class_="authors")
-        author_soup = author_section.findAll("div", class_="authorLayer")
+        if author_section := self.soup.select_one('.authors'):
+            author_soup = author_section.findAll("div", class_="authorLayer")
+        else:
+            return results
         corresponding_text = self.get_corresponding_text()
         for author in author_soup:
             name = author.find("a", class_="entryAuthor").text.strip()
@@ -64,7 +89,11 @@ class Sage(PublisherParser):
                     "is_corresponding": is_corresponding,
                 }
             )
-        return {"authors": results, "abstract": self.parse_abstract()}
+        return results
+
+    def parse(self):
+        authors = self.parse_authors_1() or self.parse_authors_2()
+        return {"authors": authors, "abstract": self.parse_abstract()}
 
     def get_corresponding_text(self):
         article_notes = self.soup.find("div", class_="artice-notes")

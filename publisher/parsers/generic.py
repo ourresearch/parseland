@@ -12,9 +12,8 @@ class GenericPublisherParser(PublisherParser):
         return False
 
     def authors_found(self):
-        return self.parse() and (
-                self.parse().get("authors") or self.parse().get("abstract")
-        )
+        parsed = self.parse()
+        return parsed.get('authors') or parsed.get('abstract')
 
     def parse(self):
         if not self._parse_result:

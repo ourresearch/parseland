@@ -62,9 +62,11 @@ class PublisherParser(ABC):
                 corresponding_tag, corresponding_class
             )
 
+        author_meta_keys = {'citation_author', 'dc.Creator'}
+
         result = None
         for meta in metas:
-            if meta.get("name", None) and meta["name"] == "citation_author":
+            if 'name' in meta.attrs and meta['name'] in author_meta_keys:
                 if result:
                     # reset for next author
                     results.append(result)
@@ -207,7 +209,7 @@ class PublisherParser(ABC):
                 if 'abstract' in str(value).lower():
                     for desc in tag.descendants:
                         if len(desc.text) > 100:
-                            return desc.text
+                            return re.sub('^abstract', '', desc.text, flags=re.IGNORECASE)
         return ''
 
     test_cases = []
