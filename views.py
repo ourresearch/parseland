@@ -3,7 +3,7 @@ from flask import jsonify, request
 from app import app
 from exceptions import APIError
 from publisher.controller import PublisherController
-from publisher.utils import sanitize_message
+from publisher.utils import prep_message
 from repository.controller import RepositoryController
 
 
@@ -26,7 +26,7 @@ def parse_publisher():
 
     parsed_message = parser.parse()
 
-    message = sanitize_message(parsed_message, parser)
+    message = prep_message(parsed_message, parser)
     response = {
         "message": message,
         "metadata": {

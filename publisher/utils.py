@@ -6,7 +6,7 @@ def has_corresponding(message):
     return bool([author for author in authors if author['is_corresponding']])
 
 
-def sanitize_message(message, parser):
+def prep_message(message, parser):
     if isinstance(message, list):
         message = {'authors': message, 'abstract': None}
 
@@ -16,7 +16,10 @@ def sanitize_message(message, parser):
         message = parser.no_authors_output()
 
     if not has_corresponding(message):
-        message['authors'] = parser.try_mark_corresponding_authors(message['authors'])
+        message['authors'] = parser.fallback_mark_corresponding_authors(message['authors'])
+
+    if not message['abstract']:
+        message['abstract'] = parser.fallback_parse_abstract()
 
     message = alter_is_corresponding(message)
     message = sanitize_affiliations(message)

@@ -167,7 +167,7 @@ class PublisherParser(ABC):
                 aff_ids.append(int(aff_id))
         return aff_ids
 
-    def try_mark_corresponding_authors(self, authors):
+    def fallback_mark_corresponding_authors(self, authors):
         def func(tag):
             for attr, value in tag.attrs.items():
                 if ('author' in str(value).lower() and
@@ -200,5 +200,14 @@ class PublisherParser(ABC):
                             author['name'].split(',')]):
                         author['is_corresponding'] = True
         return authors
+
+    def fallback_parse_abstract(self):
+        for tag in self.soup.find_all():
+            for attr, value in tag.attrs.items():
+                if 'abstract' in str(value).lower():
+                    for desc in tag.descendants:
+                        if len(desc.text) > 100:
+                            return desc.text
+        return ''
 
     test_cases = []
