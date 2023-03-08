@@ -1,3 +1,5 @@
+import re
+
 from publisher.parsers.parser import PublisherParser
 
 
@@ -9,6 +11,17 @@ class Sage(PublisherParser):
 
     def authors_found(self):
         return self.soup.find("div", class_="authors")
+
+    def parse_abstract(self):
+        if abs_header := self.soup.find(lambda tag: re.match('^h[1-6]$', tag.name) and tag.text.strip().lower() == 'abstract'):
+            if abs_tag := abs_header.find_next_sibling(lambda tag: len(tag.text) > 100):
+                return abs_tag.text.strip()
+        selectors = ['section#abstract div', '.abstractInFull']
+        for selector in selectors:
+            if abs_tag := self.soup.select_one(selector):
+                return abs_tag.text.strip()
+
+        return None
 
     def parse(self):
         results = []
@@ -51,7 +64,7 @@ class Sage(PublisherParser):
                     "is_corresponding": is_corresponding,
                 }
             )
-        return results
+        return {"authors": results, "abstract": self.parse_abstract()}
 
     def get_corresponding_text(self):
         article_notes = self.soup.find("div", class_="artice-notes")
