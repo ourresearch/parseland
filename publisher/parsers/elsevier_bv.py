@@ -1,3 +1,5 @@
+import re
+
 from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
 
@@ -14,7 +16,23 @@ class ElsevierBV(PublisherParser):
         return bool(self.soup.findAll("li", class_="author"))
 
     def parse_abstract(self):
-        return '\n'.join([tag.text for tag in self.soup.select('div[class*=article__sections] div.section-paragraph')])
+
+        if abs_header := self.soup.find(lambda tag: re.match('^h[1-6]$', tag.name) and tag.text.lower().strip() == 'abstract'):
+            if abs_tag := abs_header.find_next_sibling('div', class_='section-paragraph'):
+                return abs_tag.text
+
+        abs_text = ''
+        for i, tag in enumerate(self.soup.select('div[class*=article__sections] div.section-paragraph')):
+            if tag.figure:
+                tag.figure.decompose()
+            if i != 0:
+                abs_text += '\n'
+            prev_sibling = tag.find_previous_sibling()
+            if re.match('^h[1-6]$', prev_sibling.name) and 'funding' in prev_sibling.text.lower():
+                break
+            abs_text += tag.text
+
+        return abs_text
 
     def parse(self):
         author_results = []

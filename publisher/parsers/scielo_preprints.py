@@ -44,7 +44,7 @@ class ScieloPreprints(PublisherParser):
                     )
                 )
 
-        return authors
+        return {"authors": authors, "abstract": None}
 
     test_cases = [
         {
