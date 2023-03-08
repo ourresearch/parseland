@@ -1,3 +1,5 @@
+import re
+
 from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
 
@@ -30,7 +32,7 @@ class Taylor(PublisherParser):
             affiliations = []
             affiliation = author.find("span", class_="overlay")
             if affiliation:
-                affiliation_trimmed = affiliation.contents[0].text
+                affiliation_trimmed = re.sub('^[a-z0-9] ', '', affiliation.contents[0].text)
                 affiliations.append(affiliation_trimmed)
             results.append(
                 AuthorAffiliations(
@@ -40,7 +42,7 @@ class Taylor(PublisherParser):
                 )
             )
         abstract_tag = self.soup.find('div', class_='abstractInFull')
-        abstract = abstract_tag.text.strip('ABSTRACT').strip('Abstract') if abstract_tag else None
+        abstract = re.sub('^Abstract', '', abstract_tag.text, flags=re.IGNORECASE) if abstract_tag else None
         return {"authors": results, "abstract": abstract}
 
     test_cases = [
