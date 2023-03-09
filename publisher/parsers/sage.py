@@ -11,7 +11,9 @@ class Sage(PublisherParser):
         return self.domain_in_meta_og_url("journals.sagepub.com")
 
     def authors_found(self):
-        return self.soup.find("div", class_="authors")
+        return any([self.soup.find("div", class_="authors"),
+                    self.soup.select('section.core-authors'),
+                    self.soup.select('div.author.name')])
 
     def parse_abstract(self):
         if abs_header := self.soup.find(lambda tag: re.match('^h[1-6]$',
@@ -44,16 +46,19 @@ class Sage(PublisherParser):
             affiliations = []
             is_corresponding = None
             name = a_tag.select_one('.entryAuthor').text.strip()
-            aff_sups = a_tag.find_all(lambda tag: tag.name == 'sup' and tag.text.strip().isnumeric())
+            aff_sups = a_tag.find_all(
+                lambda tag: tag.name == 'sup' and tag.text.strip().isnumeric())
             if len(author_tags) == 1:
                 affiliations.extend(affs)
             else:
                 for aff_sup in aff_sups:
                     affiliations.append(affs[int(aff_sup.text.strip()) - 1])
 
-            authors.append({'name': name, 'affiliations': affiliations, 'is_corresponding': is_corresponding})
+            authors.append({'name': name, 'affiliations': affiliations,
+                            'is_corresponding': is_corresponding})
 
-        corresponding_tags = self.soup.find_all(lambda tag: 'corresponding author' in tag.text.lower())
+        corresponding_tags = self.soup.find_all(
+            lambda tag: 'corresponding author' in tag.text.lower())
         corresponding_tags = remove_parents(corresponding_tags)
         corresponding_text = '\n'.join([tag.text for tag in corresponding_tags])
         if corresponding_text:
@@ -65,17 +70,17 @@ class Sage(PublisherParser):
         return authors
 
     def parse_authors_2(self):
-        author_tags = self.soup.find_all(
+        author_tags = self.soup.select(
             'section.core-authors div[typeof=Person]')
         authors = []
         for author_tag in author_tags:
             given_name = author_tag.select_one(
-                'h4 span[property=givenName]').text
+                'span[property=givenName]').text
             family_name = author_tag.select_one(
-                'h4 span[property=familyName]').text
+                'span[property=familyName]').text
             name = f'{given_name} {family_name}'
             if hon_suffix_tag := author_tag.select_one(
-                    'h4 span[property=honorificSuffix]'):
+                    'span[property=honorificSuffix]'):
                 hon_suffix = hon_suffix_tag.text
                 name += ', ' + hon_suffix
             aff_tags = author_tag.select('[property=affiliation]')
@@ -130,13 +135,14 @@ class Sage(PublisherParser):
         return results
 
     def parse(self):
-        authors = None
-        for i in range(1, 4):
-            parse_method_name = f'parse_authors_{i}'
-            result = self.__getattribute__(parse_method_name).__call__()
+        authors = []
+        for method in [self.parse_authors_1,
+                       self.parse_authors_2,
+                       self.parse_authors_3]:
+            result = method.__call__()
             if result and not authors:
                 authors = result
-            if any([author['affiliations'] for author in authors]):
+            if any([author['affiliations'] for author in result]):
                 authors = result
                 break
         return {"authors": authors, "abstract": self.parse_abstract()}
