@@ -60,6 +60,16 @@ class Lippincott(PublisherParser):
                     name = name.replace("∗", "").strip()
                     authors.append(Author(name=name, aff_ids=[]))
 
+        if not [author for author in authors if author.is_corresponding]:
+            if corresponding_text_tag := self.soup.find(lambda tag: tag.name == 'p' and 'correspondence' in tag.text.lower()):
+                for author in authors:
+                    if ',' in author.name:
+                        last_name = author.name.split(',')[0]
+                        if last_name in corresponding_text_tag.text:
+                            author.is_corresponding = True
+                    else:
+                        if author.name in corresponding_text_tag.text:
+                            author.is_corresponding = True
         return authors
 
     def get_affiliations(self):
