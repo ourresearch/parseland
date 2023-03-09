@@ -60,17 +60,20 @@ class Sage(PublisherParser):
             affiliations = []
             is_corresponding = None
             name = a_tag.select_one('.entryAuthor').text.strip()
-            if 'no-aff' in a_tag['class']:
-                aff_tags = []
-                for tag in a_tag.find_next_siblings():
-                    if 'artice-info-affiliation' not in tag.get('class', ''):
-                        break
-                    aff_tags.append(tag)
+            if a_tag.sup:
+                affiliations.extend(self._parse_sup_affiliations(a_tag))
             else:
-                aff_tags = a_tag.select('.artice-info-affiliation')
+                if 'no-aff' in a_tag['class']:
+                    aff_tags = []
+                    for tag in a_tag.find_next_siblings():
+                        if 'artice-info-affiliation' not in tag.get('class', ''):
+                            break
+                        aff_tags.append(tag)
+                else:
+                    aff_tags = a_tag.select('.artice-info-affiliation')
 
-            for aff in aff_tags:
-                affiliations.append(aff.text)
+                for aff in aff_tags:
+                    affiliations.append(aff.text)
 
             if not affiliations:
                 affiliations = self._parse_sup_affiliations(a_tag)

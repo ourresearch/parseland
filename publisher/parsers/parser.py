@@ -201,6 +201,6 @@ class PublisherParser(ABC):
                     for desc in tag.descendants:
                         if len(desc.text) > 100:
                             return re.sub('^abstract', '', desc.text, flags=re.IGNORECASE)
-        return ''
+        return None
 
     test_cases = []
