@@ -2,6 +2,7 @@ import re
 from abc import ABC, abstractmethod
 
 from publisher.elements import AuthorAffiliations
+from publisher.utils import remove_parents
 
 
 class PublisherParser(ABC):
@@ -180,17 +181,7 @@ class PublisherParser(ABC):
         tags = self.soup.find_all(func)
 
         # Return only smallest tags, we don't want any tags with class*= authors that may contain multiple author names
-        final_tags = []
-        for tag1 in tags:
-            is_parent = False
-            for tag2 in tags:
-                if tag1 == tag2:
-                    continue
-                tag1_children = list(tag1.children)
-                if tag2 in tag1_children:
-                    is_parent = True
-            if not is_parent:
-                final_tags.append(tag1)
+        final_tags = remove_parents(tags)
 
         for tag in final_tags:
             tag_str = str(tag)

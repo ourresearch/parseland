@@ -1,6 +1,7 @@
 import re
 
 from publisher.parsers.parser import PublisherParser
+from publisher.utils import remove_parents
 
 
 class Sage(PublisherParser):
@@ -25,7 +26,45 @@ class Sage(PublisherParser):
 
         return None
 
+    def _make_affiliations_list(self):
+        affs = []
+        aff_tags = self.soup.select('div.artice-info-affiliation')
+        for i, aff_tag in enumerate(aff_tags):
+            if aff_tag.sup:
+                aff_tag.sup.decompose()
+            name = aff_tag.text.strip()
+            affs.append(name)
+        return affs
+
     def parse_authors_1(self):
+        author_tags = self.soup.select('div.author.name .contribDegrees')
+        affs = self._make_affiliations_list()
+        authors = []
+        for a_tag in author_tags:
+            affiliations = []
+            is_corresponding = None
+            name = a_tag.select_one('.entryAuthor').text.strip()
+            aff_sups = a_tag.find_all(lambda tag: tag.name == 'sup' and tag.text.strip().isnumeric())
+            if len(author_tags) == 1:
+                affiliations.extend(affs)
+            else:
+                for aff_sup in aff_sups:
+                    affiliations.append(affs[int(aff_sup.text.strip()) - 1])
+
+            authors.append({'name': name, 'affiliations': affiliations, 'is_corresponding': is_corresponding})
+
+        corresponding_tags = self.soup.find_all(lambda tag: 'corresponding author' in tag.text.lower())
+        corresponding_tags = remove_parents(corresponding_tags)
+        corresponding_text = '\n'.join([tag.text for tag in corresponding_tags])
+        if corresponding_text:
+            for author in authors:
+                if author['name'] in corresponding_text:
+                    author['is_corresponding'] = True
+                else:
+                    author['is_corresponding'] = False
+        return authors
+
+    def parse_authors_2(self):
         author_tags = self.soup.find_all(
             'section.core-authors div[typeof=Person]')
         authors = []
@@ -46,7 +85,7 @@ class Sage(PublisherParser):
                             'is_corresponding': is_corresponding})
         return authors
 
-    def parse_authors_2(self):
+    def parse_authors_3(self):
         results = []
         if author_section := self.soup.select_one('.authors'):
             author_soup = author_section.findAll("div", class_="authorLayer")
@@ -55,11 +94,10 @@ class Sage(PublisherParser):
         corresponding_text = self.get_corresponding_text()
         for author in author_soup:
             name = author.find("a", class_="entryAuthor").text.strip()
-            name_lower = name.lower()
             if (
-                corresponding_text
-                and name_lower in corresponding_text
-                and "corresponding" in corresponding_text
+                    corresponding_text
+                    and name.lower() in corresponding_text
+                    and "corresponding" in corresponding_text
             ):
                 is_corresponding = True
             elif corresponding_text:
@@ -92,7 +130,15 @@ class Sage(PublisherParser):
         return results
 
     def parse(self):
-        authors = self.parse_authors_1() or self.parse_authors_2()
+        authors = None
+        for i in range(1, 4):
+            parse_method_name = f'parse_authors_{i}'
+            result = self.__getattribute__(parse_method_name).__call__()
+            if result and not authors:
+                authors = result
+            if any([author['affiliations'] for author in authors]):
+                authors = result
+                break
         return {"authors": authors, "abstract": self.parse_abstract()}
 
     def get_corresponding_text(self):
