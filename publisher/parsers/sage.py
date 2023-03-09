@@ -18,9 +18,9 @@ class Sage(PublisherParser):
     def parse_abstract(self):
         if abs_header := self.soup.find(lambda tag: re.match('^h[1-6]$',
                                                              tag.name) and tag.text.strip().lower() == 'abstract'):
-            if abs_tag := abs_header.find_next_sibling(
+            if abs_tags := abs_header.find_next_siblings(
                     lambda tag: len(tag.text) > 100):
-                return abs_tag.text.strip()
+                return '\n'.join([abs_tag.text.strip() for abs_tag in abs_tags])
         selectors = ['section#abstract div', '.abstractInFull']
         for selector in selectors:
             if abs_tag := self.soup.select_one(selector):
