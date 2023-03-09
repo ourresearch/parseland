@@ -38,21 +38,42 @@ class Sage(PublisherParser):
             affs.append(name)
         return affs
 
+    def _parse_sup_affiliations(self, author_tag):
+        affiliations = []
+        affs = self._make_affiliations_list()
+        aff_sups = author_tag.find_all(
+            lambda
+                tag: tag.name == 'sup' and tag.text.strip().isnumeric())
+        # if aff_sups:
+        #     if len(author_tags) == 1:
+        #         affiliations.extend(affs)
+        #     else:
+        for aff_sup in aff_sups:
+            affiliations.append(
+                affs[int(aff_sup.text.strip()) - 1])
+        return affiliations
+
     def parse_authors_1(self):
         author_tags = self.soup.select('div.author.name .contribDegrees')
-        affs = self._make_affiliations_list()
         authors = []
         for a_tag in author_tags:
             affiliations = []
             is_corresponding = None
             name = a_tag.select_one('.entryAuthor').text.strip()
-            aff_sups = a_tag.find_all(
-                lambda tag: tag.name == 'sup' and tag.text.strip().isnumeric())
-            if len(author_tags) == 1:
-                affiliations.extend(affs)
+            if 'no-aff' in a_tag['class']:
+                aff_tags = []
+                for tag in a_tag.find_next_siblings():
+                    if 'artice-info-affiliation' not in tag.get('class', ''):
+                        break
+                    aff_tags.append(tag)
             else:
-                for aff_sup in aff_sups:
-                    affiliations.append(affs[int(aff_sup.text.strip()) - 1])
+                aff_tags = a_tag.select('.artice-info-affiliation')
+
+            for aff in aff_tags:
+                affiliations.append(aff.text)
+
+            if not affiliations:
+                affiliations = self._parse_sup_affiliations(a_tag)
 
             authors.append({'name': name, 'affiliations': affiliations,
                             'is_corresponding': is_corresponding})
