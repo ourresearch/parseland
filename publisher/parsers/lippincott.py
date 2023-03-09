@@ -1,3 +1,5 @@
+import re
+
 from publisher.parsers.parser import PublisherParser
 from publisher.elements import Author, Affiliation
 
@@ -14,9 +16,13 @@ class Lippincott(PublisherParser):
     def parse(self):
         authors = self.get_authors()
         affiliations = self.get_affiliations()
-        authors_affiliations = self.merge_authors_affiliations(authors, affiliations)
-        abstract_tag = self.soup.select_one('section#ArticleBody')
-        abstract = abstract_tag.text if abstract_tag else None
+        authors_affiliations = self.merge_authors_affiliations(authors,
+                                                               affiliations)
+        abstract_tag = self.soup.select_one(
+            'section#abstractWrap') or self.soup.select_one(
+            'section#ArticleBody')
+        abstract = re.sub('^abstract', '', abstract_tag.text.strip(),
+                          flags=re.IGNORECASE).strip() if abstract_tag else None
         return {"authors": authors_affiliations, "abstract": abstract}
 
     def get_authors(self):
@@ -26,10 +32,14 @@ class Lippincott(PublisherParser):
 
         # authors with ids
         for author in author_soup:
+            is_corresponding = None
             # set name
             name = self.clean_name(author.previous_element)
             if ";" in name:
                 break
+
+            if '∗' in author.text or '*' in author.text:
+                is_corresponding = True
 
             # set aff_ids
             aff_ids = self.format_ids(author.text)
@@ -37,7 +47,8 @@ class Lippincott(PublisherParser):
             if not aff_ids and name.lower().startswith("editor"):
                 continue
 
-            authors.append(Author(name=name, aff_ids=aff_ids if aff_ids else []))
+            authors.append(Author(name=name, aff_ids=aff_ids if aff_ids else [],
+                                  is_corresponding=is_corresponding))
 
         # authors without ids
         if not authors and author_section.p:
@@ -52,7 +63,8 @@ class Lippincott(PublisherParser):
         return authors
 
     def get_affiliations(self):
-        aff_soup = self.soup.find("div", class_="ejp-article-authors-info-holder")
+        aff_soup = self.soup.find("div",
+                                  class_="ejp-article-authors-info-holder")
         if not aff_soup:
             return []
 
@@ -65,7 +77,8 @@ class Lippincott(PublisherParser):
 
             aff_id = aff.text
             organization = aff.next_element.next_element
-            results.append(Affiliation(aff_id=aff_id, organization=organization))
+            results.append(
+                Affiliation(aff_id=aff_id, organization=organization))
 
         # affiliation with no ids
         affiliations = aff_soup.findAll("p")
@@ -73,7 +86,8 @@ class Lippincott(PublisherParser):
             aff_html_id = aff.get("id")
             if aff_html_id.startswith("AF"):
                 organization = aff.text.strip()
-                results.append(Affiliation(aff_id=None, organization=organization))
+                results.append(
+                    Affiliation(aff_id=None, organization=organization))
         return results
 
     @staticmethod
