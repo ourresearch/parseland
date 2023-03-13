@@ -149,8 +149,9 @@ class ScienceDirect(PublisherParser):
                         }
                     )
         # first try parsing abstract text through html
-        abstract_tag = self.soup.select_one('div.abstract.author p')
-        abstract = abstract_tag.text if abstract_tag else ''
+        abstract = None
+        if abstract_tags := self.soup.select('div.abstract.author p'):
+            abstract = '\n'.join([tag.text for tag in abstract_tags])
         if not abstract:
             # try parsing through json
             abstracts_content = science_direct_json.get("abstracts", {}).get(
