@@ -45,16 +45,15 @@ class ElsevierBV(PublisherParser):
                 name = name_soup.text
             else:
                 continue
-            correspondence = author.find(
-                "span", class_="article-header__info__group__label"
-            )
-            if (
-                correspondence
-                and correspondence.text.lower().strip() == "correspondence"
-            ):
+            is_corresponding = False
+            if correspondence := author.find(
+                "span", class_="article-header__info__group__label"):
+                if correspondence.text.lower().strip() == 'correspondence':
+                    is_corresponding = True
+            if author.select_one('.icon-gizmo-person'):
                 is_corresponding = True
-            else:
-                is_corresponding = False
+            elif author.select_one('.article-header__info__email'):
+                is_corresponding = True
 
             affiliations = []
             # method 1
