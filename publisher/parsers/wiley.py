@@ -61,16 +61,18 @@ class Wiley(PublisherParser):
 
     def get_abstract(self):
 
-        abs_headings = self.soup.find_all(
-            lambda tag: re.match('^h[1-6]$', tag.name) and tag.text.lower().strip() == 'abstract'
-        )
-        for abstract_heading in abs_headings:
-            # if graphical abstract is the only abstract, then take it, otherwise try to find actual abstract
-            if any(['graphical' in cls for cls in abstract_heading['class']]) and len(abs_headings) > 1:
-                continue
-            if abstract_body := abstract_heading.find_next_sibling():
-                if abstract := abstract_body.text.strip():
-                    return abstract
+        if abs_headings := self.soup.find_all(
+            lambda tag: re.match('^h[1-6]$', tag.name) and (tag.text.lower().strip() == 'abstract' or tag.text.lower() == 'summary')
+        ):
+            for abstract_heading in abs_headings:
+                # if graphical abstract is the only abstract, then take it, otherwise try to find actual abstract
+                if any(['graphical' in cls for cls in abstract_heading['class']]) and len(abs_headings) > 1:
+                    continue
+                if abstract_body := abstract_heading.find_next_sibling():
+                    if abstract := abstract_body.text.strip() and len(abstract_body.text.strip()) > 100:
+                        return abstract
+        if paragraphs := self.soup.select('div.article__body p'):
+            return '\n'.join([p.text for p in paragraphs])
 
     test_cases = [
         {
