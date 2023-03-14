@@ -69,7 +69,7 @@ class Wiley(PublisherParser):
                 if any(['graphical' in cls for cls in abstract_heading['class']]) and len(abs_headings) > 1:
                     continue
                 if abstract_body := abstract_heading.find_next_sibling():
-                    if abstract := abstract_body.text.strip() and len(abstract_body.text.strip()) > 100:
+                    if (abstract := abstract_body.text.strip()) and len(abstract_body.text.strip()) > 100:
                         return abstract
         if paragraphs := self.soup.select('div.article__body p'):
             return '\n'.join([p.text for p in paragraphs])
