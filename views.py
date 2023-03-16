@@ -27,6 +27,9 @@ def parse_publisher():
     parsed_message = parser.parse()
 
     message = prep_message(parsed_message, parser)
+
+    if doi.startswith('http'):
+        doi = doi.split('doi.org/')[1]
     response = {
         "message": message,
         "metadata": {

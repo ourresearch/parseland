@@ -10,16 +10,21 @@ def prep_message(message, parser):
     if isinstance(message, list):
         message = {'authors': message, 'abstract': None}
 
-    message['authors'] = [asdict(author) if is_dataclass(author) else author for author in message['authors']]
+    message['authors'] = [asdict(author) if is_dataclass(author) else author for
+                          author in message['authors']]
 
     if not message['authors']:
         message = parser.no_authors_output()
 
     if not has_corresponding(message):
-        message['authors'] = parser.fallback_mark_corresponding_authors(message['authors'])
+        message['authors'] = parser.fallback_mark_corresponding_authors(
+            message['authors'])
 
     if not message['abstract']:
         message['abstract'] = parser.fallback_parse_abstract()
+
+    if 'abstract' in message and message['abstract']:
+        message['abstract'] = message['abstract'].strip(' \n')
 
     message = alter_is_corresponding(message)
     message = sanitize_affiliations(message)
