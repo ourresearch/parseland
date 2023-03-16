@@ -112,7 +112,7 @@ class PublisherParser(ABC):
                             meta_property_name: re.compile(f"^{meta_tag_name}$",
                                                            re.I)}
                 ):
-                    if description := meta_tag.get("content").strip():
+                    if description := meta_tag.get("content", '').strip():
                         if (
                                 len(description) > 200
                                 and not description.endswith("...")
@@ -199,7 +199,7 @@ class PublisherParser(ABC):
             for attr, value in tag.attrs.items():
                 if 'abstract' in str(value).lower():
                     for desc in tag.descendants:
-                        if len(desc.text) > 100:
+                        if len(desc.text) > 100 and desc.name in {'p', 'div', 'span', 'section', 'article'}:
                             return re.sub('^abstract', '', desc.text, flags=re.IGNORECASE)
         return None
 

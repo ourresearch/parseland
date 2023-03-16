@@ -8,7 +8,7 @@ class Lippincott(PublisherParser):
     parser_name = "lippincott"
 
     def is_publisher_specific_parser(self):
-        return self.domain_in_meta_og_url("journals.lww.com")
+        return self.domain_in_meta_og_url("journals.lww.com") or self.authors_found()
 
     def authors_found(self):
         return self.soup.find(id="ejp-article-authors")
@@ -19,13 +19,12 @@ class Lippincott(PublisherParser):
         authors_affiliations = self.merge_authors_affiliations(authors,
                                                                affiliations)
         abstract = None
-        abs_wrap = self.soup.select_one(
-            'section#abstractWrap')
-        if len(abs_wrap.text) > 100:
-            abstract = abs_wrap.text.strip()
-        else:
-            if abstract_tag := self.soup.select_one('section#ArticleBody'):
-                abstract = abstract_tag.text.strip()
+        if abs_wrap := self.soup.select_one(
+            'section#abstractWrap'):
+            if len(abs_wrap.text) > 100:
+                abstract = abs_wrap.text.strip()
+        elif abstract_tag := self.soup.select_one('section#ArticleBody'):
+            abstract = abstract_tag.text.strip()
         abstract = re.sub('^abstract', '', abstract,
                           flags=re.IGNORECASE).strip() if abstract else None
         return {"authors": authors_affiliations, "abstract": abstract}
