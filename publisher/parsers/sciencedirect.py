@@ -184,6 +184,8 @@ class ScienceDirect(PublisherParser):
         """Finds and loads json that contains affiliation data."""
         raw_json = self.soup.find("script", type="application/json").text
         loaded_json = json.loads(raw_json)
+        if isinstance(loaded_json, str):
+            loaded_json = json.loads(loaded_json)
         return loaded_json
 
     test_cases = [

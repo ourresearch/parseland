@@ -6,6 +6,11 @@ def has_corresponding(message):
     return bool([author for author in authors if author['is_corresponding']])
 
 
+def has_affiliations(message):
+    authors = message['authors']
+    return bool([author for author in authors if author['affiliations']])
+
+
 def prep_message(message, parser):
     if isinstance(message, list):
         message = {'authors': message, 'abstract': None}
@@ -85,3 +90,30 @@ def remove_parents(tags):
         if not is_parent:
             final_tags.append(tag1)
     return final_tags
+
+
+def merge_messages(publisher_msg, generic_msg):
+    publisher_has_cor = has_corresponding(publisher_msg)
+    generic_has_cor = has_corresponding(generic_msg)
+
+    publisher_has_aff = has_affiliations(publisher_msg)
+    generic_has_aff = has_affiliations(generic_msg)
+
+    publisher_has_abs = bool(publisher_msg.get('abstract'))
+    generic_has_abs = bool(publisher_msg.get('abstract'))
+
+    if len(generic_msg['authors']) >= len(publisher_msg['authors']) and ((not publisher_has_cor and generic_has_cor) or (not publisher_has_aff and generic_has_aff)):
+        publisher_msg['authors'] = generic_msg['authors']
+
+    if not publisher_msg['authors'] and generic_msg['authors']:
+        publisher_msg['authors'] = generic_msg['authors']
+
+    if not publisher_has_abs and generic_has_abs:
+        publisher_msg['abstract'] = generic_msg['abstract']
+
+    return publisher_msg
+
+
+
+
+
