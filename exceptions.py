@@ -23,3 +23,9 @@ class S3FileNotFoundError(APIError):
 
     code = 404
     description = "Source file not found on S3. Nothing to parse."
+
+
+class BadLandingPageError(APIError):
+
+    code = 400
+    description = "Bad landing page contents. No data available to parse."

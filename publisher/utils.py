@@ -102,7 +102,9 @@ def merge_messages(publisher_msg, generic_msg):
     publisher_has_abs = bool(publisher_msg.get('abstract'))
     generic_has_abs = bool(publisher_msg.get('abstract'))
 
-    if len(generic_msg['authors']) >= len(publisher_msg['authors']) and ((not publisher_has_cor and generic_has_cor) or (not publisher_has_aff and generic_has_aff)):
+    if len(generic_msg['authors']) >= len(publisher_msg['authors']) and (
+            (not publisher_has_cor and generic_has_cor) or (
+            not publisher_has_aff and generic_has_aff)):
         publisher_msg['authors'] = generic_msg['authors']
 
     if not publisher_msg['authors'] and generic_msg['authors']:
@@ -114,6 +116,9 @@ def merge_messages(publisher_msg, generic_msg):
     return publisher_msg
 
 
-
-
-
+def check_bad_landing_page(soup):
+    s = str(soup)
+    if not soup.title:
+        return True
+    return any(['Redirecting' in soup.title.text,
+                ])

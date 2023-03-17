@@ -1,9 +1,9 @@
 from flask import jsonify, request
 
 from app import app
-from exceptions import APIError
+from exceptions import APIError, BadLandingPageError
 from publisher.controller import PublisherController
-from publisher.utils import prep_message
+from publisher.utils import prep_message, check_bad_landing_page
 from repository.controller import RepositoryController
 
 
@@ -22,6 +22,8 @@ def home():
 def parse_publisher():
     doi = request.args.get("doi")
     pc = PublisherController(doi)
+    if check_bad_landing_page(pc.soup):
+        raise BadLandingPageError()
     parser = pc.find_parser()
 
     parsed_message = parser.parse()
