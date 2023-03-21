@@ -31,7 +31,7 @@ class Wiley(PublisherParser):
             is_corresponding = False
 
             author_type = author.find("p", class_="author-type")
-            if author_type and "corresponding" in author_type.text.lower():
+            if author_type and "corresponding" in author_type.text.lower() or author.select_one('a[href*=mailto]'):
                 is_corresponding = True
 
             for aff in aff_soup:
