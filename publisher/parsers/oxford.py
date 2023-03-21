@@ -24,36 +24,37 @@ class Oxford(PublisherParser):
 
     def parse(self):
         results = []
-        author_soup = self.soup.find("div", class_="at-ArticleAuthors")
-        authors = author_soup.findAll("div", class_="info-card-author")
+        if author_soup := self.soup.find("div", class_="at-ArticleAuthors"):
+            authors = author_soup.findAll("div", class_="info-card-author")
 
-        for author in authors:
-            name = author.find("div", class_="info-card-name").text.strip()
+            for author in authors:
+                name = author.find("div", class_="info-card-name").text.strip()
 
-            is_corresponding = (
-                True
-                if author.find("div", class_="info-author-correspondence")
-                else False
-            )
-
-            affiliations = []
-            affiliation_section = author.find("div",
-                                              class_="info-card-affilitation")
-            if affiliation_section:
-                affiliations_soup = affiliation_section.findAll("div",
-                                                                class_="aff")
-                for aff in affiliations_soup:
-                    affiliations.append(aff.text)
-
-            results.append(
-                AuthorAffiliations(
-                    name=name,
-                    affiliations=affiliations,
-                    is_corresponding=is_corresponding,
+                is_corresponding = (
+                    True
+                    if author.find("div", class_="info-author-correspondence")
+                    else False
                 )
-            )
+
+                affiliations = []
+                affiliation_section = author.find("div",
+                                                  class_="info-card-affilitation")
+                if affiliation_section:
+                    affiliations_soup = affiliation_section.findAll("div",
+                                                                    class_="aff")
+                    for aff in affiliations_soup:
+                        affiliations.append(aff.text)
+
+                results.append(
+                    AuthorAffiliations(
+                        name=name,
+                        affiliations=affiliations,
+                        is_corresponding=is_corresponding,
+                    )
+                )
         abstract = '\n'.join([tag.text for tag in self.soup.select('section.abstract p')])
         return {"authors": results, "abstract": abstract}
+
 
     test_cases = [
         {
