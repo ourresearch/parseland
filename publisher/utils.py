@@ -11,6 +11,18 @@ def has_affiliations(message):
     return bool([author for author in authors if author['affiliations']])
 
 
+def strip_message_strs(message):
+    if isinstance(message, list):
+        for i in range(len(message)):
+            message[i] = strip_message_strs(message[i])
+    if isinstance(message, dict):
+        for k in message.keys():
+            message[k] = strip_message_strs(message[k])
+    if isinstance(message, str):
+        return message.strip('\n ')
+    return message
+
+
 def prep_message(message, parser):
     if isinstance(message, list):
         message = {'authors': message, 'abstract': None}
@@ -33,6 +45,7 @@ def prep_message(message, parser):
 
     message = alter_is_corresponding(message)
     message = sanitize_affiliations(message)
+    message = strip_message_strs(message)
     return message
 
 
