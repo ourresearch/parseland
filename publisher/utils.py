@@ -3,7 +3,7 @@ from dataclasses import asdict, is_dataclass
 
 def has_corresponding(message):
     authors = message['authors']
-    return bool([author for author in authors if author['is_corresponding']])
+    return bool([author for author in authors if author['is_corresponding'] is not None])
 
 
 def has_affiliations(message):
@@ -53,6 +53,10 @@ def alter_is_corresponding(message):
     """If all is_corresponding are False, change them to None."""
     authors = message['authors']
 
+    if len(authors) == 1:
+        authors[0]['is_corresponding'] = True
+        return message
+
     is_corresponding_list = [
         author["is_corresponding"]
         for author in authors
@@ -67,10 +71,6 @@ def alter_is_corresponding(message):
         for i, val in enumerate(authors):
             if val['is_corresponding'] is None:
                 authors[i]["is_corresponding"] = False
-    if 'authors' in message:
-        message['authors'] = authors
-    else:
-        message = authors
 
     return message
 
@@ -134,4 +134,5 @@ def check_bad_landing_page(soup):
     if not soup.title:
         return True
     return any(['Redirecting' in soup.title.text,
+                'Just a moment' in soup.title.text
                 ])
