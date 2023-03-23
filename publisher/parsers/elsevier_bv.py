@@ -2,6 +2,7 @@ import re
 
 from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
+from publisher.parsers.utils import is_h_tag
 
 
 class ElsevierBV(PublisherParser):
@@ -17,7 +18,7 @@ class ElsevierBV(PublisherParser):
 
     def parse_abstract(self):
 
-        if abs_header := self.soup.find(lambda tag: re.match('^h[1-6]$', tag.name) and tag.text.lower().strip() == 'abstract'):
+        if abs_header := self.soup.find(lambda tag: is_h_tag(tag) and tag.text.lower().strip() == 'abstract'):
             if abs_tag := abs_header.find_next_sibling('div', class_='section-paragraph'):
                 return abs_tag.text
 
@@ -28,10 +29,10 @@ class ElsevierBV(PublisherParser):
             if i != 0:
                 abs_text += '\n'
             prev_sibling = tag.find_previous_sibling()
-            if prev_sibling and re.match('^h[1-6]$', prev_sibling.name) and 'funding' in prev_sibling.text.lower():
+            if prev_sibling and is_h_tag(prev_sibling) and 'funding' in prev_sibling.text.lower():
                 break
             abs_text += tag.text
-            if prev_sibling and re.match('^h[1-6]$', prev_sibling.name) and 'conclusion' in prev_sibling.text.lower():
+            if prev_sibling and is_h_tag(prev_sibling) and 'conclusion' in prev_sibling.text.lower():
                 break
 
         return abs_text

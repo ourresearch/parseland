@@ -1,7 +1,7 @@
 import re
 
 from publisher.parsers.parser import PublisherParser
-from publisher.utils import remove_parents
+from publisher.parsers.utils import is_h_tag, remove_parents
 
 
 class Sage(PublisherParser):
@@ -16,8 +16,7 @@ class Sage(PublisherParser):
                     self.soup.select('div.author.name')])
 
     def parse_abstract(self):
-        if abs_header := self.soup.find(lambda tag: re.match('^h[1-6]$',
-                                                             tag.name) and tag.text.strip().lower() == 'abstract'):
+        if abs_header := self.soup.find(lambda tag: is_h_tag(tag) and tag.text.strip().lower() == 'abstract'):
             if abs_tags := abs_header.find_next_siblings(
                     lambda tag: len(tag.text) > 100):
                 return '\n'.join([abs_tag.text.strip() for abs_tag in abs_tags])

@@ -2,7 +2,7 @@ import re
 from abc import ABC, abstractmethod
 
 from publisher.elements import AuthorAffiliations
-from publisher.utils import remove_parents
+from publisher.parsers.utils import remove_parents
 
 
 class PublisherParser(ABC):

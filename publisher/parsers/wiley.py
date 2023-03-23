@@ -3,6 +3,7 @@ from unicodedata import normalize
 
 from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
+from publisher.parsers.utils import is_h_tag
 
 
 class Wiley(PublisherParser):
@@ -62,7 +63,7 @@ class Wiley(PublisherParser):
     def get_abstract(self):
 
         if abs_headings := self.soup.find_all(
-            lambda tag: re.match('^h[1-6]$', tag.name) and (tag.text.lower().strip() == 'abstract' or tag.text.lower() == 'summary')
+            lambda tag: is_h_tag(tag) and (tag.text.lower().strip() == 'abstract' or tag.text.lower() == 'summary')
         ):
             for abstract_heading in abs_headings:
                 # if graphical abstract is the only abstract, then take it, otherwise try to find actual abstract
