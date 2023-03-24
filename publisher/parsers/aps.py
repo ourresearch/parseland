@@ -5,14 +5,28 @@ class APS(PublisherParser):
     parser_name = "aps"
 
     def is_publisher_specific_parser(self):
-        return self.domain_in_meta_og_url("journals.aps.org")
+        return self.domain_in_meta_og_url("journals.aps.org") or self.domain_in_meta_og_url('journals.physiology.org')
 
     def authors_found(self):
-        return self.soup.find("meta", {"name": "citation_author"})
+        return bool(self.soup.select('ul[title="list of authors"]'))
+
+    def parse_authors(self):
+        authors = []
+        author_tags = self.soup.select(
+            'ul[title="list of authors"] + div [class*=accordion-tabbed__tab]')
+        for author_tag in author_tags:
+            name = author_tag.select_one('a.author-name').text
+            is_corresponding = bool(author_tag.select('i.icon-Email'))
+            affs_tag = author_tag.select_one('.author-info')
+            affs_tag.select_one('.bottom-info').decompose()
+            affiliations = [tag.text for tag in affs_tag.find_all('p') if len(tag.text) > 3]
+            authors.append({'name': name, 'affiliations': affiliations,
+                            'is_corresponding': is_corresponding})
+        return authors
 
     def parse(self):
         return {
-            "authors": self.parse_meta_tags(),
+            "authors": self.parse_authors(),
             "abstract": self.parse_abstract_meta_tags(),
         }
 
