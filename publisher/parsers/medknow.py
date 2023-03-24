@@ -31,7 +31,7 @@ class MedKnow(PublisherParser):
 
         abstract = self.parse_abstract_meta_tags()
         try:
-            abstract = BeautifulSoup(abstract, "html.parser").text
+            abstract = BeautifulSoup(abstract, "lxml").text
             abstract = re.sub(r"^abstract[:.]?\s*", "", abstract, flags=re.I)
         except Exception:
             pass

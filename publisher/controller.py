@@ -1,4 +1,5 @@
 from gzip import decompress
+from pathlib import Path
 
 import requests
 from bs4 import BeautifulSoup
@@ -23,7 +24,7 @@ class PublisherController:
         return html
 
     def get_soup(self):
-        soup = BeautifulSoup(self.get_html(), "html.parser")
+        soup = BeautifulSoup(self.get_html(), "lxml")
         return soup
 
     def find_parser(self):

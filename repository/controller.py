@@ -24,7 +24,7 @@ class RepositoryController:
         return html
 
     def get_soup(self):
-        soup = BeautifulSoup(self.get_html(), "html.parser")
+        soup = BeautifulSoup(self.get_html(), "lxml")
         return soup
 
     def find_parser(self):
