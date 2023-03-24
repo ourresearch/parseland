@@ -111,7 +111,7 @@ class Springer(PublisherParser):
                         isinstance(json_affiliations, dict)
                         and "name" in json_affiliations
                     ):
-                        affiliations = [json_affiliations["name"]]
+                        affiliations = [json_affiliations.get('address', {}).get('name') or json_affiliations['name']]
                     elif isinstance(json_affiliations, list):
                         for json_affiliation in json_affiliations:
                             if (
@@ -124,7 +124,7 @@ class Springer(PublisherParser):
                                 and "name" in json_affiliation
                             ):
                                 if json_affiliation["name"] not in affiliations:
-                                    affiliations.append(json_affiliation["name"])
+                                    affiliations.append(json_affiliation.get('address', {}).get('name') or json_affiliation['name'])
 
                     authors.append(
                         AuthorAffiliations(
