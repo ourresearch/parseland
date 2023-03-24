@@ -109,7 +109,7 @@ class MedKnow(PublisherParser):
         corresponding_soup = self.soup.find(html_tag, class_=class_name)
         if corresponding_soup:
             text = corresponding_soup.text
-            text = text.replace("  ", " ").lower()
+            text = re.sub(' +', ' ', text).lower()
         return text
 
     test_cases = [
