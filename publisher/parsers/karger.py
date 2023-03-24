@@ -1,5 +1,7 @@
 import re
 
+from bs4 import NavigableString
+
 from publisher.parsers.parser import PublisherParser
 from publisher.parsers.utils import is_h_tag
 
@@ -31,23 +33,22 @@ class Karger(PublisherParser):
         affiliations = self.parse_affiliations()
         current_author = None
         authors = []
-        authors_size = 0
         for child in authors_tag.children:
-            if len(child.text) < 2:
-                continue
+            if isinstance(child, NavigableString):
+                if child.text.strip():
+                    current_author = {'name': child.text.strip(), 'affiliations': [],
+                                      'is_corresponding': None}
+                else:
+                    continue
             elif child.name == 'sup':
                 affs = child.text.split(',')
                 for aff in affs:
                     if affiliations and aff in affiliations:
                         current_author['affiliations'].append(affiliations.get(aff))
                 authors.append(current_author)
-                authors_size += 1
                 current_author = None
-            else:
+            elif current_author is None:
                 current_author = {'name': child.text, 'affiliations': [], 'is_corresponding': None}
-            if authors_size == len(authors):
-                authors.append(current_author)
-                authors_size += 1
         return authors
 
     def parse_abstract(self):
