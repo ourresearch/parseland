@@ -1,4 +1,7 @@
+import re
+
 from publisher.parsers.parser import PublisherParser
+from publisher.parsers.utils import is_h_tag
 
 
 class RSC(PublisherParser):
@@ -8,10 +11,48 @@ class RSC(PublisherParser):
         return self.domain_in_meta_og_url("pubs.rsc.org")
 
     def authors_found(self):
-        return self.soup.find("meta", {"name": "citation_author"})
+        return bool(self.soup.select('.article__author-link'))
+
+    def parse_affiliations(self):
+        aff_tags = self.soup.select('.article__author-affiliation')
+        affs = {}
+        for aff_tag in aff_tags:
+            if 'Corresponding authors' in aff_tag.text:
+                continue
+            sup = aff_tag.find('sup')
+            sup_letter = sup.text.strip('\n\r ')
+            sup.decompose()
+            affs[sup_letter] = next(aff_tag.find(
+                lambda tag: bool(tag.text.strip())).children).text.strip(
+                '\n\r ')
+        return affs
+
+    @staticmethod
+    def flatten(l):
+        return [item for sublist in l for item in sublist]
+
+    def parse_authors(self):
+        affs = self.parse_affiliations()
+        author_tags = self.soup.select('.article__author-link')
+        authors = []
+        for author_tag in author_tags:
+            name = re.sub('[\n\r]', ' ', author_tag.find('a').text)
+            name = re.sub(' +', ' ', name)
+            author = {'name': name, 'affiliations': [],
+                      'is_corresponding': '*' in author_tag.text}
+            sups = author_tag.find_all('sup')
+            sups = self.flatten([sup.text.split(',') for sup in sups])
+            for letter in sups:
+                author['affiliations'].append(affs[letter])
+            authors.append(author)
+        return authors
+
+    def parse_abstract(self):
+        if abs_tag := self.soup.select_one('.article-abstract__heading + div p'):
+            return abs_tag.text
 
     def parse(self):
-        return self.parse_meta_tags()
+        return {'authors': self.parse_authors(), 'abstract': self.parse_abstract()}
 
     test_cases = [
         {
