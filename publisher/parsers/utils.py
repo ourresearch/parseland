@@ -1,6 +1,14 @@
 import re
 
 
+def strip_prefix(prefix, string):
+    return re.sub(f'^{prefix}', '', string)
+
+
+def strip_suffix(suffix, string):
+    return re.sub(f'{suffix}$', '', string)
+
+
 def is_h_tag(tag):
     return re.match('^h[1-6]$', tag.name)
 

@@ -1,12 +1,13 @@
 import re
 
 from publisher.parsers.parser import PublisherParser
+from publisher.parsers.utils import strip_prefix
 
 
 class UniversityOfCalifornia(PublisherParser):
     parser_name = 'university_of_california_press'
 
-    AFF_PATTERN = re.compile(r'at ([a-zA-Z\d, ]+)')
+    AFF_PATTERN = re.compile(r'at ([a-zA-Z\d, \.]+)')
 
     def is_publisher_specific_parser(self):
         return self.text_in_meta_og_site_name('University of California Press')
@@ -26,7 +27,7 @@ class UniversityOfCalifornia(PublisherParser):
                     info_tag.select('a[href*="mailto"]'))
                 affs = self.__class__.AFF_PATTERN.findall(
                     info_tag.text)
-                affs = [aff.strip('the ') for aff in affs]
+                affs = [strip_prefix('the ', aff) for aff in affs]
                 author['affiliations'] = affs
             authors.append(author)
         return authors
