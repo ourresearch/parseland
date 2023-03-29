@@ -4,6 +4,9 @@ from publisher.parsers.parser import PublisherParser
 class Duke(PublisherParser):
     parser_name = 'duke'
 
+    def authors_found(self):
+        return False
+
     def parse(self):
         return self.parse_meta_tags()
 
