@@ -40,14 +40,14 @@ class PublisherParser(ABC):
         )
 
     def domain_in_meta_og_url(self, domain):
-        meta_og_url = self.soup.find("meta", property="og:url")
+        meta_og_url = self.soup.find("meta", property="og:url") or self.soup.select_one('meta[name="og:url"]')
         return (meta_og_url
                 and meta_og_url.get("content")
                 and domain in meta_og_url.get("content")
                 )
 
     def text_in_meta_og_site_name(self, txt):
-        meta_og_site_name = self.soup.find('meta', property='og:site_name')
+        meta_og_site_name = self.soup.find('meta', property='og:site_name') or self.soup.select_one('meta[name="og:site_name"]')
         return (meta_og_site_name
                 and meta_og_site_name.get("content")
                 and txt in meta_og_site_name.get("content")
@@ -195,12 +195,17 @@ class PublisherParser(ABC):
         return authors
 
     def fallback_parse_abstract(self):
+        blacklisted_words = {'download options', 'please wait', 'copyright clearance center', 'procite', 'food funct', 'rsc publication'}
+        startswith_blacklist = {'download'}
         for tag in self.soup.find_all():
             for attr, value in tag.attrs.items():
-                if 'abstract' in str(value).lower():
+                if 'abstract' in str(value).lower() or tag.text.lower() == 'abstract':
                     for desc in tag.descendants:
-                        if len(desc.text) > 100 and desc.name in {'p', 'div', 'span', 'section', 'article'}:
-                            return re.sub('^abstract', '', desc.text, flags=re.IGNORECASE)
+                        abs_txt = re.sub('^abstract', '', desc.text, flags=re.IGNORECASE).strip('\r\n ')
+                        if len(desc.text) > 100 and desc.name in {'p', 'div', 'span', 'section', 'article'} \
+                                and not any([abs_txt.lower().startswith(word) for word in startswith_blacklist]) \
+                                and not any([word in abs_txt.lower() for word in blacklisted_words]):
+                            return abs_txt
         return None
 
     test_cases = []
