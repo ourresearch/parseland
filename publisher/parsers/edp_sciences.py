@@ -14,10 +14,22 @@ class EDPSciences(PublisherParser):
         return False
 
     def authors_found(self):
-        return self.soup.find("meta", {"name": "citation_author"})
+        return self.soup.find("meta", {"name": "citation_author"}) and self.soup.select('.article-authors')
+
+    def parse_abstract(self):
+        if abs_heading := self.soup.select_one("a[name='abs']"):
+            return abs_heading.parent.find_next_sibling('p').text
 
     def parse(self):
-        return self.parse_meta_tags()
+        authors = self.parse_meta_tags()
+        author_tags = self.soup.select('.article-authors span')
+        for tag in author_tags:
+            name = tag.text.strip()
+            if tag.next_sibling and '*' in tag.next_sibling.text:
+                for author in authors:
+                    if author['name'] == name:
+                        author['is_corresponding'] = True
+        return {'authors': authors, 'abstract': self.parse_abstract()}
 
     test_cases = [
         {
