@@ -3,7 +3,7 @@ from publisher.parsers.parser import PublisherParser
 
 
 class AOM(PublisherParser):
-    parser_name = "academy of management"
+    parser_name = "academy_of_management"
 
     def is_publisher_specific_parser(self):
         return self.domain_in_meta_og_url("aom.org")
