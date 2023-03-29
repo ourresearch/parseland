@@ -6,9 +6,7 @@ class JSME(PublisherParser):
     parser_name = "japan_society_of_mechanical_engineers"
 
     def is_publisher_specific_parser(self):
-        if journal_tag := self.soup.select_one('meta[name="journal_code"]'):
-            return 'jsme' in journal_tag['content']
-        return False
+        return self.domain_in_meta_og_url('www.jstage')
 
     def authors_found(self):
         return bool(self.soup.select('.global-authors-name-tags a'))
