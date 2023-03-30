@@ -121,5 +121,6 @@ def check_bad_landing_page(soup):
     if not soup.title:
         return True
     return any(['Redirecting' in soup.title.text,
-                'Just a moment' in soup.title.text
+                'Just a moment' in soup.title.text,
+                soup.title.text.strip().startswith('Login |'),
                 ])
