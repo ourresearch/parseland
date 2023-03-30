@@ -2,7 +2,7 @@ import re
 from abc import ABC, abstractmethod
 
 from publisher.elements import AuthorAffiliations
-from publisher.parsers.utils import remove_parents
+from publisher.parsers.utils import remove_parents, strip_seq, strip_prefix
 
 
 class PublisherParser(ABC):
@@ -201,7 +201,7 @@ class PublisherParser(ABC):
             for attr, value in tag.attrs.items():
                 if 'abstract' in str(value).lower() or tag.text.lower() == 'abstract':
                     for desc in tag.descendants:
-                        abs_txt = re.sub('^abstract', '', desc.text, flags=re.IGNORECASE).strip('\r\n ')
+                        abs_txt = strip_seq('\s', strip_prefix('abstract', desc.text, flags=re.IGNORECASE))
                         if len(desc.text) > 100 and desc.name in {'p', 'div', 'span', 'section', 'article'} \
                                 and not any([abs_txt.lower().startswith(word) for word in startswith_blacklist]) \
                                 and not any([word in abs_txt.lower() for word in blacklisted_words]):

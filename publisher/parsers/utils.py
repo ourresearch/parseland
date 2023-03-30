@@ -1,12 +1,16 @@
 import re
 
 
-def strip_prefix(prefix, string):
-    return re.sub(f'^{prefix}', '', string)
+def strip_prefix(prefix, string, flags=0):
+    return re.sub(f'^{prefix}', '', string, flags=flags)
 
 
-def strip_suffix(suffix, string):
-    return re.sub(f'{suffix}$', '', string)
+def strip_suffix(suffix, string, flags=0):
+    return re.sub(f'{suffix}$', '', string, flags=flags)
+
+
+def strip_seq(seq, string, flags=0):
+    return strip_prefix(seq, strip_suffix(seq, string, flags=flags), flags=flags)
 
 
 def is_h_tag(tag):
