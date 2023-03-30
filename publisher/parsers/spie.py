@@ -32,16 +32,14 @@ class SPIE(PublisherParser):
 
         author_soup = author_soup.b.findAll("sup")
         for author in author_soup:
-            name = str(author.previous_sibling).strip()
-            if name.endswith(","):
-                name = name[:-1]
+            name = str(author.previous_sibling).strip(' ,')
             aff_ids_raw = author.text
             aff_ids = []
             for aff_id_raw in aff_ids_raw:
                 aff_id = aff_id_raw.strip()
                 if aff_id:
                     aff_ids.append(aff_id)
-            authors.append(Author(name=name, aff_ids=aff_ids))
+            authors.append(Author(name=name, aff_ids=aff_ids, is_corresponding='*' in aff_ids_raw))
         return authors
 
     def get_affiliations(self):
