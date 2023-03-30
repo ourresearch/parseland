@@ -120,6 +120,9 @@ def check_bad_landing_page(soup):
     s = str(soup)
     if not soup.title:
         return True
+    elif canonical := soup.select_one('link[rel=canonical]'):
+        if 'cookieAbsent' in canonical['href']:
+            return True
     return any(['Redirecting' in soup.title.text,
                 'Just a moment' in soup.title.text,
                 soup.title.text.strip().startswith('Login |'),
