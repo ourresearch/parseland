@@ -3,7 +3,7 @@ from publisher.parsers.parser import PublisherParser
 
 
 class SPIE(PublisherParser):
-    parser_name = "SPIE"
+    parser_name = "spie"
 
     def is_publisher_specific_parser(self):
         link = self.soup.find("a", class_="logo")
