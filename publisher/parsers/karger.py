@@ -35,7 +35,7 @@ class Karger(PublisherParser):
         authors = []
         for child in authors_tag.children:
             if isinstance(child, NavigableString):
-                if child.text.strip():
+                if len(child.text.strip()) >= 2:
                     current_author = {'name': child.text.strip(), 'affiliations': [],
                                       'is_corresponding': None}
                 else:
@@ -47,8 +47,8 @@ class Karger(PublisherParser):
                         current_author['affiliations'].append(affiliations.get(aff))
                 authors.append(current_author)
                 current_author = None
-            elif current_author is None:
-                current_author = {'name': child.text, 'affiliations': [], 'is_corresponding': None}
+            elif current_author is None and len(child.text.strip()) >= 2:
+                current_author = {'name': child.text.strip(), 'affiliations': [], 'is_corresponding': None}
         return authors
 
     def parse_abstract(self):
