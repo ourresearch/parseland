@@ -2,7 +2,8 @@ import re
 from abc import ABC, abstractmethod
 
 from publisher.elements import AuthorAffiliations
-from publisher.parsers.utils import remove_parents, strip_seq, strip_prefix
+from publisher.parsers.utils import remove_parents, strip_seq, strip_prefix, \
+    is_h_tag
 
 
 class PublisherParser(ABC):
@@ -53,7 +54,7 @@ class PublisherParser(ABC):
                 and txt in meta_og_site_name.get("content")
                 )
 
-    def parse_meta_tags(self, corresponding_tag=None, corresponding_class=None):
+    def parse_author_meta_tags(self, corresponding_tag=None, corresponding_class=None):
         results = []
         metas = self.soup.findAll("meta")
 
@@ -199,7 +200,7 @@ class PublisherParser(ABC):
         startswith_blacklist = {'download'}
         for tag in self.soup.find_all():
             for attr, value in tag.attrs.items():
-                if 'abstract' in str(value).lower() or tag.text.lower() == 'abstract':
+                if 'abstract' in str(value).lower() or (tag.text.lower() == 'abstract' and is_h_tag(tag)):
                     for desc in tag.descendants:
                         abs_txt = strip_seq('\s', strip_prefix('abstract', desc.text, flags=re.IGNORECASE))
                         if len(desc.text) > 100 and desc.name in {'p', 'div', 'span', 'section', 'article'} \

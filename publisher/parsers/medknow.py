@@ -25,7 +25,7 @@ class MedKnow(PublisherParser):
             )
         else:
             # try meta tags
-            authors_affiliations = self.parse_meta_tags(
+            authors_affiliations = self.parse_author_meta_tags(
                 corresponding_tag="font", corresponding_class="CorrsAdd"
             )
 

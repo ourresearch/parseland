@@ -17,7 +17,7 @@ class EgyptianKnowledgeBank(PublisherParser):
         return self.soup.find("meta", {"name": "citation_author"})
 
     def parse(self):
-        return self.parse_meta_tags()
+        return self.parse_author_meta_tags()
 
     test_cases = [
         {

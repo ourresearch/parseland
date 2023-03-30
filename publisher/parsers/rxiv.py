@@ -19,7 +19,7 @@ class RXIV(PublisherParser):
         results = self.get_authors_method_1()
         if not results:
             # about 25% of rxiv files do not have affiliations in html, only in meta tags
-            results = self.parse_meta_tags()
+            results = self.parse_author_meta_tags()
         return results
 
     def get_authors_method_1(self):

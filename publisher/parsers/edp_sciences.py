@@ -21,7 +21,7 @@ class EDPSciences(PublisherParser):
             return abs_heading.parent.find_next_sibling('p').text
 
     def parse(self):
-        authors = self.parse_meta_tags()
+        authors = self.parse_author_meta_tags()
         author_tags = self.soup.select('.article-authors span')
         for tag in author_tags:
             name = tag.text.strip()

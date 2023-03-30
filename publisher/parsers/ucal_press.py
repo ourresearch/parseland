@@ -53,7 +53,7 @@ class UniversityOfCalifornia(PublisherParser):
         return None
 
     def parse(self):
-        meta_authors = self.parse_meta_tags()
+        meta_authors = self.parse_author_meta_tags()
         body_authors = self.parse_authors()
         for b_author in body_authors:
             if b_author['is_corresponding']:
@@ -61,5 +61,5 @@ class UniversityOfCalifornia(PublisherParser):
                     split = author['name'].split(',')
                     if all([part in b_author['name'] for part in split]):
                         author['is_corresponding'] = True
-        return {'authors': self.parse_meta_tags(),
+        return {'authors': self.parse_author_meta_tags(),
                 'abstract': self.parse_abstract()}

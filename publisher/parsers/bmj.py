@@ -21,7 +21,7 @@ class BMJ(PublisherParser):
             affiliations = self.get_affiliations()
             result_authors = self.merge_authors_affiliations(authors, affiliations)
         else:
-            result_authors = self.parse_meta_tags()
+            result_authors = self.parse_author_meta_tags()
 
         return {"authors": result_authors, "abstract": self.parse_abstract_meta_tags()}
 

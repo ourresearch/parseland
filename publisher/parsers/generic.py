@@ -17,7 +17,7 @@ class GenericPublisherParser(PublisherParser):
 
     def parse(self):
         if not self._parse_result:
-            authors = self.parse_meta_tags()
+            authors = self.parse_author_meta_tags()
             self._parse_result = {
                 "authors": authors,
                 "abstract": self.parse_abstract_meta_tags(),

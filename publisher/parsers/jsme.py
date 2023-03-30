@@ -19,7 +19,7 @@ class JSME(PublisherParser):
         return None
 
     def parse(self):
-        authors = self.parse_meta_tags()
+        authors = self.parse_author_meta_tags()
         author_tags = self.soup.select('.global-authors-name-tags a')
         for author_tag in author_tags:
             if '*' in author_tag.text:

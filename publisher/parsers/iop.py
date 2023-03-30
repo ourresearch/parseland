@@ -21,7 +21,7 @@ class IOP(PublisherParser):
 
     def parse(self):
         # displayed author affiliations are not available in the content, so we have to use meta tags.
-        return self.parse_meta_tags()
+        return self.parse_author_meta_tags()
 
     # test not passing due to page being blocked
     # test_cases = [
