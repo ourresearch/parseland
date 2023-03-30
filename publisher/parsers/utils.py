@@ -1,6 +1,9 @@
 import re
 
 
+EMAIL_RE = re.compile(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b', flags=re.IGNORECASE)
+
+
 def strip_prefix(prefix, string, flags=0):
     return re.sub(f'^{prefix}', '', string, flags=flags)
 

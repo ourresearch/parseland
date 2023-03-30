@@ -1,5 +1,7 @@
 from dataclasses import asdict, is_dataclass
 
+from publisher.parsers.utils import EMAIL_RE
+
 
 def has_corresponding(message):
     authors = message['authors']
@@ -19,7 +21,7 @@ def strip_message_strs(message):
         for k in message.keys():
             message[k] = strip_message_strs(message[k])
     if isinstance(message, str):
-        return message.strip('\r\n ')
+        return message.strip('\r\n ;')
     return message
 
 
@@ -80,7 +82,7 @@ def sanitize_affiliations(message):
 
     for author in authors:
         author['affiliations'] = [aff for aff in author['affiliations'] if
-                                  'corresponding' not in aff.lower()]
+                                  'corresponding' not in aff.lower() and not EMAIL_RE.search(aff)]
 
     if 'authors' in message:
         message['authors'] = authors
