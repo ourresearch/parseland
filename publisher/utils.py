@@ -117,7 +117,7 @@ def merge_messages(publisher_msg, generic_msg):
 
 
 def check_bad_landing_page(soup):
-    s = str(soup)
+    # s = soup.prettify()
     if not soup.title:
         return True
     elif canonical := soup.select_one('link[rel=canonical]'):
