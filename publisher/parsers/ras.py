@@ -1,5 +1,4 @@
 from publisher.parsers.parser import PublisherParser
-from publisher.parsers.utils import is_h_tag
 
 
 class RussianAcademyOfSciences(PublisherParser):
