@@ -32,10 +32,11 @@ class AcousticalSocietyOfAmerica(PublisherParser):
         for author_tag in author_tags:
             is_corresponding = bool(author_tag.select('a.email'))
             name = author_tag.select_one('a[href*="/author/"]').text.strip()
+            author_affs = []
             if not affs:
-                aff_tag = author_tag.find_next_sibling('li', class_='author-affiliation')
-                is_corresponding = bool(aff_tag.select('a.email'))
-                author_affs = [aff_tag.text.strip()]
+                if aff_tag := author_tag.find_next_sibling('li', class_='author-affiliation'):
+                    is_corresponding = bool(aff_tag.select('a.email'))
+                    author_affs = [aff_tag.text.strip()]
             elif isinstance(affs, dict):
                 sups = [tag.text.strip(' ()') for tag in (author_tag.find('sup') or []) if tag.text.strip(' ()').isnumeric()]
                 author_affs = [affs[sup] for sup in sups if not sup.isalpha()]
