@@ -37,11 +37,15 @@ def remove_parents(tags):
     return final_tags
 
 
+def split_name(name):
+    return [part for part in re.split('[ ,]', name.strip()) if
+            len(part) > 1]
+
+
 def email_matches_name(email, name):
     _email = strip_prefix('mailto:', email)
 
     normalized_name = unicodedata.normalize('NFD', name.lower()).encode('ascii',
                                                                         'ignore').decode()
-    split = [part for part in re.split('[ ,]', normalized_name.strip()) if
-             len(part) > 1]
+    split = split_name(normalized_name)
     return any([part in _email.split('@')[0] for part in split])
