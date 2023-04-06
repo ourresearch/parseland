@@ -1,3 +1,4 @@
+import re
 from dataclasses import asdict, is_dataclass
 
 from publisher.parsers.utils import EMAIL_RE
@@ -5,7 +6,8 @@ from publisher.parsers.utils import EMAIL_RE
 
 def has_corresponding(message):
     authors = message['authors']
-    return bool([author for author in authors if author['is_corresponding'] is not None])
+    return bool([author for author in authors if
+                 author['is_corresponding'] is not None])
 
 
 def has_affiliations(message):
@@ -47,6 +49,7 @@ def prep_message(message, parser):
 
     message = alter_is_corresponding(message)
     message = sanitize_affiliations(message)
+    message = sanitize_names(message)
     message = strip_message_strs(message)
     return message
 
@@ -82,7 +85,8 @@ def sanitize_affiliations(message):
 
     for author in authors:
         author['affiliations'] = [aff for aff in author['affiliations'] if
-                                  'correspond' not in aff.lower() and not EMAIL_RE.search(aff) and not aff.startswith('http')]
+                                  'correspond' not in aff.lower() and not EMAIL_RE.search(
+                                      aff) and not aff.startswith('http')]
 
     if 'authors' in message:
         message['authors'] = authors
@@ -114,6 +118,12 @@ def merge_messages(publisher_msg, generic_msg):
         publisher_msg['abstract'] = generic_msg['abstract']
 
     return publisher_msg
+
+
+def sanitize_names(message):
+    for author in message['authors']:
+        author['name'] = re.sub(r' +', ' ', author['name'])
+    return message
 
 
 def check_bad_landing_page(soup):
