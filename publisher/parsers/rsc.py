@@ -27,10 +27,6 @@ class RSC(PublisherParser):
                 '\n\r ')
         return affs
 
-    @staticmethod
-    def flatten(l):
-        return [item for sublist in l for item in sublist]
-
     def parse_authors(self):
         affs = self.parse_affiliations()
         author_tags = self.soup.select('.article__author-link')
@@ -41,7 +37,8 @@ class RSC(PublisherParser):
             author = {'name': name, 'affiliations': [],
                       'is_corresponding': '*' in author_tag.text}
             sups = author_tag.find_all('sup')
-            sups = self.flatten([sup.text.split(',') for sup in sups])
+            sups = [sup.text.split(',') for sup in sups]
+            sups = [item for sublist in sups for item in sublist]
             for letter in sups:
                 author['affiliations'].append(affs[letter])
             authors.append(author)

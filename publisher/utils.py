@@ -84,6 +84,7 @@ def sanitize_affiliations(message):
     authors = message['authors']
 
     for author in authors:
+        author['affiliations'] = [item for sublist in author['affiliations'].split(';') for item in sublist]
         author['affiliations'] = [aff for aff in author['affiliations'] if
                                   'correspond' not in aff.lower() and not EMAIL_RE.search(
                                       aff) and not aff.startswith('http')]
