@@ -42,6 +42,17 @@ def split_name(name):
             len(part) > 1]
 
 
+def names_match(name1, name2):
+    split1 = split_name(name1)
+    split2 = split_name(name2)
+    return all([part in split2 for part in split1])
+
+
+def name_in_text(name, text):
+    name_split = split_name(name)
+    return all([part in text for part in name_split])
+
+
 def email_matches_name(email, name):
     _email = strip_prefix('mailto:', email)
 

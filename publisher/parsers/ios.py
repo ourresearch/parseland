@@ -1,5 +1,5 @@
 from publisher.parsers.parser import PublisherParser
-from publisher.parsers.utils import split_name
+from publisher.parsers.utils import split_name, name_in_text
 
 
 class IOSPress(PublisherParser):
@@ -56,8 +56,7 @@ class IOSPress(PublisherParser):
         if all([not author['is_corresponding'] for author in authors]):
             corresponding_text = self.soup.select_one("span[id='*']").text
             for author in authors:
-                name_split = split_name(author['name'])
-                if all([part in corresponding_text for part in name_split]):
+                if name_in_text(author['name'], corresponding_text):
                     author['is_corresponding'] = True
         return authors
 
