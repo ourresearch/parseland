@@ -38,7 +38,7 @@ class RSC(PublisherParser):
                       'is_corresponding': '*' in author_tag.text}
             sups = author_tag.find_all('sup')
             sups = [sup.text.split(',') for sup in sups]
-            sups = [item for sublist in sups for item in sublist]
+            sups = ''.join([item for sublist in sups for item in sublist])
             for letter in sups:
                 author['affiliations'].append(affs[letter])
             authors.append(author)
