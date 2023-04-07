@@ -9,7 +9,7 @@ class ResearchSquare(PublisherParser):
         return self.domain_in_meta_og_url("researchsquare.com")
 
     def authors_found(self):
-        return self.soup.findAll("div", class_="author")
+        return bool(self.soup.select('div.authors-expanded div.author'))
 
     def parse(self):
         results = []
