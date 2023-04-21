@@ -41,7 +41,7 @@ class Wiley(PublisherParser):
 
             for aff in aff_soup:
                 if (
-                    "correspondence" in aff.text.lower()[:25]
+                    "correspond" in aff.text.lower()[:25]
                     or "address reprint" in aff.text.lower()[:40]
                     or "author deceased" in aff.text.lower()
                     or "e-mail:" in aff.text.lower()
