@@ -28,14 +28,14 @@ class WorldScientific(PublisherParser):
                 if bottom_info := affiliation_soup.find('a'):
                     bottom_info.decompose()
                 aff_tag = affiliation_soup.find(lambda
-                                                    tag: tag.name == 'p' and 'corresponding' not in tag.text.lower() and len(
+                                                    tag: tag.name == 'p' and 'correspond' not in tag.text.lower() and len(
                     tag.text) > 3)
                 affiliations.append(aff_tag.text.strip())
 
             result_authors.append(
                 AuthorAffiliations(name=name,
                                    affiliations=affiliations,
-                                   is_corresponding='corresponding' in affiliation_soup.text.lower())
+                                   is_corresponding='correspond' in affiliation_soup.text.lower())
             )
         return result_authors
 
