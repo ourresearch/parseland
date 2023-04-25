@@ -14,13 +14,44 @@ class AIPPublishing(PublisherParser):
         return self.soup.find("div", class_="publicationContentAuthors")
 
     def parse(self):
-        authors = self.get_authors()
-        affiliations = self.get_affiliations()
-        author_affiliations = self.merge_authors_affiliations(authors, affiliations)
+        if self.soup.select("li.author-affiliation"):
+            author_affiliations = self.get_authors_2()
+        else:
+            authors = self.get_authors()
+            affiliations = self.get_affiliations()
+            author_affiliations = self.merge_authors_affiliations(authors,
+                                                                  affiliations)
         return {
             "authors": author_affiliations,
             "abstract": self.parse_abstract_meta_tags(),
         }
+
+    def get_authors_2(self):
+        authors_tag = self.soup.select_one('.entryAuthor')
+        authors = []
+        in_aff_list = False
+        aff_group = []
+        for child in authors_tag.children:
+            if 'contrib-author' in child['class']:
+                if in_aff_list:
+                    for author in authors:
+                        if not author['affiliations']:
+                            author['affiliations'] = aff_group
+                    aff_group = []
+                in_aff_list = False
+                name = child.find('a').text.strip()
+                author = {'name': name,
+                          'affiliations': [],
+                          'is_corresponding': None}
+                authors.append(author)
+            elif 'author-affiliation' in child['class']:
+                in_aff_list = True
+                aff_group.append(child.text.strip())
+        if aff_group:
+            for author in authors:
+                if not author['affiliations']:
+                    author['affiliations'] = aff_group
+        return authors
 
     def get_authors(self):
         authors = []
@@ -28,19 +59,23 @@ class AIPPublishing(PublisherParser):
         # find corresponding author
         corresp = self.soup.find("corresp")
         corresp_id = (
-            corresp.find("sup").text if corresp and corresp.find("sup") else None
+            corresp.find("sup").text if corresp and corresp.find(
+                "sup") else None
         )
 
-        if authors_div := self.soup.find("div", class_="publicationContentAuthors"):
-            for author_span in authors_div.find_all("span", class_="contrib-author"):
-                if author_a := author_span.find("a", href=re.compile(r"^/author/")):
+        if authors_div := self.soup.find("div",
+                                         class_="publicationContentAuthors"):
+            for author_span in authors_div.find_all("span",
+                                                    class_="contrib-author"):
+                if author_a := author_span.find("a",
+                                                href=re.compile(r"^/author/")):
                     if author_a.text and (author_name := author_a.text.strip()):
                         affiliation_ids = []
 
                         for affiliation_sup in author_span.find_all("sup"):
                             if (
-                                sup_text := affiliation_sup.text
-                                and affiliation_sup.text.strip()
+                                    sup_text := affiliation_sup.text
+                                                and affiliation_sup.text.strip()
                             ):
                                 for sup_split_part in sup_text.split(","):
                                     if affiliation_id := sup_split_part.strip():
@@ -63,14 +98,16 @@ class AIPPublishing(PublisherParser):
     def get_affiliations(self):
         affiliations = []
 
-        if affiliations_div := self.soup.find("div", class_="affiliations-list"):
+        if affiliations_div := self.soup.find("div",
+                                              class_="affiliations-list"):
             for affiliation_li in affiliations_div.find_all(
-                "li", class_="author-affiliation"
+                    "li", class_="author-affiliation"
             ):
-                if institution_a := affiliation_li.find("a", class_="institution"):
+                if institution_a := affiliation_li.find("a",
+                                                        class_="institution"):
                     if (
-                        institution_name := institution_a.text
-                        and institution_a.text.strip()
+                            institution_name := institution_a.text
+                                                and institution_a.text.strip()
                     ):
                         if id_sup := affiliation_li.find("sup"):
                             if affiliation_id := id_sup.text and id_sup.text.strip():
