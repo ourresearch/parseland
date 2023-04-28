@@ -2,6 +2,7 @@ from gzip import decompress
 from pathlib import Path
 
 import requests
+import filetype
 from bs4 import BeautifulSoup
 
 from exceptions import ParserNotFoundError, S3FileNotFoundError
@@ -21,6 +22,11 @@ class PublisherController:
         if r.status_code == 404:
             raise S3FileNotFoundError(f"Tried endpoint: {self.landing_page_endpoint}")
         html = decompress(r.content)
+
+        ext = filetype.guess_extension(html)
+        # ext will probably be None if content is actually html
+        if ext and 'html' not in ext:
+            return ''
         return html
 
     def get_soup(self):
