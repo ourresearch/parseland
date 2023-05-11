@@ -39,8 +39,7 @@ class Frontiers(PublisherParser):
                 if "*" in aff_ids:
                     is_corresponding = True
                 # sometimes corresponding in additional <sup> element
-                second_sup = aff_id_soup.next_sibling
-                if second_sup.text:
+                if second_sup := aff_id_soup.next_sibling:
                     if "*" in second_sup.text:
                         is_corresponding = True
 

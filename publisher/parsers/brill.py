@@ -25,8 +25,9 @@ class Brill(PublisherParser):
         return authors
 
     def parse_abstract(self):
-        abs_tag = self.soup.select_one('section.abstract')
-        return '\n'.join([p.text for p in abs_tag.select('p')])
+        if abs_tag := self.soup.select_one('section.abstract'):
+            return '\n'.join([p.text for p in abs_tag.select('p')])
+        return None
 
     def parse(self):
         return {'authors': self.parse_authors(),
