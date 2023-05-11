@@ -18,6 +18,10 @@ def strip_seq(seq, string, flags=0):
                         flags=flags)
 
 
+def cleanup_raw_name(raw_name):
+    return strip_prefix('and', raw_name.strip(' .,')).strip(' .,')
+
+
 def is_h_tag(tag):
     return re.match('^h[1-6]$', tag.name)
 

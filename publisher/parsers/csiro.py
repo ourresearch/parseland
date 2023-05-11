@@ -5,7 +5,7 @@ from bs4 import NavigableString, Tag
 from publisher.parsers.parser import PublisherParser
 import html
 
-from publisher.parsers.utils import strip_prefix
+from publisher.parsers.utils import strip_prefix, cleanup_raw_name
 
 
 class CSIRO(PublisherParser):
@@ -34,7 +34,7 @@ class CSIRO(PublisherParser):
         affs = self.parse_affs()
         for tag in authors_tag.children:
             if isinstance(tag, NavigableString):
-                if name := strip_prefix('and', tag.text.strip(' .,')).strip(' .,'):
+                if name := cleanup_raw_name(tag.text):
                     author = {'name': name,
                               'affiliations': [],
                               'is_corresponding': None}
