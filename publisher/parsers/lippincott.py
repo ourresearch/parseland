@@ -97,11 +97,13 @@ class Lippincott(PublisherParser):
         # affiliation with no ids
         affiliations = aff_soup.findAll("p")
         for aff in affiliations:
-            aff_html_id = aff.get("id")
-            if aff_html_id.startswith("AF"):
-                organization = aff.text.strip()
-                results.append(
-                    Affiliation(aff_id=None, organization=organization))
+            aff_id = None
+            if aff_ids := re.findall(r'^(\d+)\.', aff.text):
+                aff_id = aff_ids[0]
+            organization = re.sub(r'^(\d+)\.', '', aff.text.strip()).strip()
+            results.append(
+                Affiliation(aff_id=aff_id, organization=organization))
+
         return results
 
     @staticmethod
