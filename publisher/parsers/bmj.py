@@ -1,5 +1,6 @@
-from publisher.elements import Author, Affiliation
+from publisher.elements import Author, Affiliation, AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
+from publisher.parsers.utils import name_in_text
 
 
 class BMJ(PublisherParser):
@@ -9,7 +10,8 @@ class BMJ(PublisherParser):
         return self.domain_in_meta_og_url("bmj.com")
 
     def authors_found(self):
-        return self.soup.find("ol", class_="contributor-list") or self.soup.find(
+        return self.soup.find("ol",
+                              class_="contributor-list") or self.soup.find(
             "meta", {"name": "citation_author"}
         )
 
@@ -19,15 +21,22 @@ class BMJ(PublisherParser):
         authors = self.get_authors()
         if authors:
             affiliations = self.get_affiliations()
-            result_authors = self.merge_authors_affiliations(authors, affiliations)
+            result_authors = self.merge_authors_affiliations(authors,
+                                                             affiliations)
         else:
             result_authors = self.parse_author_meta_tags()
 
-        return {"authors": result_authors, "abstract": self.parse_abstract_meta_tags()}
+        return {"authors": result_authors,
+                "abstract": self.parse_abstract_meta_tags()}
 
     def get_authors(self):
         authors = []
-        correspondence_name = self.get_correspondence_name()
+        corr_str = self.get_correspondence_str()
+        corr_split = corr_str.split(',', 1)
+        corr_name = corr_split[0]
+        corr_aff = None
+        if len(corr_split) == 2:
+            corr_aff = corr_split[1].split(';')[0]
         author_soup = self.soup.find("ol", class_="contributor-list")
         if not author_soup:
             return None
@@ -38,20 +47,25 @@ class BMJ(PublisherParser):
             if not name_soup:
                 continue
             name = name_soup.text.strip()
-            aff_ids_raw = author.findAll("a", class_="xref-aff")
+            aff_ids_raw = author.select('.xref-aff')
             aff_ids = []
             for aff_id_raw in aff_ids_raw:
                 aff_id = aff_id_raw.text.strip()
                 if aff_id:
                     aff_ids.append(aff_id)
-
-            if correspondence_name and name.lower() in correspondence_name.lower():
+            is_corresponding = False
+            author = Author(name=name, aff_ids=aff_ids,
+                            is_corresponding=is_corresponding)
+            if name_in_text(name, corr_name) or len(author_soup) == 1:
                 is_corresponding = True
-            else:
-                is_corresponding = False
-            authors.append(
-                Author(name=name, aff_ids=aff_ids, is_corresponding=is_corresponding)
-            )
+                if corr_aff:
+                    author = AuthorAffiliations(name=name,
+                                                affiliations=[corr_aff],
+                                                is_corresponding=is_corresponding)
+                else:
+                    author.is_corresponding = is_corresponding
+
+            authors.append(author)
         return authors
 
     def get_affiliations(self):
@@ -71,12 +85,15 @@ class BMJ(PublisherParser):
 
                 # affiliation
                 aff = aff_raw.text.strip()
+                if len(affiliations) == 1:
+                    aff_id = None
                 results.append(Affiliation(organization=aff, aff_id=aff_id))
         return results
 
-    def get_correspondence_name(self):
+    def get_correspondence_str(self):
         corr_soup = self.soup.find("li", class_="corresp")
-        return corr_soup.text if corr_soup else None
+        corr_soup.select_one('.corresp-label').decompose()
+        return corr_soup.text.strip() if corr_soup else None
 
     test_cases = [
         {
