@@ -54,6 +54,9 @@ def names_match(name1, name2):
 
 def name_in_text(name, text):
     name_split = split_name(name)
+    if len(name_split) == 3:
+        # only care about middle initial
+        name_split[1] = name_split[1][0]
     return all([part in text for part in name_split])
 
 

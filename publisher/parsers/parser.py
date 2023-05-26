@@ -1,7 +1,7 @@
 import re
 from abc import ABC, abstractmethod
 
-from publisher.elements import AuthorAffiliations
+from publisher.elements import AuthorAffiliations, Author
 from publisher.parsers.utils import remove_parents, strip_seq, strip_prefix, \
     is_h_tag
 
@@ -46,6 +46,12 @@ class PublisherParser(ABC):
                 and meta_og_url.get("content")
                 and domain in meta_og_url.get("content")
                 )
+
+    def substr_in_citation_journal_title(self, substr):
+        if tag := self.soup.select_one('meta[name="citation_journal_title"]'):
+            content = tag.get('content')
+            return substr.lower() in content.lower()
+        return False
 
     def text_in_meta_og_site_name(self, txt):
         meta_og_site_name = self.soup.find('meta', property='og:site_name') or self.soup.select_one('meta[name="og:site_name"]')
@@ -137,6 +143,9 @@ class PublisherParser(ABC):
         results = []
         for author in authors:
             author_affiliations = []
+            if not isinstance(author, Author):
+                results.append(author)
+                continue
 
             # scenario 1 affiliations with ids
             for aff_id in author.aff_ids:
