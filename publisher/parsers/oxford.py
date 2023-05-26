@@ -1,4 +1,5 @@
 import json
+import re
 
 from exceptions import UnusualTrafficError
 from publisher.elements import AuthorAffiliations
@@ -43,7 +44,8 @@ class Oxford(PublisherParser):
                     affiliations_soup = affiliation_section.findAll("div",
                                                                     class_="aff")
                     for aff in affiliations_soup:
-                        affiliations.append(aff.text)
+                        aff_cleaned = re.sub('^\d+', '', aff.text)
+                        affiliations.append(aff_cleaned)
 
                 results.append(
                     AuthorAffiliations(
