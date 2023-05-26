@@ -101,8 +101,9 @@ class Lippincott(PublisherParser):
             if aff_ids := re.findall(r'^(\d+)\.', aff.text):
                 aff_id = aff_ids[0]
             organization = re.sub(r'^(\d+)\.', '', aff.text.strip()).strip()
-            results.append(
-                Affiliation(aff_id=aff_id, organization=organization))
+            if 'financial disclosure' not in organization.lower():
+                results.append(
+                    Affiliation(aff_id=aff_id, organization=organization))
 
         return results
 
