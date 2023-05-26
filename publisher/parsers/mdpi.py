@@ -53,7 +53,9 @@ class MDPI(PublisherParser):
                 else:
                     aff_id = None
                 aff = aff_raw.find("div", class_="affiliation-name").text
-                if aff_id and aff_id not in self.chars_to_ignore and aff_id.isnumeric():
+                if aff_id is None:
+                    results.append(Affiliation(organization=aff, aff_id=aff_id))
+                elif aff_id not in self.chars_to_ignore and aff_id.isnumeric():
                     aff_id = int(aff_id) if aff_id else None
                     results.append(Affiliation(organization=aff, aff_id=aff_id))
         return results
