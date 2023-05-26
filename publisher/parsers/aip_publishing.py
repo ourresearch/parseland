@@ -14,8 +14,10 @@ class AIPPublishing(PublisherParser):
         return self.soup.find("div", class_="publicationContentAuthors")
 
     def parse(self):
-        if self.soup.select("li.author-affiliation"):
+        if self.soup.select(".entryAuthor .author-affiliation"):
             author_affiliations = self.get_authors_2()
+        # elif self.soup.select('.entryAuthor ~ .affiliations-list'):
+        #     author_affiliations = self.get_authors_3()
         else:
             authors = self.get_authors()
             affiliations = self.get_affiliations()
@@ -25,6 +27,9 @@ class AIPPublishing(PublisherParser):
             "authors": author_affiliations,
             "abstract": self.parse_abstract_meta_tags(),
         }
+
+    def get_authors_3(self):
+        pass
 
     def get_authors_2(self):
         authors_tag = self.soup.select_one('.entryAuthor')
@@ -103,20 +108,9 @@ class AIPPublishing(PublisherParser):
             for affiliation_li in affiliations_div.find_all(
                     "li", class_="author-affiliation"
             ):
-                if institution_a := affiliation_li.find("a",
-                                                        class_="institution"):
-                    if (
-                            institution_name := institution_a.text
-                                                and institution_a.text.strip()
-                    ):
-                        if id_sup := affiliation_li.find("sup"):
-                            if affiliation_id := id_sup.text and id_sup.text.strip():
-                                affiliations.append(
-                                    Affiliation(
-                                        aff_id=affiliation_id,
-                                        organization=institution_name,
-                                    )
-                                )
+                aff_id = re.findall(r'^\d+', affiliation_li.text.strip())[0]
+                aff = re.sub(r'^\d+', '', affiliation_li.text.strip()).strip()
+                affiliations.append(Affiliation(aff_id=aff_id, organization=aff))
 
         return affiliations
 
