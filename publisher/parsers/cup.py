@@ -1,3 +1,5 @@
+import re
+
 from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
 
@@ -26,6 +28,7 @@ class CUP(PublisherParser):
             affiliation_soup = author.find("div", class_="d-sm-flex")
             if affiliation_soup:
                 for organization in affiliation_soup.stripped_strings:
+                    organization = re.sub('email:.*?$', '', organization)
                     affiliations.append(organization.strip())
 
             result_authors.append(
