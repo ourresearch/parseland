@@ -15,13 +15,14 @@ class Brill(PublisherParser):
         author_tags = authors_block.select('.contributor-details')
         authors = []
         for author_tag in author_tags:
-            name = author_tag.select_one('span.contributor-details-link').text
-            affiliations = [aff.text for aff in
-                            author_tag.select('span.institution')]
-            is_corresponding = None
-            authors.append({'name': name,
-                            'affiliations': affiliations,
-                            'is_corresponding': is_corresponding})
+            if name_tag := author_tag.select_one('span.contributor-details-link'):
+                name = name_tag.text
+                affiliations = [aff.text for aff in
+                                author_tag.select('span.institution')]
+                is_corresponding = None
+                authors.append({'name': name,
+                                'affiliations': affiliations,
+                                'is_corresponding': is_corresponding})
         return authors
 
     def parse_abstract(self):

@@ -92,7 +92,8 @@ class BMJ(PublisherParser):
 
     def get_correspondence_str(self):
         if corr_soup := self.soup.find("li", class_="corresp"):
-            corr_soup.select_one('.corresp-label').decompose()
+            if corr_label := corr_soup.select_one('.corresp-label'):
+                corr_label.decompose()
             return corr_soup.text.strip() if corr_soup else None
         return ''
 
