@@ -91,9 +91,10 @@ class BMJ(PublisherParser):
         return results
 
     def get_correspondence_str(self):
-        corr_soup = self.soup.find("li", class_="corresp")
-        corr_soup.select_one('.corresp-label').decompose()
-        return corr_soup.text.strip() if corr_soup else None
+        if corr_soup := self.soup.find("li", class_="corresp"):
+            corr_soup.select_one('.corresp-label').decompose()
+            return corr_soup.text.strip() if corr_soup else None
+        return ''
 
     test_cases = [
         {
