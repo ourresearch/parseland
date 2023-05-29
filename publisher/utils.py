@@ -84,6 +84,7 @@ def sanitize_affiliations(message):
     authors = message['authors']
 
     for author in authors:
+        author['affiliations'] = list(set(author['affiliations']))
         author['affiliations'] = [item.split(';') for item in author['affiliations']]
         author['affiliations'] = [item for sublist in author['affiliations'] for item in sublist]
         author['affiliations'] = [aff for aff in author['affiliations'] if aff and
