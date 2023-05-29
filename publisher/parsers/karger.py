@@ -13,7 +13,21 @@ class Karger(PublisherParser):
         return self.domain_in_meta_og_url('karger.com')
 
     def authors_found(self):
-        return bool(self.soup.select_one('span.autoren'))
+        return bool(self.soup.select_one('span.autoren')) or bool(self.soup.select('.al-author-name'))
+
+    def parse_authors_2(self):
+        author_tags = self.soup.select('.al-author-name')
+        authors = []
+        for author_tag in author_tags:
+            name = author_tag.find('a').text
+            author = {'name': name, 'affiliations': [], 'is_corresponding': bool(author_tag.select_one('.info-card-footnote'))}
+            aff_tags = author_tag.select('.info-card-affilitation .aff')
+            for aff_tag in aff_tags:
+                label = aff_tag.find('span')
+                label.decompose()
+                author['affiliations'].append(aff_tag.text)
+            authors.append(author)
+        return authors
 
     def parse_affiliations(self):
         affs = {}
@@ -47,8 +61,14 @@ class Karger(PublisherParser):
                         current_author['affiliations'].append(affiliations.get(aff))
                 authors.append(current_author)
                 current_author = None
+            elif child.name == 'span':
+                authors.append(current_author)
+                current_author = None
             elif current_author is None and len(child.text.strip()) >= 2:
                 current_author = {'name': child.text.strip(), 'affiliations': [], 'is_corresponding': None}
+        if len(affiliations) == 1:
+            for author in authors:
+                author['affiliations'] = affiliations.values()
         return authors
 
     def parse_abstract(self):
@@ -56,4 +76,5 @@ class Karger(PublisherParser):
             return abs_heading.find_next_sibling('p').text
 
     def parse(self):
-        return {'authors': self.parse_authors(), 'abstract': self.parse_abstract()}
+        authors = self.parse_authors_2() if bool(self.soup.select('.al-author-name')) else self.parse_authors()
+        return {'authors': authors, 'abstract': self.parse_abstract()}
