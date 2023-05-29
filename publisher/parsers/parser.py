@@ -155,7 +155,7 @@ class PublisherParser(ABC):
 
             # scenario 2 affiliations with no ids (applied to all authors)
             for aff in affiliations:
-                if len(author.aff_ids) == 0 and aff.aff_id is None:
+                if (len(author.aff_ids) == 0 and aff.aff_id is None) or (len(affiliations) == 1 and len(author_affiliations) == 0):
                     author_affiliations.append(str(aff.organization))
 
             results.append(
