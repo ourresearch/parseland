@@ -108,7 +108,9 @@ class AIPPublishing(PublisherParser):
             for affiliation_li in affiliations_div.find_all(
                     "li", class_="author-affiliation"
             ):
-                aff_id = re.findall(r'^\d+', affiliation_li.text.strip())[0]
+                aff_id = None
+                if aff_ids := re.findall(r'^\d+', affiliation_li.text.strip()):
+                    aff_id = aff_ids[0]
                 aff = re.sub(r'^\d+', '', affiliation_li.text.strip()).strip()
                 affiliations.append(Affiliation(aff_id=aff_id, organization=aff))
 
