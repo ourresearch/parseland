@@ -5,7 +5,8 @@ import requests
 import filetype
 from bs4 import BeautifulSoup
 
-from exceptions import ParserNotFoundError, S3FileNotFoundError
+from exceptions import ParserNotFoundError, S3FileNotFoundError, \
+    WrongFormatLandingPageError
 from publisher.parsers.generic import GenericPublisherParser
 from publisher.parsers.parser import PublisherParser
 
@@ -26,7 +27,8 @@ class PublisherController:
         ext = filetype.guess_extension(html)
         # ext will probably be None if content is actually html
         if ext and 'html' not in ext:
-            return ''
+            raise WrongFormatLandingPageError(ext)
+
         return html
 
     def get_soup(self):

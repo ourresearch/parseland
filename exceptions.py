@@ -26,6 +26,14 @@ class S3FileNotFoundError(APIError):
 
 
 class BadLandingPageError(APIError):
-
     code = 400
     description = "Bad landing page contents. No data available to parse."
+
+
+class WrongFormatLandingPageError(APIError):
+
+    def __init__(self, format_):
+        self.format_ = format_
+        self.description = f'Wrong format landing page ({self.format_} format). Unable to parse.'
+
+    code = 400

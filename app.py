@@ -8,7 +8,7 @@ sentry_sdk.init(
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     # We recommend adjusting this value in production.
-    traces_sample_rate=0.2
+    traces_sample_rate=0.02
 )
 
 app = Flask(__name__)
