@@ -12,10 +12,10 @@ class Springer(PublisherParser):
 
     def is_publisher_specific_parser(self):
         if (
-            self.domain_in_canonical_link("link.springer.com")
-            or self.domain_in_canonical_link("springeropen.com")
-            or self.domain_in_meta_og_url("nature.com")
-            or self.domain_in_meta_og_url("biomedcentral.com")
+                self.domain_in_canonical_link("link.springer.com")
+                or self.domain_in_canonical_link("springeropen.com")
+                or self.domain_in_meta_og_url("nature.com")
+                or self.domain_in_meta_og_url("biomedcentral.com")
         ):
             return True
 
@@ -29,10 +29,29 @@ class Springer(PublisherParser):
                 return md['description']
         return None
 
+    def parse_authors_method_3(self):
+        author_tags = self.soup.select('li.c-article-authors-listing__item')
+        authors = []
+        for tag in author_tags:
+            name_tag = tag.select_one('span[class*=search-name]')
+            name = name_tag.text.strip()
+            is_corr = bool(name_tag.select_one('a[id*=corresp]'))
+            affs = [aff_tag.text.strip() for aff_tag in
+                    tag.select('ol[class*=affiliation__list] li p')]
+            authors.append({
+                'name': name,
+                'affiliations': affs,
+                'is_corresponding': is_corr,
+            })
+        return authors
+
     def parse(self):
         article_metadatas = self.parse_article_metadatas()
         abstract = self._try_find_abstract_in_metadatas(article_metadatas)
-        authors_affiliations = self.parse_ld_json(article_metadatas)
+        if self.soup.select('li.c-article-authors-listing__item'):
+            authors_affiliations = self.parse_authors_method_3()
+        else:
+            authors_affiliations = self.parse_ld_json(article_metadatas)
 
         if not authors_affiliations:
             authors = self.get_authors()
@@ -65,18 +84,20 @@ class Springer(PublisherParser):
     def parse_abstract(self):
         if abstract_soup := self.soup.find("section", class_="Abstract"):
             if abstract_heading := abstract_soup.find(
-                class_="Heading", string="Abstract"
+                    class_="Heading", string="Abstract"
             ):
                 abstract_heading.decompose()
 
-            for citation in abstract_soup.find_all("span", class_="CitationRef"):
+            for citation in abstract_soup.find_all("span",
+                                                   class_="CitationRef"):
                 citation.decompose()
 
             return abstract_soup.text.strip()
 
-        elif abstract_soup := self.soup.select_one('section[data-title=Abstract] div[class*=c-article-section] p'):
+        elif abstract_soup := self.soup.select_one(
+                'section[data-title=Abstract] div[class*=c-article-section] p'):
             for abstract_heading in abstract_soup.find_all(
-                re.compile("^h[1-6]$"), string="Abstract"
+                    re.compile("^h[1-6]$"), string="Abstract"
             ):
                 abstract_heading.decompose()
 
@@ -86,7 +107,8 @@ class Springer(PublisherParser):
 
     def parse_article_metadatas(self):
         metadatas = []
-        for ld_json in self.soup.find_all("script", {"type": "application/ld+json"}):
+        for ld_json in self.soup.find_all("script",
+                                          {"type": "application/ld+json"}):
             article_metadata = json.loads(ld_json.text)
             if 'mainEntity' in article_metadata:
                 article_metadata = article_metadata['mainEntity']
@@ -108,23 +130,27 @@ class Springer(PublisherParser):
                     if isinstance(json_affiliations, str):
                         affiliations = [json_affiliations]
                     elif (
-                        isinstance(json_affiliations, dict)
-                        and "name" in json_affiliations
+                            isinstance(json_affiliations, dict)
+                            and "name" in json_affiliations
                     ):
-                        affiliations = [json_affiliations.get('address', {}).get('name') or json_affiliations['name']]
+                        affiliations = [
+                            json_affiliations.get('address', {}).get('name') or
+                            json_affiliations['name']]
                     elif isinstance(json_affiliations, list):
                         for json_affiliation in json_affiliations:
                             if (
-                                isinstance(json_affiliation, str)
-                                and json_affiliation not in affiliations
+                                    isinstance(json_affiliation, str)
+                                    and json_affiliation not in affiliations
                             ):
                                 affiliations.append(json_affiliation)
                             elif (
-                                isinstance(json_affiliation, dict)
-                                and "name" in json_affiliation
+                                    isinstance(json_affiliation, dict)
+                                    and "name" in json_affiliation
                             ):
                                 if json_affiliation["name"] not in affiliations:
-                                    affiliations.append(json_affiliation.get('address', {}).get('name') or json_affiliation['name'])
+                                    affiliations.append(
+                                        json_affiliation.get('address', {}).get(
+                                            'name') or json_affiliation['name'])
 
                     authors.append(
                         AuthorAffiliations(
@@ -182,7 +208,8 @@ class Springer(PublisherParser):
 
             affiliation = ", ".join(affiliation_data)
 
-            affiliations.append(Affiliation(aff_id=aff_id, organization=affiliation))
+            affiliations.append(
+                Affiliation(aff_id=aff_id, organization=affiliation))
 
         return affiliations
 
@@ -416,7 +443,8 @@ class Springer(PublisherParser):
                     },
                     {
                         "name": "Oni, Georgette",
-                        "affiliations": ["Nottingham University Hospitals NHS Trust"],
+                        "affiliations": [
+                            "Nottingham University Hospitals NHS Trust"],
                         "is_corresponding": None,
                     },
                     {
@@ -428,12 +456,14 @@ class Springer(PublisherParser):
                     },
                     {
                         "name": "Khout, Hazem",
-                        "affiliations": ["Nottingham University Hospitals NHS Trust"],
+                        "affiliations": [
+                            "Nottingham University Hospitals NHS Trust"],
                         "is_corresponding": None,
                     },
                     {
                         "name": "Tan, Qing Ting",
-                        "affiliations": ["Nottingham University Hospitals NHS Trust"],
+                        "affiliations": [
+                            "Nottingham University Hospitals NHS Trust"],
                         "is_corresponding": None,
                     },
                     {
@@ -443,7 +473,8 @@ class Springer(PublisherParser):
                     },
                     {
                         "name": "Macmillan, R. Douglas",
-                        "affiliations": ["Nottingham University Hospitals NHS Trust"],
+                        "affiliations": [
+                            "Nottingham University Hospitals NHS Trust"],
                         "is_corresponding": None,
                     },
                     {
@@ -482,7 +513,8 @@ class Springer(PublisherParser):
                     },
                     {
                         "name": "Glenis K Scadding",
-                        "affiliations": ["Royal National ENT Hospital, London, UK"],
+                        "affiliations": [
+                            "Royal National ENT Hospital, London, UK"],
                         "is_corresponding": None,
                     },
                     {

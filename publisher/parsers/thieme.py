@@ -13,7 +13,7 @@ class Thieme(PublisherParser):
         return False
 
     def authors_found(self):
-        return bool(self.soup.select('.authors'))
+        return bool(self.soup.select_one('.authors'))
 
     def parse_affiliations(self):
         aff_tags = self.soup.select('.authorsAffiliationsList li')
@@ -28,6 +28,8 @@ class Thieme(PublisherParser):
     def parse_authors(self):
         authors_tag = self.soup.select_one('.authors')
         authors = []
+        if not authors_tag:
+            return authors
         for tag in authors_tag:
             if isinstance(tag, NavigableString):
                 name = tag.text.strip(' ,\n\r')

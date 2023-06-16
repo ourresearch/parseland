@@ -53,6 +53,12 @@ class PublisherParser(ABC):
             return substr.lower() in content.lower()
         return False
 
+    def substr_in_citation_publisher(self, substr):
+        if tag := self.soup.select_one('meta[name="citation_publisher"]'):
+            content = tag.get('content')
+            return substr.lower() in content.lower()
+        return False
+
     def text_in_meta_og_site_name(self, txt):
         meta_og_site_name = self.soup.find('meta', property='og:site_name') or self.soup.select_one('meta[name="og:site_name"]')
         return (meta_og_site_name

@@ -69,7 +69,7 @@ class Karger(PublisherParser):
         if len(affiliations) == 1:
             for author in authors:
                 author['affiliations'] = affiliations.values()
-        return authors
+        return [author for author in authors if author]
 
     def parse_abstract(self):
         if abs_heading := self.soup.find(lambda tag: is_h_tag(tag) and 'abstract' in tag.text.lower()):
