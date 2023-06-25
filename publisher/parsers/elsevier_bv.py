@@ -88,7 +88,9 @@ class ElsevierBV(PublisherParser):
                 )
             )
 
-        return {"authors": author_results, "abstract": self.parse_abstract() or self.parse_abstract_meta_tags()}
+        return {"authors": author_results,
+                "abstract": self.parse_abstract() or self.parse_abstract_meta_tags(),
+                "readable": self.readable()}
 
     test_cases = [
         {

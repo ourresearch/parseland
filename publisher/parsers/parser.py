@@ -1,9 +1,12 @@
 import re
 from abc import ABC, abstractmethod
 
+from bs4 import BeautifulSoup
+
 from publisher.elements import AuthorAffiliations, Author
 from publisher.parsers.utils import remove_parents, strip_seq, strip_prefix, \
     is_h_tag
+from readability import Document
 
 
 class PublisherParser(ABC):
@@ -40,8 +43,14 @@ class PublisherParser(ABC):
                 and domain in canonical_link.get("href")
         )
 
+    def readable(self):
+        doc = Document(str(self.soup))
+        return BeautifulSoup(doc.summary()).text
+
     def domain_in_meta_og_url(self, domain):
-        meta_og_url = self.soup.find("meta", property="og:url") or self.soup.select_one('meta[name="og:url"]')
+        meta_og_url = self.soup.find("meta",
+                                     property="og:url") or self.soup.select_one(
+            'meta[name="og:url"]')
         return (meta_og_url
                 and meta_og_url.get("content")
                 and domain in meta_og_url.get("content")
@@ -60,13 +69,16 @@ class PublisherParser(ABC):
         return False
 
     def text_in_meta_og_site_name(self, txt):
-        meta_og_site_name = self.soup.find('meta', property='og:site_name') or self.soup.select_one('meta[name="og:site_name"]')
+        meta_og_site_name = self.soup.find('meta',
+                                           property='og:site_name') or self.soup.select_one(
+            'meta[name="og:site_name"]')
         return (meta_og_site_name
                 and meta_og_site_name.get("content")
                 and txt in meta_og_site_name.get("content")
                 )
 
-    def parse_author_meta_tags(self, corresponding_tag=None, corresponding_class=None):
+    def parse_author_meta_tags(self, corresponding_tag=None,
+                               corresponding_class=None):
         results = []
         metas = self.soup.findAll("meta")
 
@@ -161,7 +173,9 @@ class PublisherParser(ABC):
 
             # scenario 2 affiliations with no ids (applied to all authors)
             for aff in affiliations:
-                if (len(author.aff_ids) == 0 and aff.aff_id is None) or (len(affiliations) == 1 and len(author_affiliations) == 0):
+                if (len(author.aff_ids) == 0 and aff.aff_id is None) or (
+                        len(affiliations) == 1 and len(
+                        author_affiliations) == 0):
                     author_affiliations.append(str(aff.organization))
 
             results.append(
@@ -211,16 +225,27 @@ class PublisherParser(ABC):
         return authors
 
     def fallback_parse_abstract(self):
-        blacklisted_words = {'download options', 'please wait', 'copyright clearance center', 'procite', 'food funct', 'rsc publication'}
+        blacklisted_words = {'download options', 'please wait',
+                             'copyright clearance center', 'procite',
+                             'food funct', 'rsc publication'}
         startswith_blacklist = {'download'}
         for tag in self.soup.find_all():
             for attr, value in tag.attrs.items():
-                if 'abstract' in str(value).lower() or (tag.text.lower() == 'abstract' and is_h_tag(tag)):
+                if 'abstract' in str(value).lower() or (
+                        tag.text.lower() == 'abstract' and is_h_tag(tag)):
                     for desc in tag.descendants:
-                        abs_txt = strip_seq('\s', strip_prefix('abstract', desc.text, flags=re.IGNORECASE))
-                        if len(desc.text) > 100 and desc.name in {'p', 'div', 'span', 'section', 'article'} \
-                                and not any([abs_txt.lower().startswith(word) for word in startswith_blacklist]) \
-                                and not any([word in abs_txt.lower() for word in blacklisted_words]):
+                        abs_txt = strip_seq('\s',
+                                            strip_prefix('abstract', desc.text,
+                                                         flags=re.IGNORECASE))
+                        if len(desc.text) > 100 and desc.name in {'p', 'div',
+                                                                  'span',
+                                                                  'section',
+                                                                  'article'} \
+                                and not any(
+                            [abs_txt.lower().startswith(word) for word in
+                             startswith_blacklist]) \
+                                and not any([word in abs_txt.lower() for word in
+                                             blacklisted_words]):
                             return abs_txt
         return None
 

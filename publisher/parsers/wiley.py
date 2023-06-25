@@ -16,7 +16,9 @@ class Wiley(PublisherParser):
         return self.soup.find("div", class_="loa-authors")
 
     def parse(self):
-        return {"authors": self.get_authors(), "abstract": self.get_abstract()}
+        return {"authors": self.get_authors(),
+                "abstract": self.get_abstract(),
+                'readable': self.readable()}
 
     def get_authors(self):
         results = []
