@@ -17,8 +17,7 @@ class Wiley(PublisherParser):
 
     def parse(self):
         return {"authors": self.get_authors(),
-                "abstract": self.get_abstract(),
-                'readable': self.readable()}
+                "abstract": self.get_abstract()}
 
     def get_authors(self):
         results = []

@@ -79,8 +79,7 @@ class Springer(PublisherParser):
                 )
 
         return {"authors": authors_affiliations,
-                "abstract": abstract or self.parse_abstract(),
-                'readable': self.readable()}
+                "abstract": abstract or self.parse_abstract(),}
 
     def parse_abstract(self):
         if abstract_soup := self.soup.find("section", class_="Abstract"):
