@@ -56,8 +56,7 @@ class Oxford(PublisherParser):
                 )
         abstract = '\n'.join([tag.text for tag in self.soup.select('section.abstract p')])
         return {"authors": results,
-                "abstract": abstract,
-                "readable": self.readable()}
+                "abstract": abstract,}
 
 
     test_cases = [

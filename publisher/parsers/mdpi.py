@@ -19,7 +19,6 @@ class MDPI(PublisherParser):
         return {
             "authors": authors_affiliations,
             "abstract": self.parse_abstract_meta_tags(),
-            "readable": self.readable()
         }
 
     def get_authors(self):
