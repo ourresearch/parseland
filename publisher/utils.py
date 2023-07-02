@@ -47,6 +47,8 @@ def prep_message(message, parser):
     if 'abstract' in message and message['abstract']:
         message['abstract'] = message['abstract'].strip(' \n')
 
+    # message['readable'] = parser.readable()
+
     message = alter_is_corresponding(message)
     message = sanitize_affiliations(message)
     message = sanitize_names(message)
@@ -85,9 +87,13 @@ def sanitize_affiliations(message):
 
     for author in authors:
         author['affiliations'] = list(set(author['affiliations']))
-        author['affiliations'] = [item.split(';') for item in author['affiliations']]
-        author['affiliations'] = [strip_prefix(' *and', item).strip() for sublist in author['affiliations'] for item in sublist]
-        author['affiliations'] = [aff for aff in author['affiliations'] if aff and
+        author['affiliations'] = [item.split(';') for item in
+                                  author['affiliations']]
+        author['affiliations'] = [strip_prefix(' *and', item).strip() for
+                                  sublist in author['affiliations'] for item in
+                                  sublist]
+        author['affiliations'] = [aff for aff in author['affiliations'] if
+                                  aff and
                                   'correspond' not in aff.lower() and not EMAIL_RE.search(
                                       aff) and not aff.startswith('http')]
 
@@ -140,3 +146,9 @@ def check_bad_landing_page(soup):
                 'Just a moment' in soup.title.text,
                 soup.title.text.strip().startswith('Login |'),
                 ])
+
+
+def normalize_doi(doi):
+    if doi.startswith('http'):
+        return re.findall(r'doi.org/(.*?)$', doi)[0]
+    return doi

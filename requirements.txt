@@ -11,3 +11,5 @@ requests-cache==0.9.4
 sentry-sdk[flask]==1.18.0
 filetype==1.2.0
 readability-lxml==0.8.1
+boto3==1.18.8
+grobid-client==0.8.3

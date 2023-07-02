@@ -9,7 +9,19 @@ from publisher.parsers.utils import remove_parents, strip_seq, strip_prefix, \
 from readability import Document
 
 
-class PublisherParser(ABC):
+class Parser(ABC):
+
+    @abstractmethod
+    def parse(self):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def no_authors_output():
+        pass
+
+
+class PublisherParser(Parser, ABC):
     def __init__(self, soup):
         self.soup = soup
 
@@ -30,10 +42,6 @@ class PublisherParser(ABC):
     def no_authors_output():
         return {"authors": [], "abstract": None, "published_date": None,
                 "genre": None}
-
-    @abstractmethod
-    def parse(self):
-        pass
 
     def domain_in_canonical_link(self, domain):
         canonical_link = self.soup.find("link", {"rel": "canonical"})
@@ -175,7 +183,7 @@ class PublisherParser(ABC):
             for aff in affiliations:
                 if (len(author.aff_ids) == 0 and aff.aff_id is None) or (
                         len(affiliations) == 1 and len(
-                        author_affiliations) == 0):
+                    author_affiliations) == 0):
                     author_affiliations.append(str(aff.organization))
 
             results.append(
