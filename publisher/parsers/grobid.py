@@ -1,3 +1,4 @@
+import re
 from io import BytesIO
 
 from bs4 import BeautifulSoup
@@ -31,6 +32,13 @@ class GrobidParser(Parser):
         return {"authors": [], "abstract": None, "published_date": None,
                 "genre": None, 'references': []}
 
+    @staticmethod
+    def cleanup_text(fulltext):
+        fulltext = fulltext.replace(
+            'GROBID - A machine learning software for extracting information from scholarly documents',
+            '').strip('\n')
+        return re.sub(r'\n+', '\n', fulltext)
+
     @retry(stop=stop_after_attempt(5), wait=wait_fixed(3))
     def get_grobid_soup(self):
         form = ProcessForm(
@@ -49,6 +57,54 @@ class GrobidParser(Parser):
             if 'HTTP ERROR 503' in body_tag.text:
                 raise Exception('503 error from GROBID')
         return soup
+
+    @staticmethod
+    def make_ref_dict(ref_tag):
+        d = {
+            'doi': None,
+            'title': None,
+            'author': None,
+            'volume': None,
+            'year': None,
+            'journal': None,
+            'page': None,
+            'raw': None
+        }
+        if doi_tag := ref_tag.select_one('idno[type="DOI"]'):
+            d['doi'] = doi_tag.text.strip()
+        if title_tag := ref_tag.select_one('title[level="a"]'):
+            d['title'] = title_tag.text.strip()
+        author = ''
+        if first_name_tag := ref_tag.select_one(
+                'author forename[type="first"]'):
+            author += first_name_tag.text.strip() + ' '
+        if middle_name_tag := ref_tag.select_one(
+                'author forename[type="middle"]'):
+            author += middle_name_tag.text.strip() + ' '
+        if last_name_tag := ref_tag.select_one(
+                'author surname'):
+            author += last_name_tag.text.strip()
+        d['author'] = author if author else None
+        if journal_tag := ref_tag.select_one('title[level="j"]'):
+            d['journal'] = journal_tag.text.strip()
+        if year_tag := ref_tag.select_one('date[type="published"]'):
+            d['year'] = year_tag.text.strip()
+        if volume_tag := ref_tag.select_one('biblscope[unit="volume"]'):
+            d['volume'] = volume_tag.text.strip()
+        if page_tag := ref_tag.select_one('biblscope[unit="page"]'):
+            page_str = None
+            start_page = page_tag.get('from')
+            end_page = page_tag.get('to')
+            if start_page and end_page:
+                page_str = f'{start_page} - {end_page}'
+            elif start_page:
+                page_str = start_page
+            elif end_page:
+                page_str = end_page
+            d['page'] = page_str
+        if raw_tag := ref_tag.select_one('note[type="raw_reference"]'):
+            d['raw'] = raw_tag.text.strip()
+        return d
 
     def parse(self):
         soup = self.get_grobid_soup()
@@ -83,9 +139,10 @@ class GrobidParser(Parser):
             abstract = abstract_tag.text
 
         ref_tags = soup.select(
-            'div[type=references] listbibl biblstruct note[type=raw_reference]')
-        refs = [tag.text for tag in ref_tags]
+            'div[type=references] listbibl biblstruct')
+        refs = [self.make_ref_dict(tag) for tag in ref_tags]
+        refs = [ref for ref in refs if ref['doi'] or len([val for val in ref.values() if val]) > 1]
         return {'authors': authors,
-                'abstract': abstract,
-                'fulltext': body,
+                'abstract': self.cleanup_text(abstract) if abstract else None,
+                'fulltext': self.cleanup_text(body) if body else None,
                 'references': refs}
