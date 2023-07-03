@@ -48,6 +48,7 @@ class GrobidParser(Parser):
         if body_tag := soup.select_one('body'):
             if 'HTTP ERROR 503' in body_tag.text:
                 raise Exception('503 error from GROBID')
+        return soup
 
     def parse(self):
         soup = self.get_grobid_soup()
