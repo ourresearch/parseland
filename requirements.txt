@@ -13,3 +13,8 @@ filetype==1.2.0
 readability-lxml==0.8.1
 boto3==1.18.8
 grobid-client==0.8.3
+botocore~=1.21.65
+spacy~=3.5.2
+readability~=0.3.1
+pyalex~=0.7
+tenacity~=8.2.1
