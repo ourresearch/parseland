@@ -72,7 +72,7 @@ class GrobidParser(Parser):
         }
         if doi_tag := ref_tag.select_one('idno[type="DOI"]'):
             d['doi'] = doi_tag.text.strip()
-        if title_tag := ref_tag.select_one('title[level="a"]'):
+        if title_tag := ref_tag.select_one('title:not([level="j"])'):
             d['title'] = title_tag.text.strip()
         author = ''
         if first_name_tag := ref_tag.select_one(
