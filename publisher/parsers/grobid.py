@@ -37,7 +37,7 @@ class GrobidParser(Parser):
         fulltext = fulltext.replace(
             'GROBID - A machine learning software for extracting information from scholarly documents',
             '').strip('\n')
-        return fulltext.replace('\n', '')
+        return fulltext.replace('\n', ' ')
 
     @retry(stop=stop_after_attempt(5), wait=wait_fixed(3))
     def get_grobid_soup(self):
