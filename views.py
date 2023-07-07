@@ -19,24 +19,6 @@ def home():
     )
 
 
-@app.route('/parse-pdf')
-def parse_pdf():
-    doi = request.args.get("doi")
-    pdf_c = PDFController(doi)
-    msg = pdf_c.parser.parse()
-    if doi.startswith('http'):
-        doi = doi.split('doi.org/')[1]
-    response = {
-        "message": msg,
-        "metadata": {
-            "parser": pdf_c.parser.parser_name,
-            "doi": doi,
-            "doi_url": f"https://doi.org/{doi}",
-        },
-    }
-    return jsonify(response)
-
-
 @app.route("/parse-publisher")
 def parse_publisher():
     doi = request.args.get("doi")
