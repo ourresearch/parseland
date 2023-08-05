@@ -13,8 +13,9 @@ class ResearchSquare(PublisherParser):
 
     def parse(self):
         results = []
-        author_section = self.soup.find("div", class_="authors-expanded")
-        authors = author_section.findAll("div", class_="author")
+        authors = []
+        if author_section := self.soup.find("div", class_="authors-expanded"):
+            authors = author_section.findAll("div", class_="author")
         for author in authors:
             name = author.find("h5").text.strip()
 
