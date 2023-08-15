@@ -29,11 +29,14 @@ class ElsevierBV(PublisherParser):
             if i != 0:
                 abs_text += '\n'
             prev_sibling = tag.find_previous_sibling()
-            if prev_sibling and is_h_tag(prev_sibling) and 'funding' in prev_sibling.text.lower():
+            if prev_sibling and is_h_tag(prev_sibling) and any([word in prev_sibling.text.lower() for word in {'funding', 'conclusion', 'introduction'}]):
                 break
             abs_text += tag.text
-            if prev_sibling and is_h_tag(prev_sibling) and 'conclusion' in prev_sibling.text.lower():
-                break
+            # if prev_sibling and is_h_tag(prev_sibling) and 'funding' in prev_sibling.text.lower():
+            #     break
+            # abs_text += tag.text
+            # if prev_sibling and is_h_tag(prev_sibling) and 'conclusion' in prev_sibling.text.lower():
+            #     break
 
         return abs_text
 
