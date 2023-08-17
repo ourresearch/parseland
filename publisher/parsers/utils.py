@@ -18,6 +18,12 @@ def strip_seq(seq, string, flags=0):
                         flags=flags)
 
 
+def strip_seqs(seqs, string, flags=0):
+    for seq in seqs:
+        string = strip_seq(seq, string, flags)
+    return string
+
+
 def cleanup_raw_name(raw_name):
     return strip_prefix('and', raw_name.strip(' .,')).strip(' .,')
 
