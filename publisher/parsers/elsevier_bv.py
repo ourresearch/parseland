@@ -21,6 +21,8 @@ class ElsevierBV(PublisherParser):
         if abs_header := self.soup.find(lambda tag: is_h_tag(tag) and tag.text.lower().strip() == 'abstract'):
             if abs_tag := abs_header.find_next_sibling('div', class_='section-paragraph'):
                 return abs_tag.text
+        if abs_tag := self.soup.select_one('h2[data-left-hand-nav="Summary"] + div.section-paragraph'):
+            return abs_tag.text
 
         abs_text = ''
         for i, tag in enumerate(self.soup.select('div[class*=article__sections] div.section-paragraph')):
@@ -29,9 +31,11 @@ class ElsevierBV(PublisherParser):
             if i != 0:
                 abs_text += '\n'
             prev_sibling = tag.find_previous_sibling()
-            if prev_sibling and is_h_tag(prev_sibling) and any([word in prev_sibling.text.lower() for word in {'funding', 'conclusion', 'introduction'}]):
+            if prev_sibling and is_h_tag(prev_sibling) and 'introduction' in prev_sibling.text.lower():
                 break
             abs_text += tag.text
+            if prev_sibling and is_h_tag(prev_sibling) and any([word in prev_sibling.text.lower() for word in {'funding', 'conclusion'}]):
+                break
             # if prev_sibling and is_h_tag(prev_sibling) and 'funding' in prev_sibling.text.lower():
             #     break
             # abs_text += tag.text
