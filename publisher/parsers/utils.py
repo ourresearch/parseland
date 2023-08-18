@@ -18,10 +18,23 @@ def strip_seq(seq, string, flags=0):
                         flags=flags)
 
 
-def strip_seqs(seqs, string, flags=0):
+def _strip_seqs(seqs, string, flags=0):
     for seq in seqs:
         string = strip_seq(seq, string, flags)
     return string
+
+
+def strip_seqs(seqs, string, flags=0, recursive=False):
+    if not recursive:
+        return _strip_seqs(seqs, string, flags)
+    new_string = string
+    prev_string = string
+    while True:
+        new_string = _strip_seqs(seqs, new_string, flags)
+        if new_string == prev_string:
+            break
+        prev_string = new_string
+    return new_string
 
 
 def cleanup_raw_name(raw_name):
