@@ -114,7 +114,7 @@ class PublisherParser(Parser, ABC):
                 else:
                     is_corresponding = None
                 result = {
-                    "name": name,
+                    "name": name.strip(),
                     "affiliations": [],
                     "is_corresponding": is_corresponding,
                 }

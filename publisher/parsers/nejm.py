@@ -1,10 +1,10 @@
 import copy
 import re
 
-from nameparser import HumanName
 import spacy
+from nameparser import HumanName
 
-from publisher.elements import AuthorAffiliations, Author, Affiliation
+from publisher.elements import Author, Affiliation
 from publisher.parsers.parser import PublisherParser
 from publisher.parsers.utils import strip_seqs, strip_prefix
 
@@ -54,15 +54,16 @@ class NewEnglandJournalOfMedicine(PublisherParser):
 
     @staticmethod
     def clean_aff(aff):
-        cleaned = re.sub(r'\([\- .,A-Za-z]+\)', '', aff).strip(', ')
+        cleaned = re.sub(r'\([\- .,A-Za-z]+\)', '', aff).strip(';, ')
         cleaned = strip_seqs(['From', ' the', ' and', 'the ', 'and '], cleaned,
-                             recursive=True).strip(' ,')
+                             recursive=True).strip(';, ')
         return cleaned
 
     def affs_initials_dict(self, affs):
         d = {}
         for aff in affs:
-            initials = re.findall(r'\([\- .,A-Za-z]+\)', aff)[0]
+            initials_matches = re.findall(r'\([\- .,A-Za-z]+\)', aff)
+            initials = initials_matches[0] if initials_matches else None
             cleaned = self.clean_aff(aff)
             d[cleaned] = initials
         return d
@@ -71,57 +72,75 @@ class NewEnglandJournalOfMedicine(PublisherParser):
         if not nested_affs:
             return affs_initials_dict
         affs_initials = [list(item) for item in affs_initials_dict.items()]
-        nested_truths = [(nested in aff[0], nested if nested in aff[0] else None) for nested in nested_affs for aff in
-                         affs_initials]
         last_nested_index = 0
         nested_count = 0
         for i, aff in enumerate(affs_initials):
-            if nested_truths[i][0]:
+            if not affs_initials[i][1]:
                 for j in range(last_nested_index, i):
-                    affs_initials[j][0] = f'{affs_initials[j][0]}, {nested_affs[nested_count]}'
+                    affs_initials[j][0] = f'{affs_initials[j][0]}, {nested_affs[nested_count].strip(" ;,").split("—")[0].strip(" ;,")}'
                 last_nested_index = i
                 nested_count += 1
-        for i, t in enumerate(nested_truths):
-            if t[0]:
-                aff = self.clean_aff(affs_initials[i][0].replace(t[1], ''))
-                if aff:
-                    affs_initials[i][0] = aff
-                else:
-                    affs_initials.pop(i)
-        return dict(affs_initials)
+        return dict([(self.clean_aff(item[0]), item[1]) for item in affs_initials if item[1]])
+
+    @staticmethod
+    def _make_initials_patterns(name: HumanName):
+        #M.G.-O.
+        initial_matches = {re.sub(r'\.\W*\.+', '.', name.initials().replace(' ', '')),
+                           f'{name.first[0]}. *{name.last}',
+                           '.'.join(re.findall(r'([A-Z])', name.full_name)) + '.'}
+        if name.middle:
+            initial_matches.add(f'{name.first[0]}. *{name.middle[0]}. {name.last}',)
+        parts = [name.first, name.middle, name.last]
+        parts = [part for part in parts if part]
+        for i, part in enumerate(parts):
+            new_parts = parts.copy()
+            split = part.split('-')
+            if len(split) > 1:
+                for j, _part in enumerate(split):
+                    if j == 0:
+                        new_parts[i] = _part
+                    else:
+                        new_parts.insert(i + j, '-' + _part)
+                initials = '.'.join([name[:2] if name.startswith('-') else name[0] for name in new_parts])
+                initials += '.'
+                initial_matches.add(initials)
+        patterns = []
+        for match in initial_matches:
+            safe_match = match.replace(".", "\.")
+            patterns.append(re.compile(f'[(,] *{safe_match}[),]'))
+        return patterns
 
     def parse_affs_by_unformatted_text(self, authors, affs_text):
-        affs = re.findall(r'(?:and|;|\A|,)(.*?\([\- .,A-Za-z]+\))',
+        affs = re.findall(r'(?:;|\)|and|—)?(.*?(?:\(.*?\)|;|, and the |\Z))',
                           affs_text)
-        nested_affs = [self.clean_aff(aff) for aff in re.findall(
-            r', and [a-zA-Z ]+ \([\-A-Z.]+\), ([a-zA-Z ,]+)(?:and|;)',
-            affs_text)]
+        affs = [aff for aff in affs if not aff.startswith('—') and len(aff) > 3]
+        nested_affs = [aff for aff in affs if not re.search(r'\(.*?\)', aff)]
         if not affs:
             for author in authors:
                 author['affiliations'].append(affs_text)
             return authors
         aff_initials_dict = self.affs_initials_dict(affs)
+        if len(aff_initials_dict) == 1:
+            for author in authors:
+                author['affiliations'].append(tuple(aff_initials_dict.keys())[0])
+            return authors
         aff_initials_dict = self.modify_nested_affs(aff_initials_dict, nested_affs)
         for author in authors:
-            name = HumanName(author['name'])
-            initial_matches = {name.initials().replace(' ', ''),
-                               f'{name.first[0]}. {name.last}'}
-            if '-' in name.first:
-                split = [part[0] if i == 0 else '-' + part[0] for i, part in
-                         enumerate(name.first.split('-'))]
-                initials = '.'.join([*split, *[part[0] for part in
-                                               name.as_dict().values() if part][
-                                              1:]])
-                initial_matches.add(initials)
+            name = author['name']
+            split = name.split(', ')
+            if len(split) == 2:
+                name = ' '.join(split[::-1])
+            name = HumanName(name)
+            patterns = self._make_initials_patterns(name)
             for aff, initials in aff_initials_dict.items():
-                for match in initial_matches:
-                    if match in initials:
+                for pattern in patterns:
+                    if pattern.search(initials):
                         author['affiliations'].append(aff)
         return authors
 
     def _parse_unformatted_affs_text(self):
         if affs_tag := self.soup.select_one('#author_affiliations p'):
-            if "The authors' affiliations are listed in the Appendix" in affs_tag.text:
+            if re.search(r"The authors' affiliations [a-z ]+ the Appendix", affs_tag.text):
                 possible_affs_tags = self.soup.select(
                     'section[id*=article_appendix] p')
                 for tag in possible_affs_tags:
