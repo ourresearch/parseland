@@ -1,14 +1,11 @@
 import copy
 import re
 
-import spacy
 from nameparser import HumanName
 
 from publisher.elements import Author, Affiliation
 from publisher.parsers.parser import PublisherParser
 from publisher.parsers.utils import strip_seqs, strip_prefix
-
-nlp = spacy.load("en_core_web_lg")
 
 
 class NewEnglandJournalOfMedicine(PublisherParser):
