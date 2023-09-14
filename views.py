@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from flask import jsonify, request
 
@@ -38,7 +38,7 @@ def parse_publisher():
         if cached:
             cached_last_modified, cached_response = json.loads(cached)
             cached_last_modified = parse(cached_last_modified)
-            day_ago = datetime.now() - timedelta(hours=24)
+            day_ago = datetime.now(timezone.utc) - timedelta(hours=24)
             if cached_last_modified >= day_ago:
                 return jsonify(cached_response)
             else:
