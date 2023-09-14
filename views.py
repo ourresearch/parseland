@@ -32,18 +32,29 @@ def parse_publisher():
     check_cache = request.args.get('check_cache', 'true')
     check_cache = check_cache.startswith('t') or check_cache == 1
     update_cache = False
-    s3_last_modified = None
+    current_s3_last_modified = None
     if check_cache:
         cached = cache.get(doi)
         if cached:
-            cached_last_modified, cached_response = json.loads(cached)
-            cached_last_modified = parse(cached_last_modified)
+            cached_obj = json.loads(cached)
             day_ago = datetime.now(timezone.utc) - timedelta(hours=24)
-            if cached_last_modified >= day_ago:
+            if len(cached_obj) == 3:
+                last_updated, cached_s3_last_modified, cached_response = cached_obj
+                if last_updated >= day_ago:
+                    return jsonify(cached_response)
+            else:
+                cached_s3_last_modified, cached_response = cached_obj
+                update_cache = True
+            cached_s3_last_modified = parse(cached_s3_last_modified)
+            if cached_s3_last_modified >= day_ago:
+                if update_cache:
+                    cache.set(doi, cached_s3_last_modified, cached_response)
                 return jsonify(cached_response)
             else:
-                s3_last_modified = cache.s3_last_modified(doi)
-                if cached_last_modified >= s3_last_modified:
+                current_s3_last_modified = cache.s3_last_modified(doi)
+                if cached_s3_last_modified >= current_s3_last_modified:
+                    if update_cache:
+                        cache.set(doi, current_s3_last_modified, cached_response)
                     return jsonify(cached_response)
                 else:
                     update_cache = True
@@ -68,7 +79,9 @@ def parse_publisher():
         },
     }
     if check_cache and update_cache:
-        cache.set(doi, s3_last_modified, response)
+        if current_s3_last_modified is None:
+            current_s3_last_modified = cache.s3_last_modified(doi)
+        cache.set(doi, current_s3_last_modified, response)
     return jsonify(response)
 
 

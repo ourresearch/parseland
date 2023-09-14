@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timezone
 from threading import Lock
 from urllib.parse import quote
 
@@ -27,7 +28,7 @@ REDIS_CONN = redis.Redis.from_url(os.getenv('REDISCLOUD_URL'))
 
 
 def set(doi, last_modified, response):
-    obj = json.dumps([last_modified, response], default=str)
+    obj = json.dumps([datetime.now(timezone.utc), last_modified, response], default=str)
     REDIS_CONN.set(doi, obj)
 
 
