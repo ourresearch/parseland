@@ -1,4 +1,6 @@
 import json
+import time
+import timeit
 from datetime import datetime, timedelta, timezone
 
 from flask import jsonify, request
@@ -81,7 +83,10 @@ def parse_publisher():
     }
     if check_cache and update_cache:
         if current_s3_last_modified is None:
+            tic = time.perf_counter()
             current_s3_last_modified = cache.s3_last_modified(doi)
+            toc = time.perf_counter()
+            print(f"S3 fetch took {toc - tic:0.4f} seconds")
         cache.set(doi, current_s3_last_modified, response)
     return jsonify(response)
 
