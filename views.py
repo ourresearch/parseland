@@ -40,6 +40,7 @@ def parse_publisher():
             day_ago = datetime.now(timezone.utc) - timedelta(hours=24)
             if len(cached_obj) == 3:
                 last_updated, cached_s3_last_modified, cached_response = cached_obj
+                last_updated = parse(last_updated)
                 if last_updated >= day_ago:
                     return jsonify(cached_response)
             else:
