@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, timedelta
 
 from flask import jsonify, request
 
@@ -28,18 +29,26 @@ def parse_publisher():
     doi = request.args.get("doi")
     if doi.startswith('http'):
         doi = doi.split('doi.org/')[1]
-    cached = cache.get(doi)
-    s3_last_modified = cache.s3_last_modified(doi)
+    check_cache = request.args.get('check_cache', 'true')
+    check_cache = check_cache.startswith('t') or check_cache == 1
     update_cache = False
-    if cached:
-        cached_last_modified, cached_response = json.loads(cached)
-        cached_last_modified = parse(cached_last_modified)
-        if cached_last_modified >= s3_last_modified:
-            return jsonify(cached_response)
+    s3_last_modified = None
+    if check_cache:
+        cached = cache.get(doi)
+        if cached:
+            cached_last_modified, cached_response = json.loads(cached)
+            cached_last_modified = parse(cached_last_modified)
+            day_ago = datetime.now() - timedelta(hours=24)
+            if cached_last_modified >= day_ago:
+                return jsonify(cached_response)
+            else:
+                s3_last_modified = cache.s3_last_modified(doi)
+                if cached_last_modified >= s3_last_modified:
+                    return jsonify(cached_response)
+                else:
+                    update_cache = True
         else:
             update_cache = True
-    else:
-        update_cache = True
 
     pc = PublisherController(doi)
     if check_bad_landing_page(pc.soup):
@@ -58,7 +67,7 @@ def parse_publisher():
             "doi_url": f"https://doi.org/{doi}",
         },
     }
-    if update_cache:
+    if check_cache and update_cache:
         cache.set(doi, s3_last_modified, response)
     return jsonify(response)
 

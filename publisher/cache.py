@@ -44,7 +44,7 @@ def s3_last_modified(doi):
     try:
         obj = S3.get_object(Bucket=S3_LANDING_PAGE_BUCKET,
                             Key=doi_to_lp_key(doi))
+        return obj['LastModified']
     except botocore.exceptions.ClientError as e:
         if e.response['Error']['Code'] in {"404", "NoSuchKey"}:
             raise S3FileNotFoundError()
-    return obj['LastModified']
