@@ -9,7 +9,7 @@ import os
 
 from exceptions import S3FileNotFoundError
 
-S3_LOCK = Lock()
+# S3_LOCK = Lock()
 S3_LANDING_PAGE_BUCKET = os.getenv('AWS_S3_LANDING_PAGE_BUCKET')
 
 
@@ -40,11 +40,11 @@ def doi_to_lp_key(doi):
 
 
 def s3_last_modified(doi):
-    with S3_LOCK:
-        try:
-            obj = S3.get_object(Bucket=S3_LANDING_PAGE_BUCKET,
-                                Key=doi_to_lp_key(doi))
-        except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] in {"404", "NoSuchKey"}:
-                raise S3FileNotFoundError()
+    # with S3_LOCK:
+    try:
+        obj = S3.get_object(Bucket=S3_LANDING_PAGE_BUCKET,
+                            Key=doi_to_lp_key(doi))
+    except botocore.exceptions.ClientError as e:
+        if e.response['Error']['Code'] in {"404", "NoSuchKey"}:
+            raise S3FileNotFoundError()
     return obj['LastModified']
