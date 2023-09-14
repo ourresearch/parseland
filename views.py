@@ -1,3 +1,5 @@
+import json
+
 from flask import jsonify, request
 
 from app import app
@@ -6,6 +8,8 @@ from pdf.controller import PDFController
 from publisher.controller import PublisherController
 from publisher.utils import prep_message, check_bad_landing_page
 from repository.controller import RepositoryController
+from publisher import cache
+from dateutil.parser import parse
 
 
 @app.route("/")
@@ -22,6 +26,21 @@ def home():
 @app.route("/parse-publisher")
 def parse_publisher():
     doi = request.args.get("doi")
+    if doi.startswith('http'):
+        doi = doi.split('doi.org/')[1]
+    cached = cache.get(doi)
+    s3_last_modified = cache.s3_last_modified(doi)
+    update_cache = False
+    if cached:
+        cached_last_modified, cached_response = json.loads(cached)
+        cached_last_modified = parse(cached_last_modified)
+        if cached_last_modified >= s3_last_modified:
+            return jsonify(cached_response)
+        else:
+            update_cache = True
+    else:
+        update_cache = True
+
     pc = PublisherController(doi)
     if check_bad_landing_page(pc.soup):
         raise BadLandingPageError()
@@ -31,8 +50,6 @@ def parse_publisher():
 
     message = prep_message(parsed_message, parser)
 
-    if doi.startswith('http'):
-        doi = doi.split('doi.org/')[1]
     response = {
         "message": message,
         "metadata": {
@@ -41,6 +58,8 @@ def parse_publisher():
             "doi_url": f"https://doi.org/{doi}",
         },
     }
+    if update_cache:
+        cache.set(doi, s3_last_modified, response)
     return jsonify(response)
 
 
