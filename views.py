@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 from flask import jsonify, request
 
+import util.s3
 from app import app
 from exceptions import APIError, BadLandingPageError
 from pdf.controller import PDFController
@@ -56,7 +57,7 @@ def parse_publisher():
                 print(f'Cache hit - {doi}')
                 return jsonify(cached_response)
             else:
-                current_s3_last_modified = cache.s3_last_modified(doi)
+                current_s3_last_modified = util.s3.s3_last_modified(doi)
                 if cached_s3_last_modified >= current_s3_last_modified:
                     if update_cache:
                         cache.set(doi, current_s3_last_modified, cached_response)
@@ -86,7 +87,7 @@ def parse_publisher():
     if check_cache and update_cache:
         if current_s3_last_modified is None:
             tic = time.perf_counter()
-            current_s3_last_modified = cache.s3_last_modified(doi)
+            current_s3_last_modified = util.s3.s3_last_modified(doi)
             toc = time.perf_counter()
             print(f"S3 fetch took {toc - tic:0.4f} seconds")
         cache.set(doi, current_s3_last_modified, response)

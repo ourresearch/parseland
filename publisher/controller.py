@@ -1,32 +1,27 @@
 from gzip import decompress
-from pathlib import Path
 
-import requests
 import filetype
 from bs4 import BeautifulSoup
 
-from exceptions import ParserNotFoundError, S3FileNotFoundError, \
-    WrongFormatLandingPageError
+from exceptions import ParserNotFoundError, WrongFormatLandingPageError
 from publisher.parsers.generic import GenericPublisherParser
 from publisher.parsers.parser import PublisherParser
-
 from publisher.utils import normalize_doi
+from util.s3 import make_s3, get_obj, S3_LANDING_PAGE_BUCKET, doi_to_lp_key
+
+_s3 = make_s3()
 
 
 class PublisherController:
     def __init__(self, doi):
         self.doi = normalize_doi(doi)
-        self.landing_page_endpoint = f"https://api.unpaywall.org/doi_page/{self.doi}"
         self.parsers = PublisherParser.__subclasses__()
         self.html = self.get_html()
         self.soup = self.get_soup()
 
     def get_html(self):
-        r = requests.get(self.landing_page_endpoint)
-        if r.status_code == 404:
-            raise S3FileNotFoundError(
-                f"Tried endpoint: {self.landing_page_endpoint}")
-        contents = decompress(r.content)
+        obj = get_obj(S3_LANDING_PAGE_BUCKET, doi_to_lp_key(self.doi), s3=_s3)
+        contents = decompress(obj['Body'].read())
         ext = filetype.guess_extension(contents)
         # ext will probably be None if content is actually html
         if ext and 'pdf' in ext:
