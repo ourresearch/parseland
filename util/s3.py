@@ -35,5 +35,5 @@ def get_obj(bucket, key, s3=DEFAULT_S3):
             raise S3FileNotFoundError()
 
 
-def doi_to_lp_key(doi):
-    return quote(doi, safe='')
+def doi_to_lp_key(doi: str):
+    return quote(doi.lower(), safe='')

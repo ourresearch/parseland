@@ -23,10 +23,13 @@ class OpenEdition(PublisherParser):
                 aff_tag = aff_tag.find('.affiliation')
             affs = [child.strip() for child in aff_tag.children if isinstance(child, NavigableString)]
             author_name = aff_tag.find_previous_sibling('h3').text
-            author = {'name': author_name, 'affiliations': affs, 'is_corresponding': None}
+            author = {'name': author_name,
+                      'affiliations': affs,
+                      'is_corresponding': None}
             authors.append(author)
         return authors
 
     def parse(self):
-        return {'authors': self.parse_authors(), 'abstract': self.parse_abstract_meta_tags()}
+        return {'authors': self.parse_authors(),
+                'abstract': self.parse_abstract_meta_tags()}
 
