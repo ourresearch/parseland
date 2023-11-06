@@ -47,8 +47,9 @@ class APS(PublisherParser):
         affs = self.parse_affs_2()
         author_tags = self.soup.select('section.article.authors p a')
         for author_tag in author_tags:
-            aff_ids = author_tag.find_next_sibling('sup').text.strip().split(',')
-            author = Author(name=author_tag.text.strip(), aff_ids=aff_ids)
+            author = Author(name=author_tag.text.strip(), aff_ids=[])
+            if sup := author_tag.find_next_sibling('sup'):
+                author.aff_ids = sup.text.strip().split(',')
             authors.append(author)
         return self.merge_authors_affiliations(authors=authors, affiliations=affs)
 
