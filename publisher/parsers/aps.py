@@ -1,3 +1,4 @@
+from publisher.elements import Affiliation, AuthorAffiliations, Author
 from publisher.parsers.parser import PublisherParser
 
 
@@ -5,12 +6,16 @@ class APS(PublisherParser):
     parser_name = "aps"
 
     def is_publisher_specific_parser(self):
-        return self.domain_in_meta_og_url("journals.aps.org") or self.domain_in_meta_og_url('journals.physiology.org')
+        return self.domain_in_meta_og_url(
+            "journals.aps.org") or self.domain_in_meta_og_url(
+            'journals.physiology.org')
 
     def authors_found(self):
-        return bool(self.soup.select('ul[title="list of authors"]'))
+        return bool(self.soup.select(
+            'ul[title="list of authors"]')) or self.soup.select(
+            'section.article.authors p')
 
-    def parse_authors(self):
+    def parse_authors_1(self):
         authors = []
         author_tags = self.soup.select(
             'ul[title="list of authors"] + div [class*=accordion-tabbed__tab]')
@@ -19,14 +24,37 @@ class APS(PublisherParser):
             is_corresponding = bool(author_tag.select('i.icon-Email'))
             affs_tag = author_tag.select_one('.author-info')
             affs_tag.select_one('.bottom-info').decompose()
-            affiliations = [tag.text for tag in affs_tag.find_all('p') if len(tag.text) > 3]
+            affiliations = [tag.text for tag in affs_tag.find_all('p') if
+                            len(tag.text) > 3]
             authors.append({'name': name, 'affiliations': affiliations,
                             'is_corresponding': is_corresponding})
         return authors
 
+    def parse_affs_2(self):
+        affs = []
+        if affs_tag := self.soup.select_one('section.article.authors ul'):
+            aff_tags = affs_tag.select('li')
+            for aff in aff_tags:
+                sup = aff.find('sup')
+                _id = sup.text.strip()
+                sup.decompose()
+                affs.append(
+                    Affiliation(organization=aff.text.strip(), aff_id=_id))
+        return affs
+
+    def parse_authors_2(self):
+        authors = []
+        affs = self.parse_affs_2()
+        author_tags = self.soup.select('section.article.authors p a')
+        for author_tag in author_tags:
+            aff_ids = author_tag.find_next_sibling('sup').text.strip().split(',')
+            author = Author(name=author_tag.text.strip(), aff_ids=aff_ids)
+            authors.append(author)
+        return self.merge_authors_affiliations(authors=authors, affiliations=affs)
+
     def parse(self):
         return {
-            "authors": self.parse_authors(),
+            "authors": self.parse_authors_1() or self.parse_authors_2(),
             "abstract": self.parse_abstract_meta_tags(),
         }
 
