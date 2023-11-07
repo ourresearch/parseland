@@ -9,6 +9,7 @@ requests==2.27.1
 lxml==4.9.2
 requests-cache==0.9.4
 sentry-sdk[flask]==1.18.0
+Werkzeug==2.2.2
 filetype==1.2.0
 readability-lxml==0.8.1
 boto3==1.18.8
