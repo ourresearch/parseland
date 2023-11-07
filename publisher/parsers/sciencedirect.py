@@ -34,10 +34,17 @@ class ScienceDirect(PublisherParser):
 
         authors_content = science_direct_json.get("authors", {}).get("content",
                                                                      {})
-
-        for author_group in [
+        author_groups = [
             ac for ac in authors_content if ac.get("#name") == "author-group"
-        ]:
+        ]
+        collab_dicts = [
+            d for author_group in author_groups for d in author_group.get("$$", [])
+            if d.get('#name') == 'collaboration'
+        ]
+        collab_author_groups = [obj for d in collab_dicts for obj in d.get('$$', []) if obj.get('#name') == 'author-group']
+        author_groups.extend(collab_author_groups)
+
+        for author_group in author_groups:
             group_authors = []
             group_affiliation_labels = {}
             group_footnote_labels = {}
