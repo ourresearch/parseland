@@ -15,6 +15,8 @@ class Emerald(PublisherParser):
         results = []
         author_soup = self.soup.find("span", class_="m:contributor-display")
         authors = author_soup.findAll("div", {"contrib-type": "author"})
+        if not authors:
+            return results
         for author in authors:
             name = author.a.text.strip()
 
