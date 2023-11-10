@@ -68,7 +68,7 @@ def parse_publisher():
                 print(f'Cache hit - {doi}')
                 return jsonify(cached_response)
             else:
-                current_s3_last_modified = util.s3.s3_last_modified(doi)
+                current_s3_last_modified = s3_last_modified(doi)
                 if cached_s3_last_modified >= current_s3_last_modified:
                     if update_cache:
                         cache.set(doi, current_s3_last_modified,
