@@ -1,5 +1,8 @@
 import pdfkit
 from bs4 import BeautifulSoup
+from pdfkit.configuration import Configuration
+
+pdfkit_config = Configuration(wkhtmltopdf='/app/bin/wkhtmltopdf')
 
 
 def clean_html(soup: BeautifulSoup):
@@ -15,6 +18,7 @@ def html_to_pdf(html_str: str):
     cleaned = clean_html(soup)
     body = soup.find('body')
     return pdfkit.from_string(str(body) if body else str(cleaned),
+                              configuration=pdfkit_config,
                               options={"load-error-handling": "ignore",
                                        'load-media-error-handling': 'ignore',
                                        'no-images': "",
