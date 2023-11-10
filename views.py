@@ -31,7 +31,7 @@ def home():
     )
 
 
-@app.route('grobid-parse')
+@app.route('/grobid-parse')
 def grobid_parse():
     doi = request.args.get("doi")
     if doi.startswith('http'):
