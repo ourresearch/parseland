@@ -1,8 +1,10 @@
+import os
+
 import pdfkit
 from bs4 import BeautifulSoup
 from pdfkit.configuration import Configuration
 
-pdfkit_config = Configuration(wkhtmltopdf='/app/bin/wkhtmltopdf')
+pdfkit_config = Configuration(wkhtmltopdf=os.getenv('WKHTMLTOPDF'))
 
 
 def clean_html(soup: BeautifulSoup):

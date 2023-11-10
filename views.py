@@ -1,7 +1,8 @@
 import json
+import os
 import time
-import timeit
 from datetime import datetime, timedelta, timezone
+from urllib.parse import urljoin
 
 from flask import jsonify, request, redirect
 
@@ -9,7 +10,6 @@ from publisher.parsers.grobid import GrobidParser
 from util import s3
 from app import app
 from exceptions import APIError, BadLandingPageError
-from pdf.controller import PDFController
 from publisher.controller import PublisherController
 from publisher.utils import prep_message, check_bad_landing_page
 from repository.controller import RepositoryController
@@ -36,6 +36,12 @@ def grobid_parse():
     doi = request.args.get("doi")
     if doi.startswith('http'):
         doi = doi.split('doi.org/')[1]
+    forward = request.args.get('forward', False)
+    include_raw = request.args.get('include_raw', False)
+    if forward:
+        path = urljoin(os.getenv('OPENALEX_PDF_PARSER_URL'), 'parse-html')
+        url = f'{path}?doi={doi}&api_key={os.getenv("OPENALEX_PDF_PARSER_API_KEY")}&include_raw={include_raw}'
+        return redirect(url)
     html = get_landing_page(doi)
     pdf = html_to_pdf(html)
     parser = GrobidParser(pdf)
