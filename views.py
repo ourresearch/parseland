@@ -15,6 +15,8 @@ from repository.controller import RepositoryController
 from publisher import cache
 from dateutil.parser import parse
 
+from util.s3 import s3_last_modified
+
 
 @app.route("/")
 def home():
@@ -97,7 +99,7 @@ def parse_publisher():
     if check_cache and update_cache:
         if current_s3_last_modified is None:
             tic = time.perf_counter()
-            current_s3_last_modified = util.s3.s3_last_modified(doi)
+            current_s3_last_modified = s3_last_modified(doi)
             toc = time.perf_counter()
             print(f"S3 fetch took {toc - tic:0.4f} seconds")
         cache.set(doi, current_s3_last_modified, response)
