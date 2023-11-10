@@ -36,7 +36,7 @@ def grobid_parse():
     doi = request.args.get("doi")
     if doi.startswith('http'):
         doi = doi.split('doi.org/')[1]
-    forward = request.args.get('forward', False)
+    forward = request.args.get('forward', True)
     include_raw = request.args.get('include_raw', False)
     if forward:
         path = urljoin(os.getenv('OPENALEX_PDF_PARSER_URL'), 'parse-html')
