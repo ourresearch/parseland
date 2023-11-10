@@ -1,4 +1,5 @@
 import os
+from gzip import decompress
 from urllib.parse import quote
 
 import boto3
@@ -22,7 +23,8 @@ DEFAULT_S3 = make_s3()
 
 
 def s3_last_modified(doi, s3=DEFAULT_S3):
-    return get_obj(S3_LANDING_PAGE_BUCKET, doi_to_lp_key(doi), s3)['LastModified']
+    return get_obj(S3_LANDING_PAGE_BUCKET, doi_to_lp_key(doi), s3)[
+        'LastModified']
 
 
 def get_obj(bucket, key, s3=DEFAULT_S3):
@@ -37,3 +39,10 @@ def get_obj(bucket, key, s3=DEFAULT_S3):
 
 def doi_to_lp_key(doi: str):
     return quote(doi.lower(), safe='')
+
+
+def get_landing_page(doi, s3=DEFAULT_S3):
+    key = doi_to_lp_key(doi)
+    obj = get_obj(S3_LANDING_PAGE_BUCKET, key, s3)
+    contents = decompress(obj['Body'].read())
+    return contents

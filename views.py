@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 from flask import jsonify, request
 
-import util.s3
+from util import s3
 from app import app
 from exceptions import APIError, BadLandingPageError
 from pdf.controller import PDFController
@@ -25,6 +25,15 @@ def home():
             "msg": "Don't panic",
         }
     )
+
+
+@app.route('/view')
+def view():
+    doi = request.args.get("doi")
+    if doi.startswith('http'):
+        doi = doi.split('doi.org/')[1]
+    lp_contents = s3.get_landing_page(doi)
+    return lp_contents.decode()
 
 
 @app.route("/parse-publisher")
@@ -60,7 +69,8 @@ def parse_publisher():
                 current_s3_last_modified = util.s3.s3_last_modified(doi)
                 if cached_s3_last_modified >= current_s3_last_modified:
                     if update_cache:
-                        cache.set(doi, current_s3_last_modified, cached_response)
+                        cache.set(doi, current_s3_last_modified,
+                                  cached_response)
                     return jsonify(cached_response)
                 else:
                     update_cache = True
@@ -130,4 +140,4 @@ def trigger_error():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=5001)

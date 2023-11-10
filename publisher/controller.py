@@ -1,5 +1,3 @@
-from gzip import decompress
-
 import filetype
 from bs4 import BeautifulSoup
 
@@ -7,7 +5,7 @@ from exceptions import ParserNotFoundError, WrongFormatLandingPageError
 from publisher.parsers.generic import GenericPublisherParser
 from publisher.parsers.parser import PublisherParser
 from publisher.utils import normalize_doi
-from util.s3 import make_s3, get_obj, S3_LANDING_PAGE_BUCKET, doi_to_lp_key
+from util.s3 import make_s3, get_landing_page
 
 _s3 = make_s3()
 
@@ -20,8 +18,7 @@ class PublisherController:
         self.soup = self.get_soup()
 
     def get_html(self):
-        obj = get_obj(S3_LANDING_PAGE_BUCKET, doi_to_lp_key(self.doi), s3=_s3)
-        contents = decompress(obj['Body'].read())
+        contents = get_landing_page(self.doi, s3=_s3)
         ext = filetype.guess_extension(contents)
         # ext will probably be None if content is actually html
         if ext and 'pdf' in ext:
