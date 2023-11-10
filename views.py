@@ -3,8 +3,9 @@ import time
 import timeit
 from datetime import datetime, timedelta, timezone
 
-from flask import jsonify, request
+from flask import jsonify, request, redirect
 
+from publisher.parsers.grobid import GrobidParser
 from util import s3
 from app import app
 from exceptions import APIError, BadLandingPageError
@@ -15,7 +16,8 @@ from repository.controller import RepositoryController
 from publisher import cache
 from dateutil.parser import parse
 
-from util.s3 import s3_last_modified
+from util.grobid import html_to_pdf
+from util.s3 import s3_last_modified, get_landing_page
 
 
 @app.route("/")
@@ -27,6 +29,17 @@ def home():
             "msg": "Don't panic",
         }
     )
+
+
+@app.route('grobid-parse')
+def grobid_parse():
+    doi = request.args.get("doi")
+    if doi.startswith('http'):
+        doi = doi.split('doi.org/')[1]
+    html = get_landing_page(doi)
+    pdf = html_to_pdf(html)
+    parser = GrobidParser(pdf)
+    return parser.parse()
 
 
 @app.route('/view')
