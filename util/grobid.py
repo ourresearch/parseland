@@ -18,11 +18,13 @@ def most_frequent_domain(html_string):
     return mfd[0][0] if mfd else None
 
 
-def try_get_base_url(soup):
+def try_get_base_url(soup: BeautifulSoup):
     if canonical := soup.find("link", {"rel": "canonical"}):
         return urlparse(canonical.get('href')).netloc
     elif base := soup.find('base'):
         return urlparse(base.get('href')).netloc
+    elif meta := soup.select_one('meta[name*=url]'):
+        return urlparse(meta.get('content')).netloc
     return most_frequent_domain(str(soup))
 
 
