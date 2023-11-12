@@ -27,7 +27,7 @@ def try_get_base_url(soup):
 
 
 def clean_soup(soup: BeautifulSoup):
-    if domain := try_get_base_url(str(soup)):
+    if domain := try_get_base_url(soup):
         tag = soup.new_tag(name='base', attrs={'href': 'https://' + domain})
         soup.select_one('html').insert(0, tag)
         has_static_files = True
