@@ -1,4 +1,7 @@
 import os
+import re
+from collections import Counter
+from urllib.parse import urlparse
 
 import pdfkit
 from bs4 import BeautifulSoup
@@ -7,24 +10,47 @@ from pdfkit.configuration import Configuration
 pdfkit_config = Configuration(wkhtmltopdf=os.getenv('WKHTMLTOPDF'))
 
 
-def clean_html(soup: BeautifulSoup):
-    for tag in soup.select('[src]'):
-        tag.decompose()
-    for tag in soup.select('[href]'):
-        tag['href'] = ''
-    return soup
+def most_frequent_domain(html_string):
+    url_pattern = re.compile(r'https?://([a-zA-Z0-9.-]+)')
+    matches = re.findall(url_pattern, html_string)
+    domain_counter = Counter(matches)
+    mfd = domain_counter.most_common(1)
+    return mfd[0][0] if mfd else None
+
+
+def try_get_base_url(soup):
+    if canonical := soup.find("link", {"rel": "canonical"}):
+        return urlparse(canonical.get('href')).netloc
+    elif base := soup.find('base'):
+        return urlparse(base.get('href')).netloc
+    return most_frequent_domain(str(soup))
+
+
+def clean_soup(soup: BeautifulSoup):
+    if domain := try_get_base_url(str(soup)):
+        tag = soup.new_tag(name='base', attrs={'href': 'https://' + domain})
+        soup.select_one('html').insert(0, tag)
+        has_static_files = True
+    else:
+        for tag in soup.select('[src]'):
+            tag.decompose()
+        for tag in soup.select('[href]'):
+            tag['href'] = ''
+        has_static_files = False
+    return soup, has_static_files
 
 
 def html_to_pdf(html_str: str):
     soup = BeautifulSoup(html_str, parser='lxml', features='lxml')
-    cleaned = clean_html(soup)
-    body = soup.find('body')
-    return pdfkit.from_string(str(body) if body else str(cleaned),
+    cleaned, has_static_files = clean_soup(soup)
+    opts = {"load-error-handling": "ignore",
+            'load-media-error-handling': 'ignore',
+            'log-level': 'info'}
+    if not has_static_files:
+        opts.update({'no-images': "",
+                     'disable-javascript': '',
+                     'disable-external-links': '',
+                     'disable-internal-links': '', })
+    return pdfkit.from_string(str(cleaned),
                               configuration=pdfkit_config,
-                              options={"load-error-handling": "ignore",
-                                       'load-media-error-handling': 'ignore',
-                                       'no-images': "",
-                                       'disable-javascript': '',
-                                       'disable-external-links': '',
-                                       'disable-internal-links': '',
-                                       'log-level': 'info'})
+                              options=opts)

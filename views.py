@@ -2,7 +2,7 @@ import json
 import os
 import time
 from datetime import datetime, timedelta, timezone
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlencode
 
 from flask import jsonify, request, redirect
 
@@ -15,8 +15,9 @@ from publisher.utils import prep_message, check_bad_landing_page
 from repository.controller import RepositoryController
 from publisher import cache
 from dateutil.parser import parse
+from bs4 import BeautifulSoup
 
-from util.grobid import html_to_pdf
+from util.grobid import html_to_pdf, clean_soup
 from util.s3 import s3_last_modified, get_landing_page
 
 
@@ -37,10 +38,16 @@ def grobid_parse():
     if doi.startswith('http'):
         doi = doi.split('doi.org/')[1]
     forward = request.args.get('forward', True)
-    include_raw = request.args.get('include_raw', False)
+    params = request.args.copy()
+    if 'forward' in params:
+        del params['forward']
+    del params['doi']
+    params['doi'] = doi
+    params['api_key'] = os.getenv("OPENALEX_PDF_PARSER_API_KEY")
+    qs = urlencode(params)
     if forward:
         path = urljoin(os.getenv('OPENALEX_PDF_PARSER_URL'), 'parse-html')
-        url = f'{path}?doi={doi}&api_key={os.getenv("OPENALEX_PDF_PARSER_API_KEY")}&include_raw={include_raw}'
+        url = f'{path}?{qs}'
         return redirect(url)
     html = get_landing_page(doi)
     pdf = html_to_pdf(html)
@@ -54,7 +61,8 @@ def view():
     if doi.startswith('http'):
         doi = doi.split('doi.org/')[1]
     lp_contents = s3.get_landing_page(doi)
-    return lp_contents.decode()
+    soup = BeautifulSoup(lp_contents.decode(), features='lxml', parser='lxml')
+    return str(clean_soup(soup))
 
 
 @app.route("/parse-publisher")
@@ -111,6 +119,7 @@ def parse_publisher():
         "message": message,
         "metadata": {
             "parser": parser.parser_name,
+            "grobid_parse_url": 'https://parseland.herokuapp.com/grobid-parse?doi=' + doi,
             "doi": doi,
             "doi_url": f"https://doi.org/{doi}",
         },
