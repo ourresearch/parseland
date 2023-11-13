@@ -47,10 +47,10 @@ def html_to_pdf(html_str: str):
     cleaned, has_static_files = clean_soup(soup)
     opts = {"load-error-handling": "ignore",
             'load-media-error-handling': 'ignore',
+            'disable-javascript': '',
             'log-level': 'info'}
     if not has_static_files:
         opts.update({'no-images': "",
-                     'disable-javascript': '',
                      'disable-external-links': '',
                      'disable-internal-links': '', })
     return pdfkit.from_string(str(cleaned),
