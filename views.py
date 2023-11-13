@@ -55,22 +55,27 @@ def grobid_parse():
     return parser.parse()
 
 
+def is_true(value: str):
+    return value.lower().startswith('t') or value == '1'
+
+
 @app.route('/view')
 def view():
     doi = request.args.get("doi")
-    try_stylize = request.args.get('try_stylize', False)
+    try_stylize = request.args.get('try_stylize', default=False, type=is_true)
     if doi.startswith('http'):
         doi = doi.split('doi.org/')[1]
     lp_contents = s3.get_landing_page(doi)
     soup = BeautifulSoup(lp_contents.decode(), features='lxml', parser='lxml')
-    return str(clean_soup(soup, try_stylize))
+    cleaned, _ = clean_soup(soup, try_stylize)
+    return str(cleaned)
 
 
 @app.route("/parse-publisher")
 def parse_publisher():
     doi = request.args.get("doi")
     if doi.startswith('http'):
-        doi = doi.split('doi.org/')[1]
+        doi = doi.split('doi.org/')[-1]
     check_cache = request.args.get('check_cache', 'true')
     check_cache = check_cache.startswith('t') or check_cache == 1
     update_cache = False
