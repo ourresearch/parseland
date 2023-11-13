@@ -58,11 +58,12 @@ def grobid_parse():
 @app.route('/view')
 def view():
     doi = request.args.get("doi")
+    try_stylize = request.args.get('try_stylize', False)
     if doi.startswith('http'):
         doi = doi.split('doi.org/')[1]
     lp_contents = s3.get_landing_page(doi)
     soup = BeautifulSoup(lp_contents.decode(), features='lxml', parser='lxml')
-    return str(clean_soup(soup))
+    return str(clean_soup(soup, try_stylize))
 
 
 @app.route("/parse-publisher")

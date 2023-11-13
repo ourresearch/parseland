@@ -28,28 +28,28 @@ def try_get_base_url(soup: BeautifulSoup):
     return most_frequent_domain(str(soup))
 
 
-def clean_soup(soup: BeautifulSoup):
-    if domain := try_get_base_url(soup):
+def clean_soup(soup: BeautifulSoup, try_stylize=False):
+    if try_stylize and (domain := try_get_base_url(soup)):
         tag = soup.new_tag(name='base', attrs={'href': 'https://' + domain})
         soup.select_one('html').insert(0, tag)
-        has_static_files = True
+        stylized = True
     else:
         for tag in soup.select('[src]'):
             tag.decompose()
         for tag in soup.select('[href]'):
             tag['href'] = ''
-        has_static_files = False
-    return soup, has_static_files
+        stylized = False
+    return soup, stylized
 
 
 def html_to_pdf(html_str: str):
     soup = BeautifulSoup(html_str, parser='lxml', features='lxml')
-    cleaned, has_static_files = clean_soup(soup)
+    cleaned, stylized = clean_soup(soup)
     opts = {"load-error-handling": "ignore",
             'load-media-error-handling': 'ignore',
             'disable-javascript': '',
             'log-level': 'info'}
-    if not has_static_files:
+    if not stylized:
         opts.update({'no-images': "",
                      'disable-external-links': '',
                      'disable-internal-links': '', })
