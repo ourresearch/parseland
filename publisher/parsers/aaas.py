@@ -13,7 +13,7 @@ class AAAS(PublisherParser):
         return self.domain_in_canonical_link('science.org')
 
     def parse_authors(self):
-        author_tags = self.soup.select('div[property=author]')
+        author_tags = self.soup.select('div[property=author]:has(span)')
         authors = []
         for tag in author_tags:
             given_name = tag.select_one('span[property=givenName]').text
