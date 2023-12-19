@@ -3,7 +3,7 @@ from unicodedata import normalize
 
 from publisher.elements import AuthorAffiliations
 from publisher.parsers.parser import PublisherParser
-from publisher.parsers.utils import is_h_tag
+from publisher.parsers.utils import is_h_tag, strip_prefix, strip_suffix
 
 
 class Wiley(PublisherParser):
@@ -49,9 +49,13 @@ class Wiley(PublisherParser):
                     or aff.text.lower().startswith("contribution")
                     or aff.text.lower().startswith("joint first authors")
                     or aff.text.lower().startswith("†joint")
-                ):
+                ) and len(aff_soup) > 1:
                     break
-                affiliations.append(normalize("NFKD", aff.text))
+                aff_txt = aff.text.strip()
+                aff_txt = strip_suffix('Direct inquiries.*', aff_txt)
+                aff_txt = strip_prefix('Authors are with ', aff_txt)
+                aff_txt = aff_txt.strip()
+                affiliations.append(normalize("NFKD", aff_txt))
             results.append(
                 AuthorAffiliations(
                     name=name,
