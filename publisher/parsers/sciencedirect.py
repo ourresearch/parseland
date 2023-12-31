@@ -14,9 +14,26 @@ class ScienceDirect(PublisherParser):
         return self.soup.find_all("a", class_="author") or self.soup.select(
             'div#author-group')
 
+    def get_collab_authors(self):
+        groups = self.soup.select('div.author-collaboration div.author-group')
+        authors = []
+        for group in groups:
+            aff = group.select_one('dl.affiliation').text.strip()
+            for author_tag in group.select('span.button-link-text'):
+                name = author_tag.get_text(separator=' ')
+                authors.append({'name': name,
+                                'affiliations': [aff],
+                                'is_corresponding': None})
+        return authors
+
     def parse(self):
         """Core function returning list of authors with their affiliations."""
-        return self.get_json_authors_affiliations_abstract()
+        authors = []
+        if self.has_collab():
+            authors = self.get_collab_authors()
+        resp = self.get_json_authors_affiliations_abstract()
+        resp['authors'].extend(authors)
+        return resp
 
     @staticmethod
     def _get_corresponding_ids(author_group):
@@ -168,6 +185,9 @@ class ScienceDirect(PublisherParser):
                 abstract = re.sub(r" +", " ", abstract).strip()
 
         return {"authors": all_authors, "abstract": abstract}
+
+    def has_collab(self):
+        return bool(self.soup.select('div.author-collaboration'))
 
     def abstract_text(self, abstracts_json):
         if isinstance(abstracts_json, list):
