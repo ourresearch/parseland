@@ -2,9 +2,10 @@ import json
 import os
 import time
 from datetime import datetime, timedelta, timezone
+from io import BytesIO
 from urllib.parse import urljoin, urlencode
 
-from flask import jsonify, request, redirect
+from flask import jsonify, request, redirect, send_file
 
 from publisher.parsers.grobid import GrobidParser
 from util import s3
@@ -18,7 +19,7 @@ from dateutil.parser import parse
 from bs4 import BeautifulSoup
 
 from util.grobid import html_to_pdf, clean_soup
-from util.s3 import s3_last_modified, get_landing_page
+from util.s3 import s3_last_modified, get_landing_page, is_pdf
 
 
 @app.route("/")
@@ -66,6 +67,10 @@ def view():
     if doi.startswith('http'):
         doi = doi.split('doi.org/')[1]
     lp_contents = s3.get_landing_page(doi)
+    if is_pdf(lp_contents):
+        # Specify the mimetype as 'application/pdf' and set as_attachment to False
+        return send_file(BytesIO(lp_contents), mimetype='application/pdf',
+                         as_attachment=False)
     soup = BeautifulSoup(lp_contents.decode(), features='lxml', parser='lxml')
     cleaned, _ = clean_soup(soup, try_stylize)
     return str(cleaned)

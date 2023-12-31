@@ -46,3 +46,7 @@ def get_landing_page(doi, s3=DEFAULT_S3):
     obj = get_obj(S3_LANDING_PAGE_BUCKET, key, s3)
     contents = decompress(obj['Body'].read())
     return contents
+
+
+def is_pdf(contents: bytes):
+    return contents.startswith(b"%PDF-")
