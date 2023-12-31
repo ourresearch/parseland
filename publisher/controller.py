@@ -1,37 +1,19 @@
-import filetype
 from bs4 import BeautifulSoup
 
-from exceptions import ParserNotFoundError, WrongFormatLandingPageError
+from exceptions import ParserNotFoundError
 from publisher.parsers.generic import GenericPublisherParser
 from publisher.parsers.parser import PublisherParser
 from publisher.utils import normalize_doi
-from util.s3 import make_s3, get_landing_page
+from util.s3 import make_s3
 
 _s3 = make_s3()
 
 
 class PublisherController:
-    def __init__(self, doi):
+    def __init__(self, html, doi):
         self.doi = normalize_doi(doi)
         self.parsers = PublisherParser.__subclasses__()
-        self.html = self.get_html()
-        self.soup = self.get_soup()
-
-    def get_html(self):
-        contents = get_landing_page(self.doi, s3=_s3)
-        ext = filetype.guess_extension(contents)
-        # ext will probably be None if content is actually html
-        if ext and 'pdf' in ext:
-            raise WrongFormatLandingPageError(ext)
-        elif not ext:
-            self.html = contents
-            return self.html
-        else:
-            raise WrongFormatLandingPageError(ext)
-
-    def get_soup(self):
-        soup = BeautifulSoup(self.html, "lxml")
-        return soup
+        self.soup = BeautifulSoup(html, "lxml")
 
     def find_parser(self):
         best_parser = None

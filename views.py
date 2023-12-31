@@ -116,11 +116,15 @@ def parse_publisher():
                     update_cache = True
         else:
             update_cache = True
-
-    pc = PublisherController(doi)
-    if check_bad_landing_page(pc.soup):
-        raise BadLandingPageError()
-    parser = pc.find_parser()
+    lp_contents = get_landing_page(doi)
+    grobid_parse_url = 'https://parseland.herokuapp.com/grobid-parse?doi=' + doi
+    if is_pdf(lp_contents):
+        return redirect(grobid_parse_url)
+    else:
+        pc = PublisherController(lp_contents, doi)
+        if check_bad_landing_page(pc.soup):
+            raise BadLandingPageError()
+        parser = pc.find_parser()
 
     parsed_message = parser.parse()
 
@@ -130,17 +134,14 @@ def parse_publisher():
         "message": message,
         "metadata": {
             "parser": parser.parser_name,
-            "grobid_parse_url": 'https://parseland.herokuapp.com/grobid-parse?doi=' + doi,
+            "grobid_parse_url": grobid_parse_url,
             "doi": doi,
             "doi_url": f"https://doi.org/{doi}",
         },
     }
     if check_cache and update_cache:
         if current_s3_last_modified is None:
-            tic = time.perf_counter()
             current_s3_last_modified = s3_last_modified(doi)
-            toc = time.perf_counter()
-            print(f"S3 fetch took {toc - tic:0.4f} seconds")
         cache.set(doi, current_s3_last_modified, response)
     return jsonify(response)
 

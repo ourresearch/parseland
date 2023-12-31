@@ -6,6 +6,7 @@ import boto3
 import botocore
 
 from exceptions import S3FileNotFoundError
+from publisher.utils import normalize_doi
 
 S3_LANDING_PAGE_BUCKET = os.getenv('AWS_S3_LANDING_PAGE_BUCKET')
 
@@ -38,6 +39,7 @@ def get_obj(bucket, key, s3=DEFAULT_S3):
 
 
 def doi_to_lp_key(doi: str):
+    doi = normalize_doi(doi)
     return quote(doi.lower(), safe='')
 
 
