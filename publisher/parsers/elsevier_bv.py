@@ -87,6 +87,9 @@ class ElsevierBV(PublisherParser):
             if affiliation_soup and not info_groups:
                 for aff in affiliation_soup.stripped_strings:
                     affiliations.append(aff.strip())
+            if not affiliations:
+                affiliation_soup = author.select('div.affiliation')
+                affiliations = [aff.text.strip() for aff in affiliation_soup]
             author_results.append(
                 AuthorAffiliations(
                     name=name.strip(),
