@@ -120,7 +120,8 @@ def parse_publisher():
     grobid_parse_url = 'https://parseland.herokuapp.com/grobid-parse?doi=' + doi
     if is_pdf(lp_contents):
         params = {'doi': doi,
-                  'api_key': os.getenv("OPENALEX_PDF_PARSER_API_KEY")}
+                  'api_key': os.getenv("OPENALEX_PDF_PARSER_API_KEY"),
+                  'include_raw': 'false'}
         qs = urlencode(params)
         path = urljoin(os.getenv('OPENALEX_PDF_PARSER_URL'), 'parse')
         url = f'{path}?{qs}'
