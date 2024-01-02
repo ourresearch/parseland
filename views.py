@@ -119,7 +119,12 @@ def parse_publisher():
     lp_contents = get_landing_page(doi)
     grobid_parse_url = 'https://parseland.herokuapp.com/grobid-parse?doi=' + doi
     if is_pdf(lp_contents):
-        return redirect(grobid_parse_url)
+        params = {'doi': doi,
+                  'api_key': os.getenv("OPENALEX_PDF_PARSER_API_KEY")}
+        qs = urlencode(params)
+        path = urljoin(os.getenv('OPENALEX_PDF_PARSER_URL'), 'parse')
+        url = f'{path}?{qs}'
+        return redirect(url)
     else:
         pc = PublisherController(lp_contents, doi)
         if check_bad_landing_page(pc.soup):
