@@ -45,14 +45,37 @@ class Springer(PublisherParser):
             })
         return authors
 
-    def parse_authors_method_4(self):
-        author_tags = self.soup.select('ol.c-article-author-affiliation__list li[id*=Aff]')
+    @classmethod
+    def _split(cls, input_string, split_char=',', min_length=5):
+        substrings = []
+        current_substr = ''
+        for char in input_string:
+            current_substr += char
+            if char == split_char:
+                if len(current_substr.strip()) >= min_length or not substrings:
+                    substrings.append(current_substr)
+                elif substrings:
+                    substrings[-1] += current_substr
+                current_substr = ''
+        if current_substr:
+            if len(current_substr.strip()) >= min_length:
+                substrings.append(current_substr)
+            elif substrings:
+                substrings[-1] += current_substr
+
+        return substrings
+
+    def parse_authors_method_2(self):
+        author_tags = self.soup.select(
+            'ol.c-article-author-affiliation__list li[id*=Aff]')
         authors = []
         for author_tag in author_tags:
             aff_tag = author_tag.select_one('p[class*=affiliation__address]')
             aff_text = aff_tag.text.strip()
             authors_tag = author_tag.select_one('p[class*=authors-list]')
-            author_names = list(set([name.strip() for name in authors_tag.text.strip().split(',') if '(' not in name]))
+            author_names = list(set([name.strip(' ,') for name in
+                                     self._split(authors_tag.text.replace('&', ',').strip()) if
+                                     '(' not in name]))
             for name in author_names:
                 authors.append({
                     'name': name,
@@ -64,10 +87,9 @@ class Springer(PublisherParser):
     def parse(self):
         article_metadatas = self.parse_article_metadatas()
         abstract = self._try_find_abstract_in_metadatas(article_metadatas)
+        authors_affiliations = None
         if self.soup.select('li.c-article-authors-listing__item'):
             authors_affiliations = self.parse_authors_method_3()
-        else:
-            authors_affiliations = self.parse_ld_json(article_metadatas)
 
         if not authors_affiliations:
             authors = self.get_authors()
@@ -78,13 +100,10 @@ class Springer(PublisherParser):
                 )
 
         if not authors_affiliations:
-            authors_affiliations = self.get_authors_method_2()
+            authors_affiliations = self.parse_authors_method_2()
 
         if not authors_affiliations:
             authors_affiliations = self.parse_author_meta_tags()
-
-        if not authors_affiliations:
-            authors_affiliations = self.parse_authors_method_4()
 
         if not authors_affiliations:
             authors = self.get_authors(try_editors=True)
@@ -94,8 +113,11 @@ class Springer(PublisherParser):
                     authors, affiliations
                 )
 
+        if not authors_affiliations:
+            authors_affiliations = self.parse_ld_json(article_metadatas)
+
         return {"authors": authors_affiliations,
-                "abstract": abstract or self.parse_abstract(),}
+                "abstract": abstract or self.parse_abstract(), }
 
     def parse_abstract(self):
         if abstract_soup := self.soup.find("section", class_="Abstract"):
@@ -228,51 +250,6 @@ class Springer(PublisherParser):
                 Affiliation(aff_id=aff_id, organization=affiliation))
 
         return affiliations
-
-    def get_authors_method_2(self):
-        author_soup = self.soup.find(id="author-information-content")
-        if not author_soup:
-            return None
-        list_items = author_soup.ol.findAll("li")
-
-        # get mapping of affiliation -> authors
-        results = []
-        for item in list_items:
-            affiliation = item.p.text
-            authors = item.p.findNext("p").text
-            result = {
-                "affiliation": affiliation.replace("\n", ""),
-                "authors": self.parser_author_list(authors),
-            }
-            results.append(result)
-
-        response = defaultdict(list)
-        for row in results:
-            for author in row["authors"]:
-                response[author].append(row["affiliation"])
-
-        # get proper order of author names
-        name_soup = self.soup.findAll("span", class_="js-search-name")
-        ordered_names = []
-        for name in name_soup:
-            ordered_names.append(normalize("NFKD", name.text))
-
-        # build new author list with proper order
-        ordered_response = []
-        for name in ordered_names:
-            ordered_response.append(
-                AuthorAffiliations(name=name, affiliations=response[name])
-            )
-
-        return ordered_response
-
-    @staticmethod
-    def parser_author_list(authors):
-        authors_split = authors.replace("&", ",").split(",")
-        authors_normalized = [
-            normalize("NFKD", author).strip() for author in authors_split
-        ]
-        return authors_normalized
 
     test_cases = [
         {
