@@ -45,6 +45,22 @@ class Springer(PublisherParser):
             })
         return authors
 
+    def parse_authors_method_4(self):
+        author_tags = self.soup.select('ol.c-article-author-affiliation__list li[id*=Aff]')
+        authors = []
+        for author_tag in author_tags:
+            aff_tag = author_tag.select_one('p[class*=affiliation__address]')
+            aff_text = aff_tag.text.strip()
+            authors_tag = author_tag.select_one('p[class*=authors-list]')
+            author_names = list(set([name.strip() for name in authors_tag.text.strip().split(',') if '(' not in name]))
+            for name in author_names:
+                authors.append({
+                    'name': name,
+                    'affiliations': [aff_text],
+                    'is_corresponding': None
+                })
+        return authors
+
     def parse(self):
         article_metadatas = self.parse_article_metadatas()
         abstract = self._try_find_abstract_in_metadatas(article_metadatas)
@@ -68,7 +84,7 @@ class Springer(PublisherParser):
             authors_affiliations = self.parse_author_meta_tags()
 
         if not authors_affiliations:
-            authors_affiliations = []
+            authors_affiliations = self.parse_authors_method_4()
 
         if not authors_affiliations:
             authors = self.get_authors(try_editors=True)
