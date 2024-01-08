@@ -89,18 +89,18 @@ def parse_publisher():
         cached = cache.get(doi)
         if cached:
             cached_obj = json.loads(cached)
-            day_ago = datetime.now(timezone.utc) - timedelta(hours=24)
+            five_min_ago = datetime.now(timezone.utc) - timedelta(minutes=5)
             if len(cached_obj) == 3:
                 last_updated, cached_s3_last_modified, cached_response = cached_obj
                 last_updated = parse(last_updated)
-                if last_updated >= day_ago:
+                if last_updated >= five_min_ago:
                     print(f'Cache hit - {doi}')
                     return jsonify(cached_response)
             else:
                 cached_s3_last_modified, cached_response = cached_obj
                 update_cache = True
             cached_s3_last_modified = parse(cached_s3_last_modified)
-            if cached_s3_last_modified >= day_ago:
+            if cached_s3_last_modified >= five_min_ago:
                 if update_cache:
                     cache.set(doi, cached_s3_last_modified, cached_response)
                 print(f'Cache hit - {doi}')
