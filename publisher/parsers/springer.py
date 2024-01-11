@@ -104,6 +104,8 @@ class Springer(PublisherParser):
 
         if not authors_affiliations:
             authors_affiliations = self.parse_author_meta_tags()
+            for author in authors_affiliations:
+                author['affiliations'] = [aff.split('Fax')[0] for aff in author['affiliations']]
 
         if not authors_affiliations:
             authors = self.get_authors(try_editors=True)
