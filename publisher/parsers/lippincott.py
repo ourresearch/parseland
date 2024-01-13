@@ -2,7 +2,7 @@ import re
 
 from publisher.parsers.parser import PublisherParser
 from publisher.elements import Author, Affiliation
-from publisher.parsers.utils import name_in_text, split_name
+from publisher.parsers.utils import name_in_text, split_name, strip_prefix
 
 
 class Lippincott(PublisherParser):
@@ -10,10 +10,13 @@ class Lippincott(PublisherParser):
 
     def is_publisher_specific_parser(self):
         return self.domain_in_meta_og_url(
-            "journals.lww.com") or bool(self.soup.find(id="ejp-article-authors")) or self.substr_in_citation_publisher('American Society of Anesthesiologists')
+            "journals.lww.com") or bool(self.soup.find(
+            id="ejp-article-authors")) or self.substr_in_citation_publisher(
+            'American Society of Anesthesiologists')
 
     def authors_found(self):
-        return self.soup.find(id="ejp-article-authors") or self.soup.select('.al-author-name')
+        return self.soup.find(id="ejp-article-authors") or self.soup.select(
+            '.al-author-name')
 
     def parse(self):
         if bool(self.soup.select('.al-author-name')):
@@ -42,11 +45,15 @@ class Lippincott(PublisherParser):
             email_tag.decompose()
         aff = affiliation_tag.text.strip()
         authors = []
-        corr_author_email = (self.soup.select_one('.article-footnote a[href*=mailto]') or self.soup.select_one('.info-author-correspondence a[href*=mailto]')).get('href')
+        corr_author_email = (self.soup.select_one(
+            '.article-footnote a[href*=mailto]') or self.soup.select_one(
+            '.info-author-correspondence a[href*=mailto]')).get('href')
         for name in author_names:
             name_split = [item for item in split_name(name) if '.' not in item]
             authors.append(
-                {'name': name, 'affiliations': [aff], 'is_corresponding': name_in_text(name_split[-1].lower(), corr_author_email.lower())})
+                {'name': name, 'affiliations': [aff],
+                 'is_corresponding': name_in_text(name_split[-1].lower(),
+                                                  corr_author_email.lower())})
         return authors
 
     def get_authors(self):
@@ -76,13 +83,23 @@ class Lippincott(PublisherParser):
             authors.append(Author(name=name, aff_ids=aff_ids if aff_ids else [],
                                   is_corresponding=is_corresponding))
 
+        def author_already_exists(name):
+            for author in authors:
+                if author.name.lower() == name.lower():
+                    return True
+            return False
+
         # authors without ids
-        if not authors and author_section.p:
+        if author_section.p:
             author_names = author_section.find("p")
+            for sup in author_names.find_all('sup'):
+                sup.decompose()
 
             parsed_author_names = author_names.text.split(";")
             for name in parsed_author_names:
                 name = name.replace("∗", "").strip()
+                if author_already_exists(name):
+                    continue
                 authors.append(Author(name=name, aff_ids=[]))
 
         if not [author for author in authors if author.is_corresponding]:
@@ -99,6 +116,31 @@ class Lippincott(PublisherParser):
         return authors
 
     def get_affiliations(self):
+        aff_blacklist_prefixes = ['accepted',
+                                  'received',
+                                  'presented',
+                                  'this work',
+                                  'revision',
+                                  'disclosure',
+                                  'reprints',
+                                  'the authors have']
+        aff_blacklist_substr = ['contributed equally']
+
+        def exclude_aff(aff_text):
+            for prefix in aff_blacklist_prefixes:
+                if aff_text.lower().startswith(prefix):
+                    return True
+            for substr in aff_blacklist_substr:
+                if substr in aff_text.lower():
+                    return True
+            return False
+
+        def cleanup_aff(aff_text):
+            aff_text = aff_text.split(' to:')[-1]
+            aff_text = aff_text.split('correspondence to ')[-1]
+            aff_text = strip_prefix(r'[0-9]+', aff_text)
+            return aff_text
+
         aff_soup = self.soup.find("div",
                                   class_="ejp-article-authors-info-holder")
         if not aff_soup:
@@ -112,7 +154,7 @@ class Lippincott(PublisherParser):
                 continue
 
             aff_id = aff.text
-            organization = aff.next_element.next_element
+            organization = cleanup_aff(aff.next_element.next_element)
             results.append(
                 Affiliation(aff_id=aff_id, organization=organization))
 
@@ -123,11 +165,13 @@ class Lippincott(PublisherParser):
             if aff_ids := re.findall(r'^(\d+)\.', aff.text):
                 aff_id = aff_ids[0]
             organization = re.sub(r'^(\d+)\.', '', aff.text.strip()).strip()
-            if 'financial disclosure' not in organization.lower():
-                results.append(
-                    Affiliation(aff_id=aff_id, organization=organization))
+            if 'financial disclosure' in organization.lower():
+                continue
+            organization = cleanup_aff(organization)
+            results.append(
+                Affiliation(aff_id=aff_id, organization=organization))
 
-        return results
+        return [result for result in results if not exclude_aff(result.organization)]
 
     @staticmethod
     def clean_name(name):
