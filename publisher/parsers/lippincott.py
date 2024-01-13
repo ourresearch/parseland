@@ -1,4 +1,5 @@
 import re
+from nameparser import HumanName
 
 from publisher.parsers.parser import PublisherParser
 from publisher.elements import Author, Affiliation
@@ -37,21 +38,41 @@ class Lippincott(PublisherParser):
                           flags=re.IGNORECASE).strip() if abstract else None
         return {"authors": authors_affiliations, "abstract": abstract}
 
+    @classmethod
+    def affs_last_name_map(cls, aff_tags):
+        d = {}
+        fallback_affs = []
+        for aff_tag in aff_tags:
+            if email_tag := aff_tag.find('a'):
+                email_tag.decompose()
+            aff_txt = aff_tag.text.strip()
+            fallback_affs.append(aff_txt)
+            if last_name := re.findall(r'^(\(.*?\))', aff_txt):
+                only_aff = aff_txt.replace(last_name[0], '')
+                last_name = last_name[0]
+                for name in last_name.split(','):
+                    name = name.strip('()')
+                    if name not in d:
+                        d[name] = []
+                    d[name].append(only_aff)
+        return d, fallback_affs
+
     def get_authors_2(self):
         author_names = [tag.text for tag in
                         self.soup.select('.al-author-name a.linked-name')]
-        affiliation_tag = self.soup.select_one('.article-footnote')
-        if email_tag := affiliation_tag.find('a'):
-            email_tag.decompose()
-        aff = affiliation_tag.text.strip()
+        affiliation_tags = self.soup.select('.article-footnote')
+        affs_map, affs = self.affs_last_name_map(affiliation_tags)
         authors = []
-        corr_author_email = (self.soup.select_one(
+        corr_author_email = ''
+        if corr_author_email_tag := self.soup.select_one(
             '.article-footnote a[href*=mailto]') or self.soup.select_one(
-            '.info-author-correspondence a[href*=mailto]')).get('href')
+            '.info-author-correspondence a[href*=mailto]'):
+            corr_author_email = corr_author_email_tag.get('href')
         for name in author_names:
+            name_parsed = HumanName(name)
             name_split = [item for item in split_name(name) if '.' not in item]
             authors.append(
-                {'name': name, 'affiliations': [aff],
+                {'name': name, 'affiliations': affs_map.get(name_parsed.last, []) if affs_map else affs,
                  'is_corresponding': name_in_text(name_split[-1].lower(),
                                                   corr_author_email.lower())})
         return authors
@@ -122,7 +143,8 @@ class Lippincott(PublisherParser):
                                   'this work',
                                   'revision',
                                   'disclosure',
-                                  'reprints',
+                                  'reprint',
+                                  'supported',
                                   'the authors have']
         aff_blacklist_substr = ['contributed equally']
 
