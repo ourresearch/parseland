@@ -54,7 +54,7 @@ class Wiley(PublisherParser):
                 aff_txt = aff.text.strip()
                 aff_txt = strip_suffix('Direct inquiries.*', aff_txt)
                 aff_txt = strip_prefix('Authors are with ', aff_txt)
-                aff_txt = aff_txt.strip()
+                aff_txt = aff_txt.strip().split('Fax')[0].strip()
                 affiliations.append(normalize("NFKD", aff_txt))
             results.append(
                 AuthorAffiliations(
