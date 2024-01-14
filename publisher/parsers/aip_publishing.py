@@ -8,7 +8,7 @@ class AIPPublishing(PublisherParser):
     parser_name = "aip_publishing"
 
     def is_publisher_specific_parser(self):
-        return self.domain_in_meta_og_url("aip.scitation.org")
+        return self.domain_in_meta_og_url("aip.scitation.org") or self.substr_in_citation_publisher('AIP Publishing')
 
     def authors_found(self):
         return self.soup.find("div", class_="publicationContentAuthors")
