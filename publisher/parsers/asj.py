@@ -17,7 +17,7 @@ class TheAstronomicalJournal(PublisherParser):
             name = author_tag.select_one('a').text.strip()
             affs = []
             if aff_tag := author_tag.select_one('span.affiliation'):
-                affs.append(aff_tag.text.strip())
+                affs.append(aff_tag.text.strip(' ,()'))
             authors.append({
                 'name': name,
                 'is_corresponding': None,
@@ -27,4 +27,4 @@ class TheAstronomicalJournal(PublisherParser):
 
     def parse(self):
         return {'authors': self.parse_authors(),
-                'abstract': self.parse_author_meta_tags()}
+                'abstract': self.parse_abstract_meta_tags()}

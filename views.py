@@ -127,7 +127,7 @@ def parse_publisher():
         url = f'{path}?{qs}'
         return redirect(url)
     else:
-        pc = PublisherController(lp_contents, doi)
+        pc = PublisherController(lp_contents.decode(), doi)
         if check_bad_landing_page(pc.soup):
             raise BadLandingPageError()
         parser = pc.find_parser()
