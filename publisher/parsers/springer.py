@@ -67,11 +67,11 @@ class Springer(PublisherParser):
 
     def parse_authors_method_2(self):
         author_tags = self.soup.select(
-            'ol.c-article-author-affiliation__list li[id*=Aff]')
+            'ol.c-article-author-affiliation__list li[id*=A]')
         authors = []
         for author_tag in author_tags:
             aff_tag = author_tag.select_one('p[class*=affiliation__address]')
-            aff_text = aff_tag.text.strip()
+            aff_text = aff_tag.text.strip().split('E-mail')[0]
             authors_tag = author_tag.select_one('p[class*=authors-list]')
             author_names = list(set([name.strip(' ,') for name in
                                      self._split(authors_tag.text.replace('&', ',').strip()) if
