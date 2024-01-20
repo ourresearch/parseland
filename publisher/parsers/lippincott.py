@@ -145,7 +145,10 @@ class Lippincott(PublisherParser):
                                   'disclosure',
                                   'reprint',
                                   'supported',
-                                  'the authors have']
+                                  'the authors have',
+                                  'this is an',
+                                  'patients have',
+                                  'abbreviations']
         aff_blacklist_substr = ['contributed equally']
 
         def exclude_aff(aff_text):
