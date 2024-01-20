@@ -82,7 +82,7 @@ def parse_publisher():
     if doi.startswith('http'):
         doi = doi.split('doi.org/')[-1]
     check_cache = request.args.get('check_cache', 't')
-    check_cache = check_cache.lower().startswith('t') or int(check_cache) == 1
+    check_cache = check_cache.lower().startswith('t') or check_cache == '1'
     update_cache = False
 
     if check_cache:
