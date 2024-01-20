@@ -140,13 +140,12 @@ class Lippincott(PublisherParser):
         aff_blacklist_prefixes = ['accepted',
                                   'received',
                                   'presented',
-                                  'this work',
+                                  'this',
                                   'revision',
                                   'disclosure',
                                   'reprint',
                                   'supported',
-                                  'the authors have',
-                                  'this is an',
+                                  'the authors',
                                   'patients have',
                                   'abbreviations']
         aff_blacklist_substr = ['contributed equally']
