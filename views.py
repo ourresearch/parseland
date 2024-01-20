@@ -81,59 +81,49 @@ def parse_publisher():
     doi = request.args.get("doi")
     if doi.startswith('http'):
         doi = doi.split('doi.org/')[-1]
-    check_cache = request.args.get('check_cache', 'true')
-    check_cache = check_cache.startswith('t') or check_cache == 1
+    check_cache = request.args.get('check_cache', 't')
+    check_cache = check_cache.lower().startswith('t') or int(check_cache) == 1
     update_cache = False
-    current_s3_last_modified = None
+
     if check_cache:
         cached = cache.get(doi)
         if cached:
             cached_obj = json.loads(cached)
             five_min_ago = datetime.now(timezone.utc) - timedelta(minutes=5)
-            if len(cached_obj) == 3:
-                last_updated, cached_s3_last_modified, cached_response = cached_obj
-                last_updated = parse(last_updated)
-                if last_updated >= five_min_ago:
-                    print(f'Cache hit - {doi}')
-                    return jsonify(cached_response)
-            else:
-                cached_s3_last_modified, cached_response = cached_obj
-                update_cache = True
-            cached_s3_last_modified = parse(cached_s3_last_modified)
-            if cached_s3_last_modified >= five_min_ago:
-                if update_cache:
-                    cache.set(doi, cached_s3_last_modified, cached_response)
+
+            last_updated, _, cached_response = cached_obj
+            last_updated = parse(last_updated)
+
+            if last_updated >= five_min_ago:
                 print(f'Cache hit - {doi}')
                 return jsonify(cached_response)
             else:
-                current_s3_last_modified = s3_last_modified(doi)
-                if cached_s3_last_modified >= current_s3_last_modified:
-                    if update_cache:
-                        cache.set(doi, current_s3_last_modified,
-                                  cached_response)
-                    return jsonify(cached_response)
-                else:
-                    update_cache = True
+                update_cache = True
         else:
             update_cache = True
+
     lp_contents = get_landing_page(doi)
     grobid_parse_url = 'https://parseland.herokuapp.com/grobid-parse?doi=' + doi
+
     if is_pdf(lp_contents):
-        params = {'doi': doi,
-                  'api_key': os.getenv("OPENALEX_PDF_PARSER_API_KEY"),
-                  'include_raw': 'false'}
+        params = {
+            'dox': doi,
+            'api_key': os.getenv("OPENALEX_PDF_PARSER_API_KEY"),
+            'include_raw': 'false'
+        }
         qs = urlencode(params)
         path = urljoin(os.getenv('OPENALEX_PDF_PARSER_URL'), 'parse')
         url = f'{path}?{qs}'
         return redirect(url)
     else:
         pc = PublisherController(lp_contents.decode(), doi)
+
         if check_bad_landing_page(pc.soup):
             raise BadLandingPageError()
+
         parser = pc.find_parser()
 
     parsed_message = parser.parse()
-
     message = prep_message(parsed_message, parser)
 
     response = {
@@ -145,10 +135,11 @@ def parse_publisher():
             "doi_url": f"https://doi.org/{doi}",
         },
     }
+
     if check_cache and update_cache:
-        if current_s3_last_modified is None:
-            current_s3_last_modified = s3_last_modified(doi)
-        cache.set(doi, current_s3_last_modified, response)
+        cache.set(doi, None,
+                  response)  # Setting current_s3_last_modified to None when updating the cache
+
     return jsonify(response)
 
 
