@@ -107,7 +107,7 @@ def parse_publisher():
 
     if is_pdf(lp_contents):
         params = {
-            'dox': doi,
+            'doi': doi,
             'api_key': os.getenv("OPENALEX_PDF_PARSER_API_KEY"),
             'include_raw': 'false'
         }
