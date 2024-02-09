@@ -29,8 +29,8 @@ class CUP(PublisherParser):
             if affiliation_soup:
                 for organization in affiliation_soup.stripped_strings:
                     organization = re.sub('email:.*?$', '', organization)
-                    organization = re.sub(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', '', organization)
-                    affiliations.append(organization.strip())
+                    organization = re.sub(r'[a-zA-Z0-9._%+-]+@.*?$', '', organization)
+                    affiliations.append(organization.strip('., '))
 
             result_authors.append(
                 AuthorAffiliations(
