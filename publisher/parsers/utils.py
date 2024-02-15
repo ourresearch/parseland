@@ -1,5 +1,6 @@
 import re
 import unicodedata
+from nameparser import HumanName
 
 EMAIL_RE = re.compile(r'\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b',
                       flags=re.IGNORECASE)
@@ -65,12 +66,6 @@ def split_name(name):
             len(part) > 1]
 
 
-def names_match(name1, name2):
-    split1 = split_name(name1)
-    split2 = split_name(name2)
-    return all([part in split2 for part in split1])
-
-
 def name_in_text(name, text):
     name_split = split_name(name)
     if len(name_split) == 3:
@@ -86,3 +81,7 @@ def email_matches_name(email, name):
                                                                         'ignore').decode()
     split = split_name(normalized_name)
     return any([part in _email.split('@')[0] for part in split])
+
+
+def names_match(name1: HumanName, name2: HumanName):
+    return name1.last.lower() == name2.last.lower() and name1.first.lower() == name2.first.lower()

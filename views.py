@@ -115,16 +115,14 @@ def parse_publisher():
         path = urljoin(os.getenv('OPENALEX_PDF_PARSER_URL'), 'parse')
         url = f'{path}?{qs}'
         return redirect(url)
-    else:
-        pc = PublisherController(lp_contents.decode(), doi)
+    pc = PublisherController(lp_contents.decode(), doi)
 
-        if check_bad_landing_page(pc.soup):
-            raise BadLandingPageError()
+    if check_bad_landing_page(pc.soup):
+        raise BadLandingPageError()
 
-        parser = pc.find_parser()
+    parser, parsed_msg = pc.best_parser_msg()
 
-    parsed_message = parser.parse()
-    message = prep_message(parsed_message, parser)
+    message = prep_message(parsed_msg, parser)
 
     response = {
         "message": message,

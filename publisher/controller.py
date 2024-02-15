@@ -15,19 +15,39 @@ class PublisherController:
         self.parsers = PublisherParser.__subclasses__()
         self.soup = BeautifulSoup(html, "lxml")
 
-    def find_parser(self):
-        best_parser = None
+    def best_parser_msg(self):
+        both_conditions_parsers = []
+        authors_found_parsers = []
+
+        def has_affs(parsed):
+            return any([author['affiliations'] for author in parsed['authors']])
+
         for cls in self.parsers:
             parser = cls(self.soup)
-            if parser.is_publisher_specific_parser():
-                best_parser = parser
-                if parser.authors_found():
-                    return parser
+            if parser.authors_found():
+                if parser.is_publisher_specific_parser():
+                    both_conditions_parsers.append(parser)
+                else:
+                    authors_found_parsers.append(parser)
+
+        for parser in both_conditions_parsers:
+            try:
+                parsed = parser.parse()
+                if has_affs(parsed):
+                    return parser, parsed
+            except Exception as e:
+                continue
+
+        for parser in authors_found_parsers:
+            try:
+                parsed = parser.parse()
+                if has_affs(parsed):
+                    return parser, parsed
+            except Exception as e:
+                continue
 
         generic_parser = GenericPublisherParser(self.soup)
         if generic_parser.authors_found():
-            best_parser = generic_parser
+            return generic_parser, generic_parser.parse()
 
-        if best_parser:
-            return best_parser
         raise ParserNotFoundError(f"Parser not found for {self.doi}")
