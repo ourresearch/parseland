@@ -6,8 +6,8 @@ from nameparser import HumanName
 from publisher.parsers.utils import names_match
 
 
-class JMIRPublisherParser(PublisherParser):
-    parser_name = "jmir_publisher_parser"
+class JMIR(PublisherParser):
+    parser_name = "jmir"
 
     def is_publisher_specific_parser(self):
         return self.domain_in_meta_og_url('jmir.org')
