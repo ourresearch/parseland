@@ -1,3 +1,5 @@
+import re
+
 from publisher.parsers.parser import PublisherParser
 from nameparser import HumanName
 
@@ -26,6 +28,11 @@ class JMIRPublisherParser(PublisherParser):
             m[aff_id] = org
         return m
 
+    @staticmethod
+    def parse_aff_ids(affs_txt):
+        cleaned = re.sub(r'[^\d,]', '', affs_txt)
+        return cleaned.split(',')
+
     def parse_authors(self):
         authors = []
         corresponding_author_name = self.corresponding_author_name()
@@ -36,7 +43,7 @@ class JMIRPublisherParser(PublisherParser):
             is_corresponding = names_match(name_parsed, corresponding_author_name)
             affiliations = []
             if affs_tag := author_tag.select_one('.affiliation-link'):
-                aff_ids = affs_tag.text.strip().split(',')
+                aff_ids = self.parse_aff_ids(affs_tag.text)
                 for aff_id in aff_ids:
                     affiliations.append(affs[aff_id])
             authors.append({'name': name,
@@ -44,9 +51,5 @@ class JMIRPublisherParser(PublisherParser):
                             'affiliations': affiliations})
         return authors
 
-    def parse_abstract(self):
-        if abs_tag := self.soup.select_one('.abstract'):
-            return abs_tag.text.strip()
-
     def parse(self):
-        return {'authors': self.parse_authors(), 'abstract': self.parse_abstract()}
+        return {'authors': self.parse_authors(), 'abstract': self.parse_abstract_meta_tags()}
