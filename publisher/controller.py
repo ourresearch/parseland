@@ -1,3 +1,5 @@
+import traceback
+
 from bs4 import BeautifulSoup
 
 from exceptions import ParserNotFoundError
@@ -36,6 +38,7 @@ class PublisherController:
                 if has_affs(parsed):
                     return parser, parsed
             except Exception as e:
+                traceback.print_exc()
                 continue
 
         for parser in authors_found_parsers:
