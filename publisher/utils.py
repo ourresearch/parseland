@@ -2,6 +2,7 @@ import re
 from dataclasses import asdict, is_dataclass
 
 from publisher.parsers.utils import EMAIL_RE, strip_prefix
+import ftfy
 
 
 def has_corresponding(message):
@@ -23,7 +24,7 @@ def strip_message_strs(message):
         for k in message.keys():
             message[k] = strip_message_strs(message[k])
     if isinstance(message, str):
-        return message.strip('\r\n ;')
+        return ftfy.fix_text(message.strip('\r\n ;'))
     return message
 
 
