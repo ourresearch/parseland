@@ -7,8 +7,6 @@ import pdfkit
 from bs4 import BeautifulSoup
 from pdfkit.configuration import Configuration
 
-pdfkit_config = Configuration(wkhtmltopdf=os.getenv('WKHTMLTOPDF'))
-
 
 def most_frequent_domain(html_string):
     url_pattern = re.compile(r'https?://([a-zA-Z0-9.-]+)')
@@ -41,18 +39,3 @@ def clean_soup(soup: BeautifulSoup, try_stylize=False):
         stylized = False
     return soup, stylized
 
-
-def html_to_pdf(html_str: str):
-    soup = BeautifulSoup(html_str, parser='lxml', features='lxml')
-    cleaned, stylized = clean_soup(soup)
-    opts = {"load-error-handling": "ignore",
-            'load-media-error-handling': 'ignore',
-            'disable-javascript': '',
-            'log-level': 'info'}
-    if not stylized:
-        opts.update({'no-images': "",
-                     'disable-external-links': '',
-                     'disable-internal-links': '', })
-    return pdfkit.from_string(str(cleaned),
-                              configuration=pdfkit_config,
-                              options=opts)

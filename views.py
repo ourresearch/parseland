@@ -1,25 +1,22 @@
 import json
 import os
-import time
 from datetime import datetime, timedelta, timezone
 from io import BytesIO
 from urllib.parse import urljoin, urlencode
 
+from bs4 import BeautifulSoup
+from dateutil.parser import parse
 from flask import jsonify, request, redirect, send_file
 
-from publisher.parsers.grobid import GrobidParser
-from util import s3
 from app import app
 from exceptions import APIError, BadLandingPageError
+from publisher import cache
 from publisher.controller import PublisherController
 from publisher.utils import prep_message, check_bad_landing_page
 from repository.controller import RepositoryController
-from publisher import cache
-from dateutil.parser import parse
-from bs4 import BeautifulSoup
-
-from util.grobid import html_to_pdf, clean_soup
-from util.s3 import s3_last_modified, get_landing_page, is_pdf
+from util import s3
+from util.grobid import clean_soup
+from util.s3 import get_landing_page, is_pdf
 
 
 @app.route("/")
@@ -38,7 +35,6 @@ def grobid_parse():
     doi = request.args.get("doi")
     if doi.startswith('http'):
         doi = doi.split('doi.org/')[1]
-    forward = request.args.get('forward', True)
     params = request.args.copy()
     if 'forward' in params:
         del params['forward']
@@ -46,14 +42,9 @@ def grobid_parse():
     params['doi'] = doi
     params['api_key'] = os.getenv("OPENALEX_PDF_PARSER_API_KEY")
     qs = urlencode(params)
-    if forward:
-        path = urljoin(os.getenv('OPENALEX_PDF_PARSER_URL'), 'parse-html')
-        url = f'{path}?{qs}'
-        return redirect(url)
-    html = get_landing_page(doi)
-    pdf = html_to_pdf(html)
-    parser = GrobidParser(pdf)
-    return parser.parse()
+    path = urljoin(os.getenv('OPENALEX_PDF_PARSER_URL'), 'parse-html')
+    url = f'{path}?{qs}'
+    return redirect(url)
 
 
 def is_true(value: str):
