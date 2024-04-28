@@ -48,6 +48,8 @@ class PublisherController:
                 if has_affs(parsed):
                     return parser, parsed
             except Exception as e:
+                print(f'Exception with DOI: {self.doi}')
+                traceback.print_exc()
                 continue
 
         generic_parser = GenericPublisherParser(self.soup)
