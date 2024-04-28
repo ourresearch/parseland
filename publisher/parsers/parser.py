@@ -100,7 +100,7 @@ class PublisherParser(Parser, ABC):
 
         result = None
         for meta in metas:
-            if 'name' in meta.attrs and meta['name'] in author_meta_keys:
+            if 'name' in meta.attrs and meta['name'] in author_meta_keys or 'property' in meta.attrs and meta['property'] in author_meta_keys:
                 if result:
                     # reset for next author
                     results.append(result)
