@@ -84,4 +84,8 @@ def email_matches_name(email, name):
 
 
 def names_match(name1: HumanName, name2: HumanName):
+    if not isinstance(name1, HumanName):
+        name1 = HumanName(name1)
+    if not isinstance(name2, HumanName):
+        name2 = HumanName(name2)
     return name1.last.lower() == name2.last.lower() and name1.first.lower() == name2.first.lower()
