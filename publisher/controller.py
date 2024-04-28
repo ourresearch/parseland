@@ -22,7 +22,9 @@ class PublisherController:
         authors_found_parsers = []
 
         def has_affs(parsed):
-            return any([author['affiliations'] if isinstance(parsed['authors'], dict) else author.affiliations for author in parsed['authors']])
+            if not parsed['authors']:
+                return False
+            return any([author['affiliations'] if isinstance(parsed['authors'][0], dict) else author.affiliations for author in parsed['authors']])
 
         for cls in self.parsers:
             parser = cls(self.soup)
