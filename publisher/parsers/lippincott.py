@@ -120,7 +120,7 @@ class Lippincott(PublisherParser):
                 is_corresponding = True
 
             # set aff_ids
-            aff_ids = self.parse_aff_ids(author.text, first=False)
+            aff_ids = self.parse_aff_ids(author.text, first=False) if len(author.text) > 5 else list(author.text)
 
             if not aff_ids and name.lower().startswith("editor"):
                 continue
