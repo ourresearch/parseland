@@ -28,8 +28,16 @@ class PublisherController:
 
         for cls in self.parsers:
             parser = cls(self.soup)
-            if parser.authors_found():
-                if parser.is_publisher_specific_parser():
+            authors_found = False
+            pub_specific_parser = False
+            try:
+                authors_found = parser.authors_found()
+                pub_specific_parser = parser.is_publisher_specific_parser()
+            except Exception as e:
+                print(f'Error with parser {cls.parser_name} parser: {e}')
+
+            if authors_found:
+                if pub_specific_parser:
                     both_conditions_parsers.append(parser)
                 else:
                     authors_found_parsers.append(parser)
