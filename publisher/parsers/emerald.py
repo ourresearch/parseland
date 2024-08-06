@@ -11,7 +11,7 @@ class Emerald(PublisherParser):
     def authors_found(self):
         return self.soup.find("span", class_="m:contributor-display")
 
-    def parse(self):
+    def parse_authors(self):
         results = []
         author_soup = self.soup.find("span", class_="m:contributor-display")
         authors = author_soup.findAll("div", {"contrib-type": "author"})
@@ -37,6 +37,13 @@ class Emerald(PublisherParser):
 
             results.append(AuthorAffiliations(name=name, affiliations=affiliations))
         return results
+
+    def parse_abstract(self):
+        if abs_tag := self.soup.select_one('section#abstract'):
+            return abs_tag.text.strip()
+
+    def parse(self):
+        return {'authors': self.parse_authors(), 'abstract': self.parse_abstract()}
 
     test_cases = [
         {
