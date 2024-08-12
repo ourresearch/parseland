@@ -54,6 +54,7 @@ def prep_message(message, parser):
     message = sanitize_affiliations(message)
     message = sanitize_names(message)
     message = strip_message_strs(message)
+    message['all_orcids'] = re.findall(r'\d{4}-\d{4}-\d{4}-[\dX]{4}', str(parser.soup))
     return message
 
 
