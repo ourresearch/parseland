@@ -7,6 +7,8 @@ from base64 import b64decode
 
 import requests
 
+from find_shared import get_base_url_from_soup
+
 logger = logging.getLogger(__name__)
 
 
@@ -70,40 +72,6 @@ def find_pdf_link(soup):
 
     except Exception as e:
         logger.error(f"Error finding PDF link: {str(e)}")
-
-    return None
-
-
-def get_base_url_from_soup(soup):
-    """extract base URL from BeautifulSoup object."""
-    base_tag = soup.find('base', href=True)
-    if base_tag:
-        return base_tag['href']
-
-    canonical = soup.find('link', {'rel': 'canonical', 'href': True})
-    if canonical:
-        return canonical['href']
-
-    og_url = soup.find('meta', {'property': 'og:url', 'content': True})
-    if og_url:
-        return og_url['content']
-
-    meta_url_tags = [
-        ('meta', {'name': 'citation_url', 'content': True}),
-        ('meta', {'name': 'dc.identifier', 'content': True}),
-        ('meta', {'property': 'al:web:url', 'content': True}),
-    ]
-
-    for tag, attrs in meta_url_tags:
-        meta = soup.find(tag, attrs)
-        if meta:
-            return meta['content']
-
-    for meta in soup.find_all('meta', content=True):
-        content = meta['content']
-        if content.startswith(('http://', 'https://')):
-            parsed = urlparse(content)
-            return f"{parsed.scheme}://{parsed.netloc}"
 
     return None
 
@@ -489,7 +457,7 @@ def validate_pdf(pdf_link):
         return True
 
     try:
-        use_zyte_api = ["oup.com", "ieee.org"]
+        use_zyte_api = ["oup.com", "ieee.org", "ajog.org", "journals.sagepub.com", "journals.uchicago.edu"]
         if any(domain in href for domain in use_zyte_api) and validate_with_zyte_api(href):
             return True
 
