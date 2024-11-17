@@ -457,17 +457,8 @@ def validate_pdf(pdf_link):
         return True
 
     try:
-        use_zyte_api = ["oup.com", "ieee.org", "ajog.org", "journals.sagepub.com", "journals.uchicago.edu"]
-        if any(domain in href for domain in use_zyte_api) and validate_with_zyte_api(href):
-            return True
-
         # Use HEAD request to check the link
         response = requests.head(href, allow_redirects=True, timeout=5)
-
-        # Check response status code
-        if response.status_code != 200:
-            logger.warning(f"PDF link ({pdf_link.href}) returned status code {response.status_code}")
-            return False
 
         # Validate content type
         content_type = response.headers.get('Content-Type', '').lower()
@@ -480,6 +471,9 @@ def validate_pdf(pdf_link):
             content_start = get_response.raw.read(5)
             if content_start == b'%PDF-':
                 return True
+
+        if validate_with_zyte_api(href):
+            return True
 
         logger.warning(f"PDF link ({pdf_link.href}) does not appear to be a valid PDF.")
         return False
