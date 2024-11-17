@@ -10,6 +10,7 @@ from flask import jsonify, request, redirect, send_file
 
 from app import app
 from exceptions import APIError, BadLandingPageError
+from find_pdf import find_pdf_link
 from publisher import cache
 from publisher.controller import PublisherController
 from publisher.utils import prep_message, check_bad_landing_page
@@ -128,6 +129,39 @@ def parse_publisher():
     if check_cache and update_cache:
         cache.set(doi, None,
                   response)  # Setting current_s3_last_modified to None when updating the cache
+
+    return jsonify(response)
+
+
+@app.route("/parse-oa")
+def parse_oa():
+    doi = request.args.get("doi")
+    if doi.startswith('http'):
+        doi = doi.split('doi.org/')[-1]
+
+    lp_contents = get_landing_page(doi)
+    soup = BeautifulSoup(lp_contents.decode(), features='lxml', parser='lxml')
+
+    if check_bad_landing_page(soup):
+        raise BadLandingPageError()
+
+    pdf_link = find_pdf_link(soup)
+
+    pdf = {
+        "href": pdf_link.href,
+        "anchor": pdf_link.anchor,
+        "source": pdf_link.source,
+    } if pdf_link else None
+
+    print(f"PDF link: {pdf_link}")
+
+    response = {
+        "pdf": pdf,
+        "metadata": {
+            "doi": doi,
+            "doi_url": f"https://doi.org/{doi}",
+        },
+    }
 
     return jsonify(response)
 
