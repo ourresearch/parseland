@@ -67,22 +67,32 @@ class Springer(PublisherParser):
 
     def parse_authors_method_2(self):
         author_tags = self.soup.select(
-            'ol.c-article-author-affiliation__list li[id*=A]')
-        authors = []
+            'ol.c-article-author-affiliation__list li[id*=A]'
+        )
+        authors = {}
+
         for author_tag in author_tags:
             aff_tag = author_tag.select_one('p[class*=affiliation__address]')
             aff_text = aff_tag.text.strip().split('E-mail')[0]
             authors_tag = author_tag.select_one('p[class*=authors-list]')
             author_names = list(set([name.strip(' ,') for name in
-                                     self._split(authors_tag.text.replace('&', ',').strip()) if
+                                     self._split(authors_tag.text.replace('&',
+                                                                          ',').strip())
+                                     if
                                      '(' not in name]))
+
             for name in author_names:
-                authors.append({
-                    'name': name,
-                    'affiliations': [aff_text],
-                    'is_corresponding': None
-                })
-        return authors
+                if name in authors:
+                    if aff_text not in authors[name]['affiliations']:
+                        authors[name]['affiliations'].append(aff_text)
+                else:
+                    authors[name] = {
+                        'name': name,
+                        'affiliations': [aff_text],
+                        'is_corresponding': None
+                    }
+
+        return list(authors.values())
 
     def parse(self):
         article_metadatas = self.parse_article_metadatas()
