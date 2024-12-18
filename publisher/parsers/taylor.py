@@ -42,6 +42,8 @@ class Taylor(PublisherParser):
                 )
             )
         abstract_tag = self.soup.find('div', class_='abstractInFull')
+        if not abstract_tag:
+            abstract_tag = self.soup.select_one('#abstract + p')
         abstract = re.sub('^Abstract', '', abstract_tag.text, flags=re.IGNORECASE) if abstract_tag else None
         return {"authors": results, "abstract": abstract}
 
