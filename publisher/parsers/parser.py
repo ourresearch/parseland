@@ -235,7 +235,7 @@ class PublisherParser(Parser, ABC):
     def fallback_parse_abstract(self):
         blacklisted_words = {'download options', 'please wait',
                              'copyright clearance center', 'procite',
-                             'food funct', 'rsc publication', 'accessShare',
+                             'food funct', 'rsc publication', 'accessShare', 'ShareShare'
                              'linkShare', 'EmailFacebookTwitterLinkedInRedditWechat'}
         startswith_blacklist = {'download'}
         for tag in self.soup.find_all():
