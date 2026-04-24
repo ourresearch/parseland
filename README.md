@@ -1,3 +1,5 @@
+**DO NOT USE! This is just here for archival purposes; it's no longer live. `parseland-lib` is the real one now.**
+
 # Parseland
 
 This API parses and returns author and affiliation data from landing pages.
